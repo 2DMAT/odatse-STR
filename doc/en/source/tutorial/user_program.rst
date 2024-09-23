@@ -1,7 +1,7 @@
 Analyses by user programs
 ================================================================
 
-In this tutorial, we will write a user program using 2DMAT-SIM-TRHEPD-RHEED module and perform analyese. As an example, we adopt Nelder-Mead method for the inverse problem algorithm.
+In this tutorial, we will write a user program using odatse-STR module and perform analyese. As an example, we adopt Nelder-Mead method for the inverse problem algorithm.
 
 
 Location of the sample files
@@ -40,7 +40,7 @@ The following sections describe these files and then show the actual calculation
 Description of main program
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``simple.py`` is a simple program for the analyses using 2DMAT-SIM-TRHEPD-RHEED module.
+``simple.py`` is a simple program for the analyses using odatse-STR module.
 The entire source file is shown as follows:
 
 .. code-block:: python
@@ -49,11 +49,11 @@ The entire source file is shown as follows:
 
     import py2dmat
     import py2dmat.algorithm.min_search
-    import sim_trhepd_rheed
+    from odatse.extra.sim_trhepd_rheed import Solver
 
     info = py2dmat.Info.from_file("input.toml")
 
-    solver = sim_trhepd_rheed.Solver(info)
+    solver = Solver(info)
     runner = py2dmat.Runner(solver, info)
     alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
     alg.main()
@@ -64,7 +64,7 @@ At the beginning of the program, the required modules are imported as listed bel
 
 - ``py2dmat.algorithm.min_search`` for the module of the inverse problem algorithm used in this tutorial.
 
-- ``sim-trhepd-rheed`` for the direct problem solver module.
+- ``odatse.extra.sim_trhepd_rheed`` for the direct problem solver module.
 
 Next, the instances of the classes are created.
 
@@ -72,7 +72,7 @@ Next, the instances of the classes are created.
 
   This class is for storing the parameters. It is created by calling a class method ``from_file`` with a path to TOML file as an argument.
 
-- ``sim_trhepd_rheed.Solver`` class
+- ``odatse.extra.sim_trhepd_rheed.Solver`` class
 
   This class is for the direct problem solver of the 2DMAT-SIM-TRHEPD-RHEED module. It is created by passing an instance of Info class.
 
@@ -95,7 +95,7 @@ In the above program, the input parameters are read from a file in TOML format. 
 
     import py2dmat
     import py2dmat.algorithm.min_search
-    import sim_trhepd_rheed
+    from odatse.extra.sim_trhepd_rheed import Solver
 
     params = {
         "base": {
@@ -131,7 +131,7 @@ In the above program, the input parameters are read from a file in TOML format. 
 
     info = py2dmat.Info(params)
 
-    solver = sim_trhepd_rheed.Solver(info)
+    solver = Solver(info)
     runner = py2dmat.Runner(solver, info)
     alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
     alg.main()

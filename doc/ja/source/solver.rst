@@ -3,7 +3,7 @@
 
 .. _sim-trhepd-rheed: https://github.com/sim-trhepd-rheed/sim-trhepd-rheed
 
-``2DMAT-SIM-TRHEPD-RHEED`` モジュールは sim-trhepd-rheed_ を用いて原子位置 :math:`x` から回折 rocking curve を計算し、実験で得られた rocking curve からの誤差を :math:`f(x)` として返す ``Solver`` です。
+``odatse-STR`` モジュールは sim-trhepd-rheed_ を用いて原子位置 :math:`x` から回折 rocking curve を計算し、実験で得られた rocking curve からの誤差を :math:`f(x)` として返す ``Solver`` です。
 
 この章では、入力パラメータおよび入力データと出力データについて説明します。
 入力パラメータは Info クラスの ``solver`` の項目が該当します。TOMLファイルを入力として与える場合は、 ``[solver]`` セクションに記述します。dict 形式でパラメータを作成する場合は ``solver`` キー以下に入れ子の dict 形式でデータを用意します。以下では、TOML形式でパラメータ項目を説明します。
@@ -257,7 +257,7 @@
 ``#####`` はアルゴリズムにおけるグループの番号 ``set`` (例：モンテカルロにおけるレプリカ番号)です。
 大規模計算ではこれらのフォルダの数が多くなり、時には計算機のストレージの制限に引っかかることがあります。
 そのような場合には、 ``solver.post.remove_work_dir`` パラメータを ``true`` にして、計算が終了した作業フォルダを削除してください。
-以下では、 ``py2dmat`` で独自に出力するファイルについて説明します。
+以下では、 ``odatse-STR`` で独自に出力するファイルについて説明します。
 
 ``stdout``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

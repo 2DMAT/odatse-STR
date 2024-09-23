@@ -1,4 +1,4 @@
-Installation of 2DMAT-SIM-TRHEPD-RHEED
+Installation of odatse-STR
 ================================================================
 
 Prerequisites
@@ -10,7 +10,7 @@ Prerequisites
     - tomli >= 1.2
     - numpy >= 1.14
 
-  - py2dmat version 3.0 and later
+  - ODAT-SE version 3.0 and later
 
   - sim-trhepd-rheed version 1.0.2 and later
 
@@ -18,24 +18,24 @@ Prerequisites
 How to download and install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Install py2dmat
+1. Install ODAT-SE
 
    - From source files:
 
-     Download source files of py2dmat from the repository as follows:
+     Download source files of ODAT-SE from the repository as follows:
 
      .. code-block:: bash
 
-	$ git clone -b update https://github.com/issp-center-dev/2DMAT.git
+	$ git clone -b update https://github.com/issp-center-dev/ODAT-SE.git
 
-     Install py2dmat using ``pip`` command:
+     Install ODAT-SE using ``pip`` command:
 
      .. code-block:: bash
 
-	$ cd 2DMAT
+	$ cd ODAT-SE
 	$ python3 -m pip install .
 
-     You may add ``--user`` option to install py2dmat locally (in ``$HOME/.local``).
+     You may add ``--user`` option to install ODAT-SE locally (in ``$HOME/.local``).
 
      If you run the following command instead, optional packages will also be installed at the same time.
 
@@ -62,32 +62,33 @@ How to download and install
      The executable files ``bulk.exe``, ``surf.exe``, ``potcalc.exe``, and ``xyz.exe`` will be generated.
      Put ``bulk.exe`` and ``surf.exe`` in a directory listed in the PATH environment variable, or specify the paths to these commands at run time.
      
-3. Install 2dmat-sim-trhepd-rheed
+3. Install odatse-STR
 
    - From source files:
 
-     At present, the source files of 2dmat-sim-trhepd-rheed are placed in ``extra`` directory of py2dmat source package. After obtaining the source files following the step 1, install 2dmat-sim-trhepd-rheed using ``pip`` command as follows:
+     The source files of odatse-STR are available from the GitHub repository. After obtaining the source files, install odatse-STR using ``pip`` command as follows:
 
      .. code-block:: bash
 
-	$ cd 2DMAT/extra/sim-trhepd-rheed
+	$ git clone https://github.com/2DMAT/odatse-STR.git
+	$ cd odatse-STR
 	$ python3 -m pip install .
 
      You may add ``--user`` option to install the package locally (in ``$HOME/.local``).
 
-     Then, the library of 2DMAT-SIM-TRHEPD-RHEED and the command ``py2dmat-sim-trhepd-rheed`` wil be installed.
+     Then, the library of odatse-STR and the command ``odatse-STR`` wil be installed.
 
 
 How to run
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In 2DMAT, the analysis is done by using a predefined optimization algorithm and a direct problem solver.
+In ODAT-SE, the analysis is done by using a predefined optimization algorithm and a direct problem solver.
 There are two ways to do analyses of TRHEPD:
 
-1. Use py2dmat-sim-trhepd-rheed program included in this package to perform analyses.
+1. Use odatse-STR program included in this package to perform analyses.
    The users prepare an input parameter file in TOML format, and run command with it.
    The type of the inverse problem algorithms can be chosen by the parameter.
 
-2. Write a program for the analysis with 2DMAT-SIM-TRHEPD-RHEED library and 2DMAT framework.
+2. Write a program for the analysis with odatse-STR library and ODAT-SE framework.
    The type of the inverse problem algorithms can be chosen by importing the appropriate module.
    A flexible use would be possible, for example, to include data generation within the program.
    
@@ -96,8 +97,8 @@ The types of parameters and the instruction to use the library will be given in 
 
 How to uninstall
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In order to uninstall 2DMAT-SIM-TRHEPD-RHEED and 2DMAT modules, type the following commands:
+In order to uninstall odatse-STR and ODAT-SE modules, type the following commands:
 
 .. code-block:: bash
 
-   $ python3 -m pip uninstall py2dmat-sim-trhepd-rheed py2dmat
+   $ python3 -m pip uninstall odatse-STR ODAT-SE

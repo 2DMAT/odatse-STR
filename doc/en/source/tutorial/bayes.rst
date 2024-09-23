@@ -2,7 +2,7 @@ Optimization by Bayesian Optimization
 ================================================================
 
 This tutorial describes how to estimate atomic positions from the experimental diffraction data by using Bayesian optimization (BO).
-2DMAT uses `PHYSBO <https://www.pasums.issp.u-tokyo.ac.jp/physbo/en>`_ for BO.
+odatse-STR uses `PHYSBO <https://www.pasums.issp.u-tokyo.ac.jp/physbo/en>`_ for BO.
 The search grid has to be prepared in advance as a data file ``MeshData.txt``, similar to the case of the grid search.
 
 
@@ -30,7 +30,7 @@ This directory includes the following files:
 
 - ``input.toml``
 
-  The input file of py2dmat.
+  The input file of odatse-STR.
 
 - ``prepare.sh``, ``do.sh``
 
@@ -67,7 +67,7 @@ Input files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This subsection describes the input file.
-For details, see Bayes optimization section of 2DMAT manual.
+For details, see Bayes optimization section of ODAT-SE manual.
 ``input.toml`` in the sample directory is shown as the following:
 
 .. code-block:: toml
@@ -132,7 +132,7 @@ For details on other parameters that can be specified in the input file, see the
 Calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, move to the folder where the sample file is located. (Hereinafter, it is assumed that you are the root directory of 2DMAT.)
+First, move to the folder where the sample file is located. (Hereinafter, it is assumed that you are the root directory of odatse-STR.)
 
 .. code-block::
 
@@ -155,7 +155,7 @@ Then, run the main program. It will take a few secondes on a normal PC.
 
 .. code-block::
 
-   $ python3 py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+   $ python3 odatse-STR input.toml | tee log.txt
 
 A directory ``output/0`` will be created.
 The following standard output will be shown:
@@ -232,7 +232,7 @@ The script is read as follows, though we omit further explanation.
 
     ./bulk.exe
 
-    time py2dmat-sim-trhepd-rheed input.toml
+    time odatse-STR input.toml
 
     echo diff output/BayesData.txt ref_BayesData.txt
     res=0

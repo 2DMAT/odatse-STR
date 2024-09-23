@@ -171,7 +171,7 @@
 
 .. code-block::
 
-    $ mpiexec -np 2 py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+    $ mpiexec -np 2 odatse-STR input.toml | tee log.txt
 
 ここではプロセス数2のMPI並列を用いた計算を行っています。
 実行すると、output ディレクトリ内に各ランクのフォルダが作成され、その中にグリッドのidがついたサブフォルダ ``LogXXXX_00000000``  (``XXXX`` がグリッドのid) が作成されます
@@ -224,7 +224,7 @@
 
     ./bulk.exe
 
-    time mpiexec -np 2 py2dmat-sim-trhepd-rheed input.toml
+    time mpiexec -np 2 odatse-STR input.toml
 
     echo diff output/ColorMap.txt ref_ColorMap.txt
     res=0

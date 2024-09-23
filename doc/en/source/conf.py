@@ -46,9 +46,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'2DMAT solver module: sim-trhepd-rheed'
-copyright = u'2020, Institute for Solid State Physics, University of Tokyo'
-author = u'2DMAT Developer team'
+project = 'ODAT-SE solver module: odatse-STR for sim-trhepd-rheed'
+copyright = '2020-, Institute for Solid State Physics, University of Tokyo'
+author = 'ISSP, University of Tokyo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -109,7 +109,6 @@ html_sidebars = {
     ]
 }
 
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -120,7 +119,7 @@ numfig = True
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = '2DMATdoc'
+# htmlhelp_basename = '2DMATdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -149,8 +148,12 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'userguide_sim-trhepd-rheed.tex', u'2DMAT sim-trhepd-rheed Documentation',
-     author, 'manual', 'True'),
+    (master_doc,
+     'userguide_odatse-STR_en.tex',
+     u'ODAT-SE SIM-TRHEPD-RHEED Module Documentation',
+     u'ISSP, University of Tokyo',
+     'manual',
+     True),
 ]
 
 
@@ -158,10 +161,10 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, '2dmat-sim-trhepd-rheed', u'2DMAT Documentation',
-     [author], 1)
-]
+# man_pages = [
+#     (master_doc, '2dmat-sim-trhepd-rheed', u'2DMAT Documentation',
+#      [author], 1)
+# ]
 
 #latex_docclass =  {'manual': 'jsbook'}
 
@@ -170,21 +173,8 @@ man_pages = [
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, '2dmat-sim-trhepd-rheed', u'2DMAT Documentation',
-     author, '2DMAT', 'One line description of project.',
-     'Miscellaneous'),
-]
-
-html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'relations.html',
-        'searchbox.html',
-        'donate.html',
-    ]
-}
-
-
-
+# texinfo_documents = [
+#     (master_doc, '2dmat-sim-trhepd-rheed', u'2DMAT Documentation',
+#      author, '2DMAT', 'One line description of project.',
+#      'Miscellaneous'),
+# ]

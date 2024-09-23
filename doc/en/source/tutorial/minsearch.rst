@@ -14,7 +14,7 @@ The specific calculation procedure is as follows.
 
 2. Run the main program
 
-   Run the calculation using ``py2dmat-sim-trhepd-rheed`` to estimate the atomic coordinates.
+   Run the calculation using ``odatse-STR`` to estimate the atomic coordinates.
 
 In the main program, the Nelder-Mead method implemented in `scipy.optimize.fmin <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html>`_ is applied to find the parameter that minimizes the deviation (R-value) between the intensity obtained using the solver (in this case ``surf.exe``) and the intensity listed in the reference file (``experiment.txt``).
 
@@ -216,7 +216,7 @@ After that, run the main program. The computation time will take only a few seco
 
 .. code-block::
 
-   $ py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+   $ odatse-STR input.toml | tee log.txt
 
 Then, the standard output will look as follows.
 
@@ -268,7 +268,7 @@ Here is what it does, without further explanation.
 
   ./bulk.exe
 
-  time py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+  time odatse-STR input.toml | tee log.txt
 
   echo diff output/res.txt ref.txt
   res=0

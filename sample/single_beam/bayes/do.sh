@@ -4,7 +4,7 @@ sh prepare.sh
 
 ./bulk.exe
 
-time py2dmat-sim-trhepd-rheed input.toml
+time odatse-STR input.toml
 
 echo diff output/BayesData.txt ref_BayesData.txt
 res=0

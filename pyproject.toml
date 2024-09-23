@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "py2dmat-sim-trhepd-rheed"
+name = "odatse-STR"
 version = "1.0-dev"
-description = "SIM-TRHEPD-RHEED solver module for Py2DMAT: data-analysis software of quantum beam diffraction experiments for 2D material structure"
+description = "SIM-TRHEPD-RHEED solver module for ODAT-SE: data-analysis software of quantum beam diffraction experiments for 2D material structure"
 authors = ["2DMAT developers <2dmat-dev@issp.u-tokyo.ac.jp>"]
 license = "GPL-3.0-or-later"
 
 readme = "README.md"
-repository = "https://github.com/issp-center-dev/py2dmat-sim-trhepd-rheed"
+repository = "https://github.com/2DMAT/odatse-STR"
 
 packages = [
-  { include = "sim_trhepd_rheed", from = "src" }
+  { include = "sim_trhepd_rheed", from = "src", to = "odatse/extra" }
   ]
 
 [tool.poetry.dependencies]
@@ -30,7 +30,7 @@ pydantic = "^2"
 #pynvim = "^0.4.3"
 
 [tool.poetry.scripts]
-py2dmat-sim-trhepd-rheed = "sim_trhepd_rheed._main:main"
+odatse-STR = "odatse.extra.sim_trhepd_rheed._main:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

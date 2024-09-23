@@ -1,7 +1,9 @@
 #!/bin/sh
 
-#CMD=py2dmat-sim-trhepd-rheed
+#CMD=odatse-STR
 CMD="python3 ../../../src/main.py"
+
+export PYTHONUNBUFFERED=1
 
 sh ./prepare.sh
 

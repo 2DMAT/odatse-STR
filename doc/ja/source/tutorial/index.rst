@@ -33,7 +33,7 @@ TRHEPDでは、与えられた原子位置に対して回折データのシミ�
   ポピュレーションアニーリング法
 
 本チュートリアルでは、最初に順問題プログラム ``sim_trhepd_rheed`` の実行方法を説明した後、
-``minsearch``, ``mapper_mpi``, ``bayes``, ``exchange``, ``pamc`` による逆問題解析の実行方法について順に説明します。以下では 2DMAT-SIM-TRHEPD-RHEED に付属の ``py2dmat-sim-trhepd-rheed`` プログラムを利用し、TOML形式のパラメータファイルを入力として解析を実行します。
+``minsearch``, ``mapper_mpi``, ``bayes``, ``exchange``, ``pamc`` による逆問題解析の実行方法について順に説明します。以下では odatse-STR に付属の ``odatse-STR`` プログラムを利用し、TOML形式のパラメータファイルを入力として解析を実行します。
 
 チュートリアルの最後に、ユーザープログラムの項で、メインプログラムを自分で作成して使う方法を minsearch を例に説明します。
 

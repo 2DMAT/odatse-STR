@@ -8,7 +8,7 @@
 サンプルファイルの場所
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-サンプルファイルは ``sample/sim-trhepd-rheed/single_beam/bayes`` にあります。
+サンプルファイルは ``sample/single_beam/bayes`` にあります。
 フォルダには以下のファイルが格納されています。
 
 - ``bulk.txt``
@@ -180,7 +180,7 @@
 
 .. code-block::
 
-    $ py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+    $ odatse-STR input.toml | tee log.txt
 
 実行すると以下の様な標準出力がされます。
 
@@ -255,7 +255,7 @@
 
     ./bulk.exe
 
-    time py2dmat-sim-trhepd-rheed input.toml
+    time odatse-STR input.toml
 
     echo diff output/BayesData.txt ref_BayesData.txt
     res=0
