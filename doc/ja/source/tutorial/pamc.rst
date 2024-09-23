@@ -141,7 +141,7 @@ Nelder-Mead法による最適化のチュートリアルを参照してくださ
 
 .. code-block::
 
-    mpiexec -np 4 py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+    mpiexec -np 4 odatse-STR input.toml | tee log.txt
 
 ここではプロセス数4のMPI並列を用いた計算を行っています。
 (Open MPI を用いる場合で、使えるコア数よりも要求プロセス数の方が多い時には、 ``mpiexec`` コマンドに ``--oversubscribe`` オプションを追加してください。)
@@ -202,7 +202,7 @@ Nelder-Mead法による最適化のチュートリアルを参照してくださ
 
   ./bulk.exe
 
-  time mpiexec --oversubscribe -np 4 py2dmat-sim-trhepd-rheed input.toml
+  time mpiexec --oversubscribe -np 4 odatse-STR input.toml
 
   echo diff output/fx.txt ref.txt
   res=0

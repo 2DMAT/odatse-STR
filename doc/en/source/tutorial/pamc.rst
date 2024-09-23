@@ -24,7 +24,7 @@ This directory includes the following files:
 
 - ``input.toml``
 
-  The input file of py2dmat.
+  The input file of odatse-STR.
 
 - ``prepare.sh``, ``do.sh``
 
@@ -44,7 +44,7 @@ Input files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This subsection describes the input file.
-For details, see the population annealing Monte Carlo method in 2DMAT manual.
+For details, see the population annealing Monte Carlo method in ODAT-SE manual.
 ``input.toml`` in the sample directory is shown as the following:
 
 .. code-block::
@@ -91,7 +91,7 @@ For details, see the population annealing Monte Carlo method in 2DMAT manual.
 
 
 In the following, we will briefly describe this input file.
-For details, see the manual of the population annealing Monte Carlo method in 2DMAT manual.
+For details, see the manual of the population annealing Monte Carlo method in ODAT-SE manual.
 
 ``[base]`` section describes the settings for a whole calculation.
 
@@ -137,7 +137,7 @@ For details, see the manual of the population annealing Monte Carlo method in 2D
 Calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, move to the folder where the sample file is located. (Hereinafter, it is assumed that you are the root directory of 2DMAT.)
+First, move to the folder where the sample file is located. (Hereinafter, it is assumed that you are the root directory of odatse-STR.)
 
 .. code-block::
 
@@ -160,7 +160,7 @@ Then, run the main program. It will take a few secondes on a normal PC.
 
 .. code-block::
 
-   $ mpiexec -np 4 py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+   $ mpiexec -np 4 odatse-STR input.toml | tee log.txt
 
 Here, the calculation is performed using MPI parallel with 4 processes.
 If you are using OpenMPI and you request more processes than the number of available CPU cores, add the ``--oversubscribed`` option to the ``mpiexec`` command.
@@ -230,7 +230,7 @@ The content of the script is shown below, though further information will be omi
 
   ./bulk.exe
 
-  time mpiexec --oversubscribe -np 4 py2dmat-sim-trhepd-rheed input.toml
+  time mpiexec --oversubscribe -np 4 odatse-STR input.toml
 
   echo diff output/fx.txt ref.txt
   res=0
