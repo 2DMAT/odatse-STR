@@ -12,7 +12,7 @@ In TRHEPD, when atomic coordinates are given, diffraction data is given as a sim
 Therefore, we are dealing with the direct problem from atomic coordinates to diffraction data.
 On the other hand, in many cases, diffraction data is given experimentally, and the atomic coordinates are required to reproduce the experimental data. These are inverse problems to the above direct problems.
 
-In 2DMAT, the algorithms for solving the inverse problem can be selected as following algorithms:
+In ODAT-SE, the algorithms for solving the inverse problem can be selected as following algorithms:
 
 - ``minsearch``
 
@@ -36,7 +36,7 @@ In 2DMAT, the algorithms for solving the inverse problem can be selected as foll
 
 In this tutorial, we will first introduce how to run the direct problem solver ``sim-trhepd-rheed``.
 Then we will instruct how to run ``minsearch`` , ``mapper_mpi``, ``bayes``, ``exchange``, and ``pamc``.
-Hereinafter, we use ``py2dmat-sim-trhepd-rheed`` program included in 2DMAT-SIM-TRHEPD-RHEED with input files in TOML format.
+Hereinafter, we use ``odatse-STR`` program included in odatse-STR with input files in TOML format.
 
 At the end of the tutorial, we will explain how to write your own main program for analyses.
 

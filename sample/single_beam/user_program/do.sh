@@ -4,8 +4,8 @@ sh ./prepare.sh
 
 ./bulk.exe
 
-time python3 simple.py
-#time python3 simple2.py
+time python3 -u simple.py
+#time python3 -u simple2.py
 
 result=output/res.txt
 reference=ref.txt

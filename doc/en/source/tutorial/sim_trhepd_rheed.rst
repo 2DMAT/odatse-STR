@@ -1,7 +1,7 @@
 Direct Problem Solver
 ================================================================
 
-2DMAT-SIM-TRHEPD-RHEED module provides a wrapper to the forward problem solvers of 2DMAT for the program `sim-trhepd-rheed <https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/>`_ , which calculates the intensity of reflection fast (positron) electron diffraction (RHEED, TRHEPD) (A. Ichimiya, Jpn. J. Appl. Phys. 22, 176 (1983); 24, 1365 (1985)).
+odatse-STR module provides a wrapper to the forward problem solvers of ODAT-SE for the program `sim-trhepd-rheed <https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/>`_ , which calculates the intensity of reflection fast (positron) electron diffraction (RHEED, TRHEPD) (A. Ichimiya, Jpn. J. Appl. Phys. 22, 176 (1983); 24, 1365 (1985)).
 In this tutorial, we will present several examples of analyses using algorithms with sim-trhepd-rheed.
 First, we will explain how to install and test sim-trhepd-rheed. For details, see the official web page for `sim-trhepd-rheed <https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/>`_.
 
@@ -9,12 +9,12 @@ First, we will explain how to install and test sim-trhepd-rheed. For details, se
 Download and Install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, you need to obtain the source files from the repository, and move to the directory of 2DMAT-SIM-TRHEPD-RHEED submodule.
+First, you need to obtain the source files from the repository, and move to the directory of odatse-STR module.
 
 .. code-block:: bash
 
-   $ git clone -b update https://github.com/issp-center-dev/2DMAT.git
-   $ cd 2DMAT/extra/sim-trhepd-rheed
+   $ git clone https://github.com/2DMAT/odatse-STR.git
+   $ cd odatse-STR
 
 Next, you need to download the source files of sim-trhepd-rheed from their repository, and build it.
 
@@ -35,7 +35,7 @@ In sim-trhepd-rheed, the bulk part of the surface structure is first calculated 
 Then, using the results of the ``bulk.exe`` calculation (the ``bulkP.b`` file), the surface portion of the ``surf.exe`` surface structure is calculated.
 
 In this tutorial, we will actually do the TRHEPD calculation.
-The sample input files are located in ``sample/solver`` of 2DMAT-SIM-TRHEPD-RHEED.
+The sample input files are located in ``sample/solver`` of odatse-STR.
 First, copy this folder to a suitable working folder ``work``.
 
 .. code-block::

@@ -1,19 +1,19 @@
 TRHEPD 順問題ソルバー
 ========================
 
-2DMAT-SIM-TRHEPD-RHEEDモジュールは、反射高速(陽)電子回折(RHEED, TRHEPD)の強度計算 (A. Ichimiya, Jpn. J. Appl. Phys. 22, 176 (1983); 24, 1365 (1985)) を行うプログラム `sim-trhepd-rheed <https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/>`_ を2DMATの順問題ソルバーとして利用するためのラッパーです。
+odatse-STR モジュールは、反射高速(陽)電子回折(RHEED, TRHEPD)の強度計算 (A. Ichimiya, Jpn. J. Appl. Phys. 22, 176 (1983); 24, 1365 (1985)) を行うプログラム `sim-trhepd-rheed <https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/>`_ をODAT-SEの順問題ソルバーとして利用するためのラッパーです。
 本チュートリアルでは sim-trhepd-rheed を用い、様々なアルゴリズムを利用した解析を行います。
 最初に、チュートリアルを行うために必要な sim-trhepd-rheed のインストールおよびテストを行います。
 
 ダウンロード・インストール
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-あらかじめ py2dmat のソースコードをリポジトリから取得し、2DMAT-SIM-TRHEPD-RHEED サブモジュールのディレクトリに移動します。
+あらかじめ odatse-STR のソースコードをリポジトリから取得しておきます。
 
 .. code-block:: bash
 
-    $ git clone -b update https://github.com/issp-center-dev/2DMAT.git
-    $ cd extra/sim-trhepd-rheed
+    $ git clone https://github.com/2DMAT/odatse-STR.git
+    $ cd odatse-STR
 
 GitHub の sim-trhepd-rheed リポジトリから、ソースコード一式を入手し、ビルドします。
 

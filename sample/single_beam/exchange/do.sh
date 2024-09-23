@@ -4,7 +4,7 @@ sh prepare.sh
 
 ./bulk.exe
 
-time mpiexec --oversubscribe -np 4 py2dmat-sim-trhepd-rheed input.toml
+time mpiexec --oversubscribe -np 4 odatse-STR input.toml
 
 echo diff output/best_result.txt ref.txt
 res=0

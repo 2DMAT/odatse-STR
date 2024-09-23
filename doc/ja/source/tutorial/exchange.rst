@@ -137,7 +137,7 @@ Nelder-Mead法による最適化のチュートリアルを参照してくださ
 
 .. code-block::
 
-    $ mpiexec -np 4 py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+    $ mpiexec -np 4 odatse-STR input.toml | tee log.txt
 
 ここではプロセス数4のMPI並列を用いた計算を行っています。
 (Open MPI を用いる場合で、使えるコア数よりも要求プロセス数の方が多い時には、
@@ -181,7 +181,7 @@ Nelder-Mead法による最適化のチュートリアルを参照してくださ
 
   ./bulk.exe
 
-  time mpiexec --oversubscribe -np 4 py2dmat-sim-trhepd-rheed input.toml
+  time mpiexec --oversubscribe -np 4 odatse-STR input.toml
 
   echo diff output/best_result.txt ref.txt
   res=0
@@ -197,8 +197,8 @@ Nelder-Mead法による最適化のチュートリアルを参照してくださ
 後処理
 ~~~~~~~~
 各ランクフォルダにある ``result.txt`` には、各レプリカでサンプリングされたデータが記録されていますが、
-2DMAT の実装では同一レプリカが様々な温度のサンプルを保持しています。
-2DMAT は、全レプリカの結果から温度ごとのサンプルに整列し直す ``script/separateT.py`` スクリプトを提供しています。
+ODAT-SE の実装では同一レプリカが様々な温度のサンプルを保持しています。
+ODAT-SE は、全レプリカの結果から温度ごとのサンプルに整列し直す ``script/separateT.py`` スクリプトを提供しています。
 
 .. code-block::
 

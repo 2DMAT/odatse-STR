@@ -2,11 +2,11 @@ import numpy as np
 
 import py2dmat
 import py2dmat.algorithm.min_search
-import sim_trhepd_rheed
+from odatse.extra.sim_trhepd_rheed import Solver
 
 info = py2dmat.Info.from_file("input.toml")
 
-solver = sim_trhepd_rheed.Solver(info)
+solver = Solver(info)
 
 runner = py2dmat.Runner(solver, info)
 

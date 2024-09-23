@@ -44,7 +44,7 @@ Input files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This subsection describes the input files.
-For details, see the replica exchange Monte Carlo method in 2DMAT manual.
+For details, see the replica exchange Monte Carlo method in ODAT-SE manual.
 ``input.toml`` in the sample directory is shown as the following:
 
 .. code-block::
@@ -89,7 +89,7 @@ For details, see the replica exchange Monte Carlo method in 2DMAT manual.
 
 
 In the following, we will briefly describe the contents of the file.
-For details, see the algorithm section of 2DMAT manual.
+For details, see the algorithm section of ODAT-SE manual.
 
 ``[base]`` section describes the settings for a whole calculation.
 
@@ -131,7 +131,7 @@ For details, see the algorithm section of 2DMAT manual.
 Calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, move to the folder where the sample file is located. (Hereinafter, it is assumed that you are the root directory of 2DMAT.)
+First, move to the folder where the sample file is located. (Hereinafter, it is assumed that you are the root directory of odatse-STR.)
 
 .. code-block::
 
@@ -154,7 +154,7 @@ Then, run the main program. It will take a few secondes on a normal PC.
 
 .. code-block::
 
-   $ mpiexec -np 4 py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+   $ mpiexec -np 4 odatse-STR input.toml | tee log.txt
 
 Here, the calculation is performed using MPI parallel with 4 processes.
 If you are using Open MPI and you request more processes than the number of available CPU cores, add the ``--oversubscribed`` option to the ``mpiexec`` command.
@@ -197,7 +197,7 @@ The content of the script is shown below, though further information will be omi
 
   ./bulk.exe
 
-  time mpiexec --oversubscribe -np 4 py2dmat-sim-trhepd-rheed input.toml
+  time mpiexec --oversubscribe -np 4 odatse-STR input.toml
 
   echo diff output/best_result.txt ref.txt
   res=0
@@ -216,7 +216,7 @@ Post process
 
 The ``result.txt`` in the output directory for each MPI rank records the data sampled by each replica.
 However, the same replica holds samples at different temperatures because of the temperature exchanges.
-2DMat provides a script, ``script/separateT.py``, that rearranges the results of all replicas into the samples classified by the temperature.
+odatse-STR provides a script, ``script/separateT.py``, that rearranges the results of all replicas into the samples classified by the temperature.
 
 .. code-block::
 

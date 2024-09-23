@@ -4,7 +4,7 @@ sh ./prepare.sh
 
 ./bulk.exe
 
-time py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+time odatse-STR input.toml | tee log.txt
 
 echo diff output/res.txt ref.txt
 res=0

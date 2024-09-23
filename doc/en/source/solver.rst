@@ -3,7 +3,7 @@ Input and output
 
 .. _sim-trhepd-rheed: https://github.com/sim-trhepd-rheed/sim-trhepd-rheed
 
-2DMAT-SIM-TRHEPD-RHEED module is a ``Solver`` package that uses sim-trhepd-rheed_ to calculate the diffraction rocking curve from the atomic position :math:`x` and returns the deviation from the experimental rocking curve as :math:`f(x)`. 
+odatse-STR module is a ``Solver`` package that uses sim-trhepd-rheed_ to calculate the diffraction rocking curve from the atomic position :math:`x` and returns the deviation from the experimental rocking curve as :math:`f(x)`. 
 
 In this section, the input parameters, the input data, and the output data are explained.
 The input parameters are taken from the ``solver`` entry of the ``Info`` class.
@@ -213,7 +213,7 @@ Input template file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The input template file ``template.txt`` is a template for creating an input file for ``surf.exe``.
-The parameters to be varied in ``py2dmat`` (such as the atomic coordinates you want to find) should be replaced with the appropriate string, such as ``value_*``.
+The parameters to be varied in ``odatse-STR`` (such as the atomic coordinates you want to find) should be replaced with the appropriate string, such as ``value_*``.
 The strings to be used are specified by ``string_list`` in the ``[solver]`` - ``[param]`` section of the input file for the solver.
 An example template is shown below.
 
@@ -236,7 +236,7 @@ An example template is shown below.
     2, 1.0, 1.009998328	1	0.597225
     1,1                                  ,(WDOM,I=1,NDOM)
 
-In this case, ``value_01``, ``value_02``, and ``value_03`` are the parameters to be varied in ``py2dmat``.
+In this case, ``value_01``, ``value_02``, and ``value_03`` are the parameters to be varied in ``odatse-STR``.
 
 
 Target file

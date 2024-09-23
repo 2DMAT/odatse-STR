@@ -176,7 +176,7 @@ After that, run the main program. The computation time will take only a few seco
 
 .. code-block::
 
-   $ mpiexec -np 2 py2dmat-sim-trhepd-rheed input.toml | tee log.txt
+   $ mpiexec -np 2 odatse-STR input.toml | tee log.txt
 
 Here, the calculation using MPI parallel with 2 processes will be done.
 When executed, a folder for each rank will be created, and a subfolder ``LogXXXX_YYYY`` (where ``XXXX`` and ``YYYY`` are the grid id and the sequence number, respectively) will be created under it.
@@ -229,7 +229,7 @@ Here is what it does, without further explanation.
 
     ./bulk.exe
 
-    time mpiexec -np 2 py2dmat-sim-trhepd-rheed input.toml
+    time mpiexec -np 2 odatse-STR input.toml
 
     echo diff output/ColorMap.txt ref_ColorMap.txt
     res=0

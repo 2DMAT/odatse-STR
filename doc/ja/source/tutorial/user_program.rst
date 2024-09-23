@@ -1,7 +1,7 @@
 ユーザープログラムによる解析
 ================================
 
-ここでは、2DMAT-SIM-TRHEPD-RHEED モジュールを用いたユーザプログラムを作成し、解析を行う方法を説明します。逆問題アルゴリズムは例としてNelder-Mead法を用います。
+ここでは、odatse-STR モジュールを用いたユーザプログラムを作成し、解析を行う方法を説明します。逆問題アルゴリズムは例としてNelder-Mead法を用います。
 
 
 サンプルファイルの場所
@@ -39,7 +39,7 @@
 プログラムの説明
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``simple.py`` は 2DMAT-SIM-TRHEPD-RHEED モジュールを用いて解析を行うシンプルなプログラムです。
+``simple.py`` は odatse-STR モジュールを用いて解析を行うシンプルなプログラムです。
 プログラムの全体を以下に示します。
 
 .. code-block:: python
@@ -48,22 +48,22 @@
 
     import py2dmat
     import py2dmat.algorithm.min_search
-    import sim_trhepd_rheed
+    from odatse.extra.sim_trhepd_rheed import Solver
 
     info = py2dmat.Info.from_file("input.toml")
 
-    solver = sim_trhepd_rheed.Solver(info)
+    solver = Solver(info)
     runner = py2dmat.Runner(solver, info)
     alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
     alg.main()
 
 プログラムではまず、必要なモジュールを import します。
 
-- 2DMAT のメインモジュール ``py2dmat``
+- ODAT-SE のメインモジュール ``py2dmat``
 
 - 今回利用する逆問題解析アルゴリズム ``py2dmat.algorithm.min_search``
 
-- 順問題ソルバーモジュール ``sim_trhepd_rheed``
+- 順問題ソルバーモジュール ``odatse.extra.sim_trhepd_rheed``
 
 次に、解析で利用するクラスのインスタンスを作成します。
 
@@ -71,9 +71,9 @@
 
   パラメータを格納するクラスです。 ``from_file`` クラスメソッドに TOML ファイルのパスを渡して作成することができます。
 
-- ``sim_trhepd_rheed.Solver`` クラス
+- ``odatse.extra.sim_trhepd_rheed.Solver`` クラス
 
-  2DMAT-SIM-TRHEPD-RHEED モジュールの順問題ソルバーです。Info クラスのインスタンスを渡して作成します。
+  odatse-STR モジュールの順問題ソルバーです。Info クラスのインスタンスを渡して作成します。
 
 - ``py2dmat.Runner`` クラス
 
@@ -94,7 +94,7 @@ Solver, Runner, Algorithm の順にインスタンスを作成した後、Algori
 
     import py2dmat
     import py2dmat.algorithm.min_search
-    import sim_trhepd_rheed
+    from odatse.extra.sim_trhepd_rheed import Solver
 
     params = {
         "base": {
@@ -130,7 +130,7 @@ Solver, Runner, Algorithm の順にインスタンスを作成した後、Algori
 
     info = py2dmat.Info(params)
 
-    solver = sim_trhepd_rheed.Solver(info)
+    solver = Solver(info)
     runner = py2dmat.Runner(solver, info)
     alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
     alg.main()

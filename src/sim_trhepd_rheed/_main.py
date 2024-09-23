@@ -20,7 +20,7 @@ import py2dmat
 import py2dmat.mpi
 import py2dmat.util.toml
 
-from sim_trhepd_rheed import Solver
+from odatse.extra.sim_trhepd_rheed import Solver
 
 def main():
     import argparse

@@ -16,5 +16,5 @@
 
 if __name__ == "__main__":
     # sys.path[0] is this directory (2DMAT/src)
-    from sim_trhepd_rheed._main import main
+    from odatse.extra.sim_trhepd_rheed._main import main
     main()
