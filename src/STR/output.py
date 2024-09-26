@@ -8,7 +8,7 @@ from typing import List, Dict, Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from mpi4py import MPI
 
-from py2dmat import exception, mpi
+from odatse import exception, mpi
 from . import lib_make_convolution
 
 class Output(object):
