@@ -16,7 +16,8 @@ packages = [
 python = ">=3.6.8"
 numpy = "^1.14"
 mpi4py = {version = "^3", optional = true}
-ODAT-SE = "^3"
+ODAT-SE = ">2"
+pydantic = "^2"
 
 #[tool.poetry.extras]
 #min_search = ["scipy"]
