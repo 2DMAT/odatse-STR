@@ -16,11 +16,12 @@
 
 from sys import exit
 
-import py2dmat
-import py2dmat.mpi
-import py2dmat.util.toml
+import odatse
+import odatse.mpi
+import odatse.util.toml
 
-from odatse.extra.sim_trhepd_rheed import Solver
+from . import __version__
+from .sim_trhepd_rheed import Solver
 
 def main():
     import argparse
@@ -32,35 +33,35 @@ def main():
         )
     )
     parser.add_argument("inputfile", help="input file with TOML format")
-    parser.add_argument("--version", action="version", version=py2dmat.__version__)
+    parser.add_argument("--version", action="version", version="odatse-STR {}, ODAT-SE {}".format(__version__, odatse.__version__))
 
     args = parser.parse_args()
 
     file_name = args.inputfile
     inp = {}
-    if py2dmat.mpi.rank() == 0:
-        inp = py2dmat.util.toml.load(file_name)
-    if py2dmat.mpi.size() > 1:
-        inp = py2dmat.mpi.comm().bcast(inp, root=0)
-    info = py2dmat.Info(inp)
+    if odatse.mpi.rank() == 0:
+        inp = odatse.util.toml.load(file_name)
+    if odatse.mpi.size() > 1:
+        inp = odatse.mpi.comm().bcast(inp, root=0)
+    info = odatse.Info(inp)
 
     algname = info.algorithm["name"]
     if algname == "mapper":
-        from py2dmat.algorithm.mapper_mpi import Algorithm
+        from odatse.algorithm.mapper_mpi import Algorithm
     elif algname == "minsearch":
-        from py2dmat.algorithm.min_search import Algorithm
+        from odatse.algorithm.min_search import Algorithm
     elif algname == "exchange":
-        from py2dmat.algorithm.exchange import Algorithm
+        from odatse.algorithm.exchange import Algorithm
     elif algname == "pamc":
-        from py2dmat.algorithm.pamc import Algorithm
+        from odatse.algorithm.pamc import Algorithm
     elif algname == "bayes":
-        from py2dmat.algorithm.bayes import Algorithm
+        from odatse.algorithm.bayes import Algorithm
     else:
         print(f"ERROR: Unknown algorithm ({algname})")
         exit(1)
 
     solver = Solver(info)
-    runner = py2dmat.Runner(solver, info)
+    runner = odatse.Runner(solver, info)
     alg = Algorithm(info, runner)
     alg.main()
 

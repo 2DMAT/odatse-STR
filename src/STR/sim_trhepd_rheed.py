@@ -23,8 +23,8 @@ import subprocess
 
 import numpy as np
 
-import py2dmat
-from py2dmat import exception, mpi
+import odatse
+from odatse import exception, mpi
 from .input import Input
 from .output import Output
 from .parameter import SolverInfo
@@ -39,7 +39,7 @@ if TYPE_CHECKING:
     from mpi4py import MPI
 
 
-class Solver(py2dmat.solver.SolverBase):
+class Solver(odatse.solver.SolverBase):
     mpicomm: Optional["MPI.Comm"]
     mpisize: int
     mpirank: int
@@ -48,7 +48,7 @@ class Solver(py2dmat.solver.SolverBase):
     detail_timer: Dict
     path_to_solver: Path
 
-    def __init__(self, info: py2dmat.Info):
+    def __init__(self, info: odatse.Info):
         super().__init__(info)
 
         self.mpicomm = mpi.comm()
