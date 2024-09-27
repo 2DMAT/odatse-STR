@@ -1,15 +1,20 @@
 #!/bin/sh
 
+export PYTHONUNBUFFERED=1
+export OMPI_MCA_rmaps_base_oversubscribe=true
+
 #CMD=odatse-STR
 CMD="python3 ../../../src/main.py"
 
-export PYTHONUNBUFFERED=1
+MPIEXEC=""
+#MPIEXEC="mpiexec -np 4"
+
 
 sh ./prepare.sh
 
 ../../bin/bulk.exe
 
-time $CMD input.toml
+time $MPIEXEC $CMD input.toml
 
 result=output/res.txt
 reference=ref.txt
