@@ -34,7 +34,7 @@ sim-trhepd-rheed では、最初に ``bulk.exe`` で表面構造のバルク部�
 その後、 ``bulk.exe`` の計算結果 (``bulkP.b`` ファイル) を用いて、 ``surf.exe`` 表面構造の表面部分を計算します。
 
 このチュートリアルでは実際に TRHEPD 計算をしてみます。
-サンプルとなる入力ファイルは 2DMAT-SIM-TRHEPD-RHEED の ``sample/solver`` 以下にあります。
+サンプルとなる入力ファイルは odatse-STR の ``sample/solver`` 以下にあります。
 まず、このフォルダを適当な作業用フォルダ ``work`` にコピーします。
 
 .. code-block::

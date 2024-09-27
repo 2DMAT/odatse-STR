@@ -47,40 +47,40 @@ The entire source file is shown as follows:
 
     import numpy as np
 
-    import py2dmat
-    import py2dmat.algorithm.min_search
-    from odatse.extra.sim_trhepd_rheed import Solver
+    import odatse
+    import odatse.algorithm.min_search
+    from odatse.extra.STR import Solver
 
-    info = py2dmat.Info.from_file("input.toml")
+    info = odatse.Info.from_file("input.toml")
 
     solver = Solver(info)
-    runner = py2dmat.Runner(solver, info)
-    alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
+    runner = odatse.Runner(solver, info)
+    alg = odatse.algorithm.min_search.Algorithm(info, runner)
     alg.main()
 
 At the beginning of the program, the required modules are imported as listed below.
 
-- ``py2dmat`` for the main module of 2DMAT.
+- ``odatse`` for the main module of ODAT-SE.
 
-- ``py2dmat.algorithm.min_search`` for the module of the inverse problem algorithm used in this tutorial.
+- ``odatse.algorithm.min_search`` for the module of the inverse problem algorithm used in this tutorial.
 
-- ``odatse.extra.sim_trhepd_rheed`` for the direct problem solver module.
+- ``odatse.extra.STR`` for the direct problem solver module.
 
 Next, the instances of the classes are created.
 
-- ``py2dmat.Info`` class
+- ``odatse.Info`` class
 
   This class is for storing the parameters. It is created by calling a class method ``from_file`` with a path to TOML file as an argument.
 
-- ``odatse.extra.sim_trhepd_rheed.Solver`` class
+- ``odatse.extra.STR.Solver`` class
 
-  This class is for the direct problem solver of the 2DMAT-SIM-TRHEPD-RHEED module. It is created by passing an instance of Info class.
+  This class is for the direct problem solver of the odatse-STR module. It is created by passing an instance of Info class.
 
-- ``py2dmat.Runner`` class
+- ``odatse.Runner`` class
 
   This class is for connecting the direct problem solver and the inverse problem algorithm. It is created by passing an instance of Solver class and an instance of Info class.
 
-- ``py2dmat.algorithm.min_search.Algorithm`` class
+- ``odatse.algorithm.min_search.Algorithm`` class
 
   This class is for the inverse problem algorithm. In this tutorial, we use ``min_search`` module that implements the optimization by Nelder-Mead method. It is created by passing an instance of Runner class.
 
@@ -93,9 +93,9 @@ In the above program, the input parameters are read from a file in TOML format. 
 
     import numpy as np
 
-    import py2dmat
-    import py2dmat.algorithm.min_search
-    from odatse.extra.sim_trhepd_rheed import Solver
+    import odatse
+    import odatse.algorithm.min_search
+    from odatse.extra.STR import Solver
 
     params = {
         "base": {
@@ -129,11 +129,11 @@ In the above program, the input parameters are read from a file in TOML format. 
         },
     }
 
-    info = py2dmat.Info(params)
+    info = odatse.Info(params)
 
     solver = Solver(info)
-    runner = py2dmat.Runner(solver, info)
-    alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
+    runner = odatse.Runner(solver, info)
+    alg = odatse.algorithm.min_search.Algorithm(info, runner)
     alg.main()
 
 An instance of Info class is created by passing a set of parameters in a dict form.
