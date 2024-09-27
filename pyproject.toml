@@ -9,14 +9,14 @@ readme = "README.md"
 repository = "https://github.com/2DMAT/odatse-STR"
 
 packages = [
-  { include = "sim_trhepd_rheed", from = "src", to = "odatse/extra" }
+  { include = "STR", from = "src", to = "odatse/extra" }
   ]
 
 [tool.poetry.dependencies]
 python = ">=3.6.8"
 numpy = "^1.14"
 mpi4py = {version = "^3", optional = true}
-py2dmat = "^2"
+ODAT-SE = "^3"
 
 #[tool.poetry.extras]
 #min_search = ["scipy"]
