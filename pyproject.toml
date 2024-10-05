@@ -16,7 +16,7 @@ packages = [
 python = ">=3.6.8"
 numpy = "^1.14"
 mpi4py = {version = "^3", optional = true}
-ODAT-SE = "^3"
+ODAT-SE = ">2"
 
 #[tool.poetry.extras]
 #min_search = ["scipy"]
@@ -29,7 +29,7 @@ ODAT-SE = "^3"
 #pynvim = "^0.4.3"
 
 [tool.poetry.scripts]
-odatse-STR = "odatse.extra.sim_trhepd_rheed._main:main"
+odatse-STR = "odatse.extra.STR._main:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
