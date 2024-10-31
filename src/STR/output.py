@@ -13,7 +13,8 @@ from . import lib_make_convolution
 
 class Output(object):
     """
-    Output manager.
+    This class manages the output of the solver program.
+    It handles various configurations and calculations related to the output data.
     """
 
     mpicomm: Optional["MPI.Comm"]
@@ -42,6 +43,18 @@ class Output(object):
     cal_number: List
 
     def __init__(self, info, isLogmode, detail_timer):
+        """
+        Initialize the Output class with the given parameters.
+
+        Parameters
+        ----------
+        info : object
+            Contains configuration and solver information.
+        isLogmode : bool
+            Indicates if logging mode is enabled.
+        detail_timer : dict
+            Dictionary to store detailed timing information.
+        """
         self.mpicomm = mpi.comm()
         self.mpisize = mpi.size()
         self.mpirank = mpi.rank()
@@ -282,7 +295,25 @@ class Output(object):
         self.cal_number = v
 
     def read_experiment(self, ref_path, first, last, read_to_final_line):
-        # Read experiment data
+        """
+        Read experiment data from a file.
+
+        Parameters
+        ----------
+        ref_path : str
+            Path to the reference file containing experimental data.
+        first : int
+            The first line to read from the file.
+        last : int
+            The last line to read from the file.
+        read_to_final_line : bool
+            If True, read until the final line of the file.
+
+        Returns
+        -------
+        np.ndarray
+            The experimental data read from the file.
+        """
         if self.mpirank == 0:
             assert first > 0
 
@@ -302,13 +333,28 @@ class Output(object):
         return data_exp
 
     def prepare(self, fitted_x_list):
-        self.fitted_x_list = fitted_x_list
+        """
+        Prepare the output with the given fitted x list.
 
+        Parameters
+        ----------
+        fitted_x_list : list
+            List of fitted x values.
+        """
+        self.fitted_x_list = fitted_x_list
     def get_results(self, work_dir) -> float:
         """
         Get Rfactor obtained by the solver program.
+
+        Parameters
+        ----------
+        work_dir : str
+            The working directory where the solver program runs.
+
         Returns
         -------
+        float
+            The calculated Rfactor.
         """
         # Calculate Rfactor and Output numerical results
         cwd = os.getcwd()
@@ -334,6 +380,19 @@ class Output(object):
         return Rfactor
 
     def _post(self, fitted_x_list):
+        """
+        Perform post-processing to calculate the Rfactor.
+
+        Parameters
+        ----------
+        fitted_x_list : list
+            List of fitted x values.
+
+        Returns
+        -------
+        float
+            The calculated Rfactor.
+        """
         I_experiment_normalized_l = self.I_reference_normalized_l
 
         (
@@ -361,7 +420,20 @@ class Output(object):
         return Rfactor
 
     def _generate_rocking_curve(self, fitted_x_list, glancing_angle, conv_I_calculated_normalized_l, Rfactor):
-        # generate RockingCurve_calculated.txt
+        """
+        Generate the RockingCurve_calculated.txt file.
+
+        Parameters
+        ----------
+        fitted_x_list : list
+            List of fitted x values.
+        glancing_angle : np.ndarray
+            Array of glancing angles.
+        conv_I_calculated_normalized_l : np.ndarray
+            Array of normalized calculated intensities.
+        Rfactor : float
+            The calculated Rfactor.
+        """
         dimension = self.dimension
         string_list = self.string_list
         cal_number = self.cal_number
@@ -418,6 +490,21 @@ class Output(object):
             self.detail_timer["make_RockingCurve.txt"] += time_end - time_sta
 
     def _calc_I_from_file(self):
+        """
+        Calculate the intensity from the file.
+
+        This function reads the calculated data from the file, performs convolution,
+        and normalizes the data based on the specified normalization method.
+
+        Returns
+        -------
+        tuple
+            A tuple containing:
+            - glancing_angle (np.ndarray): Array of glancing angles.
+            - angle_number_convolution (int): Number of angles after convolution.
+            - norm (np.ndarray): Normalization factors.
+            - data_normalized (np.ndarray): Normalized data.
+        """
         if self.isLogmode:
             time_sta = time.perf_counter()
 
@@ -538,6 +625,27 @@ class Output(object):
         )
 
     def _calc_Rfactor(self, n_g_angle, calc_result, exp_result):
+        """
+        Calculate the R-factor.
+
+        This function calculates the R-factor based on the specified R-factor type.
+        The R-factor is a measure of the difference between the experimental and
+        calculated data.
+
+        Parameters
+        ----------
+        n_g_angle : int
+            Number of glancing angles.
+        calc_result : np.ndarray
+            Calculated results.
+        exp_result : np.ndarray
+            Experimental results.
+
+        Returns
+        -------
+        float
+            The calculated R-factor.
+        """
         spot_weight = self.spot_weight
         n_spot = len(spot_weight)
 
