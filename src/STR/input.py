@@ -15,30 +15,48 @@ class Input(object):
     """
     A class to handle input data and configurations for the simulation.
 
-    Attributes:
-        mpicomm (Optional[MPI.Comm]): MPI communicator.
-        mpisize (int): Size of the MPI communicator.
-        mpirank (int): Rank of the MPI communicator.
-        root_dir (Path): Root directory for the simulation.
-        output_dir (Path): Output directory for the simulation.
-        dimension (int): Dimension of the simulation.
-        run_scheme (str): Scheme to run the simulation.
-        generate_rocking_curve (bool): Flag to generate rocking curve.
-        string_list (List[str]): List of strings for the simulation.
-        bulk_output_file (Path): Path to the bulk output file.
-        surface_input_file (Path): Path to the surface input file.
-        surface_template_file (Path): Path to the surface template file.
-        template_file_origin (List[str]): Original template file content.
+    Attributes
+    ----------
+    mpicomm : Optional[MPI.Comm]
+        MPI communicator.
+    mpisize : int
+        Size of the MPI communicator.
+    mpirank : int
+        Rank of the MPI communicator.
+    root_dir : Path
+        Root directory for the simulation.
+    output_dir : Path
+        Output directory for the simulation.
+    dimension : int
+        Dimension of the simulation.
+    run_scheme : str
+        Scheme to run the simulation.
+    generate_rocking_curve : bool
+        Flag to generate rocking curve.
+    string_list : List[str]
+        List of strings for the simulation.
+    bulk_output_file : Path
+        Path to the bulk output file.
+    surface_input_file : Path
+        Path to the surface input file.
+    surface_template_file : Path
+        Path to the surface template file.
+    template_file_origin : List[str]
+        Original template file content.
     """
 
     def __init__(self, info, isLogmode, detail_timer):
         """
         Initializes the Input class with the given parameters.
 
-        Args:
-            info: Information object containing base and solver configurations.
-            isLogmode (bool): Flag to enable logging mode.
-            detail_timer: Timer object for detailed timing.
+        Parameters
+        ----------
+        info
+            Information object containing base and solver configurations.
+        isLogmode : bool
+            Flag to enable logging mode.
+        detail_timer
+            Timer object for detailed timing.
         """
         self.mpicomm = mpi.comm()
         self.mpisize = mpi.size()
@@ -128,11 +146,15 @@ class Input(object):
         """
         Loads the surface template file.
 
-        Args:
-            filename (str): The name of the surface template file.
+        Parameters
+        ----------
+        filename : str
+            The name of the surface template file.
 
-        Returns:
-            List[str]: The content of the surface template file.
+        Returns
+        -------
+        List[str]
+            The content of the surface template file.
         """
         template_file = []
         with open(self.surface_template_file) as f:
@@ -144,11 +166,15 @@ class Input(object):
         """
         Loads the bulk output file.
 
-        Args:
-            filename (str): The name of the bulk output file.
+        Parameters
+        ----------
+        filename : str
+            The name of the bulk output file.
 
-        Returns:
-            np.ndarray: The content of the bulk output file as a numpy array.
+        Returns
+        -------
+        np.ndarray
+            The content of the bulk output file as a numpy array.
         """
         bulk_file = []
         with open(self.bulk_output_file) as f:
@@ -163,12 +189,17 @@ class Input(object):
         """
         Prepares the input data for the simulation.
 
-        Args:
-            x (np.ndarray): The input data array.
-            args: Additional arguments for preparation.
+        Parameters
+        ----------
+        x : np.ndarray
+            The input data array.
+        args
+            Additional arguments for preparation.
 
-        Returns:
-            Tuple[List[str], str]: The fitted x list and folder name.
+        Returns
+        -------
+        Tuple[List[str], str]
+            The fitted x list and folder name.
         """
         if self.isLogmode:
             time_sta = time.perf_counter()
@@ -227,13 +258,19 @@ class Input(object):
         """
         Prepares the bulk output file for the simulation.
 
-        Args:
-            Log_number (int): The log number for the simulation.
-            bulk_output_file (Path): The path to the bulk output file.
-            iset: The set identifier.
+        Parameters
+        ----------
+        Log_number : int
+            The log number for the simulation.
+        bulk_output_file : Path
+            The path to the bulk output file.
+        iset
+            The set identifier.
 
-        Returns:
-            str: The folder name for the bulk output file.
+        Returns
+        -------
+        str
+            The folder name for the bulk output file.
         """
         folder_name = "Log{:08d}_{:08d}".format(Log_number, iset)
         os.makedirs(folder_name, exist_ok=True)
@@ -249,9 +286,12 @@ class Input(object):
         """
         Replaces placeholders in the template file with fitted values.
 
-        Args:
-            fitted_x_list (List[str]): The list of fitted values.
-            folder_name (str): The folder name for the output files.
+        Parameters
+        ----------
+        fitted_x_list : List[str]
+            The list of fitted values.
+        folder_name : str
+            The folder name for the output files.
         """
         template_file = []
         if self.run_scheme == "subprocess":
@@ -282,8 +322,10 @@ class Input(object):
         """
         Checks if all placeholders are present in the template file.
 
-        Raises:
-            InputError: If any placeholder is missing in the template file.
+        Raises
+        ------
+        InputError
+            If any placeholder is missing in the template file.
         """
         found = [False] * self.dimension
         with open(self.surface_template_file, "r") as file_input:
