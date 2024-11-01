@@ -40,15 +40,36 @@ if TYPE_CHECKING:
 
 
 class Solver(odatse.solver.SolverBase):
-    mpicomm: Optional["MPI.Comm"]
-    mpisize: int
-    mpirank: int
-    run_scheme: str
-    isLogmode: bool
-    detail_timer: Dict
-    path_to_solver: Path
+    """
+    Solver class for sim_trhepd_rheed.
+
+    Attributes
+    ----------
+    mpicomm : Optional["MPI.Comm"]
+        MPI communicator.
+    mpisize : int
+        Size of the MPI communicator.
+    mpirank : int
+        Rank of the MPI communicator.
+    run_scheme : str
+        Scheme to run the solver, either 'subprocess' or 'connect_so'.
+    isLogmode : bool
+        Flag to indicate if logging mode is enabled.
+    detail_timer : Dict
+        Dictionary to store detailed timing information.
+    path_to_solver : Path
+        Path to the solver executable.
+    """
 
     def __init__(self, info: odatse.Info):
+        """
+        Initialize the Solver.
+
+        Parameters
+        ----------
+        info : odatse.Info
+            Information object containing solver configuration.
+        """
         super().__init__(info)
 
         self.mpicomm = mpi.comm()
@@ -91,7 +112,9 @@ class Solver(odatse.solver.SolverBase):
         self.output = Output(info.base, info_solver, self.isLogmode, self.detail_timer)
 
     def set_detail_timer(self) -> None:
-        # TODO: Operate log_mode with toml file. Generate txt of detail_timer.
+        """
+        Set the detail timer for logging mode.
+        """
         if self.isLogmode:
             self.detail_timer = {}
             self.detail_timer["prepare_Log-directory"] = 0
@@ -108,18 +131,46 @@ class Solver(odatse.solver.SolverBase):
 
     def default_run_scheme(self) -> str:
         """
-        Return
+        Get the default run scheme.
+
+        Returns
         -------
         str
-            run_scheme.
+            The run scheme.
         """
         return self.run_scheme
 
     def command(self) -> List[str]:
-        """Command to invoke solver"""
+        """
+        Get the command to invoke the solver.
+
+        Returns
+        -------
+        List[str]
+            The command to invoke the solver.
+        """
         return [str(self.path_to_solver)]
 
-    def evaluate(self, x: np.ndarray, args = (), nprocs: int = 1, nthreads: int = 1) -> float:
+    def evaluate(self, x: np.ndarray, args=(), nprocs: int = 1, nthreads: int = 1) -> float:
+        """
+        Evaluate the solver with given parameters.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            Input array.
+        args : tuple, optional
+            Additional arguments.
+        nprocs : int, optional
+            Number of processes.
+        nthreads : int, optional
+            Number of threads.
+
+        Returns
+        -------
+        float
+            The evaluation result.
+        """
         self.prepare(x, args)
         cwd = os.getcwd()
         os.chdir(self.work_dir)
@@ -129,15 +180,36 @@ class Solver(odatse.solver.SolverBase):
         return result
 
     def prepare(self, x: np.ndarray, args) -> None:
+        """
+        Prepare the solver for evaluation.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            Input array.
+        args : tuple
+            Additional arguments.
+        """
         fitted_x_list, subdir = self.input.prepare(x, args)
         self.work_dir = self.proc_dir / Path(subdir)
 
         self.output.prepare(fitted_x_list)
 
     def get_results(self) -> float:
+        """
+        Get the results from the solver.
+
+        Returns
+        -------
+        float
+            The result.
+        """
         return self.output.get_results(self.work_dir)
 
     def load_so(self) -> None:
+        """
+        Load the shared object library for the solver.
+        """
         self.lib = np.ctypeslib.load_library("surf.so", os.path.dirname(__file__))
         self.lib.surf_so.argtypes = (
             ctypes.POINTER(ctypes.c_int),
@@ -151,7 +223,9 @@ class Solver(odatse.solver.SolverBase):
         self.lib.surf_so.restype = ctypes.c_void_p
 
     def launch_so(self) -> None:
-
+        """
+        Launch the solver using the shared object library.
+        """
         n_template_file = len(self.input.template_file)
         m_template_file = self.input.surf_template_width_for_fortran
         n_bulk_file = len(self.input.bulk_file)
@@ -173,6 +247,14 @@ class Solver(odatse.solver.SolverBase):
         self.output.surf_output = self.output.surf_output[0].decode().splitlines()
 
     def _run_by_subprocess(self, command: List[str]) -> None:
+        """
+        Run the solver using a subprocess.
+
+        Parameters
+        ----------
+        command : List[str]
+            Command to run the solver.
+        """
         with open("stdout", "w") as fi:
             subprocess.run(
                 command,
@@ -182,6 +264,16 @@ class Solver(odatse.solver.SolverBase):
             )
 
     def run(self, nprocs: int = 1, nthreads: int = 1) -> None:
+        """
+        Run the solver.
+
+        Parameters
+        ----------
+        nprocs : int, optional
+            Number of processes.
+        nthreads : int, optional
+            Number of threads.
+        """
         if self.isLogmode:
             time_sta = time.perf_counter()
 
@@ -193,4 +285,3 @@ class Solver(odatse.solver.SolverBase):
         if self.isLogmode:
             time_end = time.perf_counter()
             self.detail_timer["launch_STR"] += time_end - time_sta
-

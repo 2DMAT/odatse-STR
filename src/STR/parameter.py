@@ -24,6 +24,30 @@ from pathlib import Path
 
 
 class SolverConfig(BaseModel):
+    """
+    Parameters for configuration of the STR solver
+
+    Attributes
+    ----------
+    surface_exec_file : str
+        Path to the sim-trhepd-rheed executable file.
+    surface_input_file : str
+        Name of the sim-trhepd-rheed input file.
+    surface_template_file : str
+        Name of the sim-trhepd-rheed template file.
+    bulk_output_file : str
+        Name of the bulk output file of sim-trhepd-rheed.
+    surface_output_file : str
+        Name of the surf output file of sim-trhepd-rheed.
+    calculated_first_line : int
+        The line number of the first line of the calculated data.
+    calculated_last_line : int
+        The line number of the last line of the calculated data.
+    calculated_info_line : int
+        The number of lines of info field in the cauclated data.
+    cal_number: int or List[int]
+        The column number(s) to be considered in the calculated data.
+    """
     surface_exec_file: str = "surf.exe"
     surface_input_file: str = "surf.txt"
     surface_template_file: str = "template.txt"
@@ -35,6 +59,24 @@ class SolverConfig(BaseModel):
     cal_number: Union[int,List[int]] # = Field(min_length=1)
 
 class SolverPost(BaseModel):
+    """
+    Parameters for post processes of the STR solver
+
+    Attributes
+    ----------
+    normalization : string literal
+        Type of normalization.
+    weight_type : string literal
+        Type of weight.
+    spot_weight : List[float]
+        Weighth values.
+    Rfactor_type : string literal
+        Type of the R-factor.
+    omega : float
+        Convolution parameter.
+    remove_work_dir: bool
+        Flag to remove the working directory after execution.
+    """
     normalization: Literal["TOTAL", "MANY_BEAM", "MAX"]
     weight_type: Optional[Literal["calc", "manual"]] = None
     spot_weight: Optional[List[float]] = None
@@ -44,20 +86,63 @@ class SolverPost(BaseModel):
 
     @field_validator("normalization")
     def check_obsolete_normalization(cls, v):
+        """Check obsolete parameter values."""
         if v == "MAX":
             raise ValueError("normalization=MAX is obsolete")
         return v
 
 class SolverParam(BaseModel):
+    """
+    Parameters for input files of the STR solver
+
+    Attributes
+    ----------
+    string_list : List[str]
+        List of keywords to be replaced in the template.
+    """
     string_list: List[str]
 
 class SolverReference(BaseModel):
+    """
+    Parameters for reference data of the STR solver
+
+    Attributes
+    ----------
+    path : str
+        Path to the reference data file.
+    reference_first_line : int
+        The line number of the first line in the reference file.
+    reference_last_line: int
+        The line number of the last line in the reference file.
+    exp_number: int of List[int]
+        The column number(s) to be considered in the reference file.
+    """
     path: str = "experiment.txt"
     reference_first_line: NonNegativeInt = Field(default=1)
     reference_last_line: Optional[NonNegativeInt] = None
     exp_number: Union[int,List[int]] # = Field(min_length=1)
 
 class SolverInfo(BaseModel):
+    """
+    Parameters for the STR solver
+
+    Attributes
+    ----------
+    dimension : int
+        Number of variables.
+    run_scheme : string literal
+        Choice of schemes in executing external solver programs.
+    generate_rocking_curve : bool
+        Flag to generate theh rocking curve during the calculations.
+    config : SolverConfig
+        Configuration for the solver.
+    post : SolverPost
+        Parameters for the post processes.
+    param : SolverParam
+        Parameters for the solver.
+    reference : SolverReference
+        Parameters for the reference data.
+    """
     dimension: Optional[int] = None
     run_scheme: Literal["subprocess", "connect_so"] = "subprocess"
     generate_rocking_curve: bool = False
@@ -68,12 +153,14 @@ class SolverInfo(BaseModel):
 
     @model_validator(mode="after")
     def check_dimension(self) ->Self:
+        """Check length of string_list."""
         if self.dimension is not None and len(self.param.string_list) != self.dimension:
             raise ValueError("length of param.string_list does not match with dimension")
         return self
 
     @model_validator(mode="after")
     def check_normalization(self) -> Self:
+        """Check consistency among normalization, weight_type, and spot_weight parameters."""
         if self.post.normalization == "MANY_BEAM":
             if self.post.weight_type is None:
                 raise ValueError("weight_type must be set when normalization is MANY_BEAM")
@@ -101,6 +188,7 @@ class SolverInfo(BaseModel):
 
     @model_validator(mode="after")
     def check_field_lengths(self) -> Self:
+        """Check lengths of cal_number and exp_number, consistency with normalization and weights."""
         if isinstance(self.config.cal_number, int):
             self.config.cal_number = [self.config.cal_number]
         if isinstance(self.reference.exp_number, int):
