@@ -1,3 +1,19 @@
+# 2DMAT -- Data-analysis software of quantum beam diffraction experiments for 2D material structure
+# Copyright (C) 2020- The University of Tokyo
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see http://www.gnu.org/licenses/.
+
 import os
 import shutil
 import numpy as np
@@ -10,6 +26,7 @@ if TYPE_CHECKING:
     from mpi4py import MPI
 
 from odatse import exception, mpi
+
 
 class Input(object):
     """
@@ -45,14 +62,16 @@ class Input(object):
         Original template file content.
     """
 
-    def __init__(self, info, isLogmode, detail_timer):
+    def __init__(self, info_base, info_solver, isLogmode, detail_timer):
         """
         Initializes the Input class with the given parameters.
 
         Parameters
         ----------
-        info
-            Information object containing base and solver configurations.
+        info_base
+            Information object containing base configurations.
+        info_solver
+            Information object containing solver configurations.
         isLogmode : bool
             Flag to enable logging mode.
         detail_timer
@@ -65,18 +84,17 @@ class Input(object):
         self.isLogmode = isLogmode
         self.detail_timer = detail_timer
 
-        self.root_dir = info.base["root_dir"]
-        self.output_dir = info.base["output_dir"]
+        self.root_dir = info_base["root_dir"]
+        self.output_dir = info_base["output_dir"]
 
-        if "dimension" in info.solver:
-            self.dimension = info.solver["dimension"]
+        if info_solver.dimension:
+            self.dimension = info_solver.dimension
         else:
-            self.dimension = info.base["dimension"]
+            self.dimension = info_base["dimension"]
 
         # read info
-        info_s = info.solver
-        self.run_scheme = info_s["run_scheme"]
-        self.generate_rocking_curve = info_s.get("generate_rocking_curve", False)
+        self.run_scheme = info_solver.run_scheme
+        self.generate_rocking_curve = info_solver.generate_rocking_curve
 
         # NOTE:
         # surf_template_width_for_fortran: Number of strings per line of template.txt data for surf.so.
@@ -85,20 +103,13 @@ class Input(object):
             self.surf_template_width_for_fortran = 128
             self.bulk_out_width_for_fortran = 1024
 
-        info_param = info_s.get("param", {})
-        v = info_param.setdefault("string_list", ["value_01", "value_02"])
-        if len(v) != self.dimension:
-            raise exception.InputError(
-                f"ERROR: len(string_list) != dimension ({len(v)} != {self.dimension})"
-            )
-        self.string_list = v
+        self.string_list = info_solver.param.string_list
+        if len(self.string_list) != self.dimension:
+            raise ValueError("length of string_list does not match dimension")
 
-        info_config = info_s.get("config", {})
-        self.surface_input_file = Path(
-            info_config.get("surface_input_file", "surf.txt")
-        )
+        self.surface_input_file = Path(info_solver.config.surface_input_file)
 
-        filename = info_config.get("surface_template_file", "template.txt")
+        filename = info_solver.config.surface_template_file
         filename = Path(filename).expanduser().resolve()
         self.surface_template_file = self.root_dir / filename
         if not self.surface_template_file.exists():
@@ -117,7 +128,7 @@ class Input(object):
             self.template_file_origin = temp_origin
 
         if self.run_scheme == "connect_so":
-            filename = info_config.get("bulk_output_file", "bulkP.txt")
+            filename = info_solver.config.bulk_output_file
             filename = Path(filename).expanduser().resolve()
             self.bulk_output_file = self.root_dir / filename
             if not self.bulk_output_file.exists():
@@ -134,7 +145,7 @@ class Input(object):
             else:
                 self.bulk_file = bulk_f
         else:
-            filename = info_config.get("bulk_output_file", "bulkP.b")
+            filename = info_solver.config.bulk_output_file
             filename = Path(filename).expanduser().resolve()
             self.bulk_output_file = self.root_dir / filename
             if not self.bulk_output_file.exists():
@@ -204,9 +215,6 @@ class Input(object):
         if self.isLogmode:
             time_sta = time.perf_counter()
 
-        # x_list = message.x
-        # step = message.step
-        # iset = message.set
         x_list = x
         step, iset = args
 
