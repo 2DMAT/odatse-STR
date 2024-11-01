@@ -30,7 +30,7 @@ pydantic = "^2"
 #pynvim = "^0.4.3"
 
 [tool.poetry.scripts]
-odatse-STR = "odatse.extra.sim_trhepd_rheed._main:main"
+odatse-STR = "odatse.extra.STR._main:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
