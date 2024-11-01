@@ -48,6 +48,7 @@ def main():
 
     alg_table = {
         "mapper": "mapper_mpi",
+        "minsearch": "min_search",
     }
 
     if "name" not in info.algorithm:
