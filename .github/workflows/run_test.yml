@@ -39,6 +39,7 @@ jobs:
           python -m pip install numpy scipy tomli mpi4py
           python -m pip install pydantic
           python -m pip install physbo
+          python -m pip install pytest
 
       - name: install library
         run: |
@@ -56,5 +57,8 @@ jobs:
         run: |
           mkdir build && cd build && cmake ..
           ctest -V
-          #cd ${GITHUB_WORKSPACE}/tests/${{ matrix.sample }}
-          #sh ./do.sh
+
+      - name: run unit tests
+        run: |
+          pytest -v
+
