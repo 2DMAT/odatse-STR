@@ -1,5 +1,5 @@
-# 2DMAT -- Data-analysis software of quantum beam diffraction experiments for 2D material structure
-# Copyright (C) 2020- The University of Tokyo
+# odatse-STR -- SIM-TRHEPD-RHEED solver module for ODAT-SE
+# Copyright (C) 2024- The University of Tokyo
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
