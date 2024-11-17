@@ -1,5 +1,5 @@
-# 2DMAT -- Data-analysis software of quantum beam diffraction experiments for 2D material structure
-# Copyright (C) 2020- The University of Tokyo
+# odatse-STR -- SIM-TRHEPD-RHEED solver module for ODAT-SE
+# Copyright (C) 2024- The University of Tokyo
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,6 @@
 # along with this program. If not, see http://www.gnu.org/licenses/.
 
 if __name__ == "__main__":
-    # sys.path[0] is this directory (2DMAT/src)
+    # sys.path[0] is this directory (odatse-STR/src)
     from STR._main import main
     main()
