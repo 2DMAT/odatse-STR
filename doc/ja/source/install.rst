@@ -3,7 +3,7 @@ odatse-STR のインストール
 
 実行環境・必要なパッケージ
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- python 3.6.8 以上
+- python 3.9 以上
 
     - 必要なpythonパッケージ
 
@@ -26,7 +26,7 @@ odatse-STR のインストール
 
      .. code-block:: bash
 
-	$ git clone -b update https://github.com/issp-center-dev/ODAT-SE.git
+	$ git clone https://github.com/issp-center-dev/ODAT-SE.git
 
      pip コマンドを実行してインストールします。
 
