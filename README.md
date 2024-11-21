@@ -2,15 +2,14 @@
 
 Open Data Analysis Tool for Science and Engineering (ODAT-SE) is a framework for applying a search algorithm to a direct problem solver to find the optimal solution. It has been developed by the name 2DMAT, and since version 3.0, it is organized as an open platform for data analysis by modularizing direct problem solvers and search algorithms.
 
-sim-trhepd-rheed has been developed as a simulator software package for the total-reflection high-energy positron diffraction (TRHEPD) and the reflection high energy electron diffraction (RHEED). It takes atom positions as input and calculates the Rocking Curve of the diffraction intensity. The program is written in Fortran and runs on ordinary Linux environment. odatse-STR is an adaptor library to use sim-trhepd-rheed as a direct problem solver of ODAT-SE.
+`sim-trhepd-rheed` has been developed as a simulator software package for the total-reflection high-energy positron diffraction (TRHEPD) and the reflection high energy electron diffraction (RHEED). It takes atom positions as input and calculates the Rocking Curve of the diffraction intensity. The program is written in Fortran and runs on ordinary Linux environment. `odatse-STR` is an adaptor library to use sim-trhepd-rheed as a direct problem solver of ODAT-SE.
 
 
-## Prerequists
+## Prerequisites
 
 - Required
-  - python >= 3.6.8
+  - python >= 3.9
   - numpy >= 1.14
-  - tomli >= 1.2.0
   - pydantic >= 2.0
   - ODAT-SE >= 3.0
   - sim-trhepd-rheed >= 1.0.2
@@ -23,7 +22,7 @@ sim-trhepd-rheed has been developed as a simulator software package for the tota
 - From Source (For developers)
   1. update `pip >= 19` by `python3 -m pip install -U pip`
   2. `python3 -m pip install ODATSE_STR_ROOT_DIRECTORY` to install `odatse-STR` package and `odatse-STR` command
-    - `ODATSE_STR_ROOT_DIRECTORY` means the directory including this `README.md` file.
+    - `ODATSE_STR_ROOT_DIRECTORY` points to the directory including this `README.md` file.
 
 ## Simple Usage
 
