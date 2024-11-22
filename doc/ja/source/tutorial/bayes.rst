@@ -77,13 +77,13 @@
     [solver]
     name = "sim-trhepd-rheed"
     run_scheme = "subprocess"
+    generate_rocking_curve = false
 
     [solver.config]
     cal_number = [1]
 
     [solver.param]
     string_list = ["value_01", "value_02" ]
-    degree_max = 7.0
 
     [solver.reference]
     path = "experiment.txt"
@@ -123,8 +123,6 @@
 ``[solver.param]`` セクションではメインプログラム内部で呼び出す ``surf.exe`` への入力パラメータについてのオプションを指定します。
 
 - ``string_list`` は、 ``template.txt`` で読み込む、動かしたい変数の名前のリストです。
-
-- ``degree_max`` は、最大角度（度単位）の指定をします。
 
 ``[solver.reference]`` セクションでは、実験データの置いてある場所と読みこむ範囲を指定します。
 
@@ -186,21 +184,35 @@
 
 .. code-block::
 
-  # parameter
-  random_max_num_probes = 10
-  bayes_max_num_probes = 20
-  score = TS
-  interval = 5
-  num_rand_basis = 5000
-  value_01 =  5.10000
-  value_02 =  4.90000
-  R-factor = 0.037237314010261195
-  0001-th step: f(x) = -0.037237 (action=150)
-     current best f(x) = -0.037237 (best action=150)
+    # parameter
+    random_max_num_probes = 10
+    bayes_max_num_probes = 20
+    score = TS
+    interval = 5
+    num_rand_basis = 5000
+    name            : bayes
+    label_list      : ['z1', 'z2']
+    seed            : 1
+    param.mesh_path : ./MeshData.txt
+    bayes.random_max_num_probes: 10
+    bayes.bayes_max_num_probes: 20
+    0001-th step: f(x) = -0.037237 (action=150)
+       current best f(x) = -0.037237 (best action=150) 
 
-  value_01 =  4.30000
-  value_02 =  3.50000
+    0002-th step: f(x) = -0.060508 (action=36)
+       current best f(x) = -0.037237 (best action=150) 
 
+    0003-th step: f(x) = -0.062158 (action=175)
+       current best f(x) = -0.037237 (best action=150) 
+
+    0004-th step: f(x) = -0.049211 (action=85)
+       current best f(x) = -0.037237 (best action=150) 
+
+    0005-th step: f(x) = -0.083945 (action=255)
+       current best f(x) = -0.037237 (best action=150) 
+
+    0006-th step: f(x) = -0.055569 (action=170)
+       current best f(x) = -0.037237 (best action=150) 
     ...
 
 最初に設定したパラメータのリスト、そのあとに各ステップでの候補パラメータと、その時の ``R-factor`` に ``-1`` を乗じた ``f(x)`` が出力されます。また、その時点での一番良いスコアを持つグリッドインデックス (``action``) とその場合の ``f(x)`` と変数が出力されます。

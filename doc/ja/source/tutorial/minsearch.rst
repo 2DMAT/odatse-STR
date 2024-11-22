@@ -79,11 +79,11 @@ Nelder-Mead法による最適化
 
 .. code-block::
 
-  fx = 7.382680568652868e-06
-  z1 = 5.230524973874179
-  z2 = 4.370622919269477
-  z3 = 3.5961444501081647
-
+    fx = 8.97501627575891e-06
+    z1 = 5.230573154947887
+    z2 = 4.3706085364407095
+    z3 = 3.5961303342247577
+  
 となっており、 ``value_01``, ``value_02``, ``value_03`` がそれぞれ ``z1``, ``z2``, ``z3`` に対応しています。
 ``fx`` は目的関数の最適値です。
 ``experiment.txt`` は、メインプログラムで参照に用いるファイルです。ここではテストデータとして、
@@ -114,7 +114,6 @@ Nelder-Mead法による最適化
 
     [solver.param]
     string_list = ["value_01", "value_02", "value_03" ]
-    degree_max = 7.0
 
     [solver.reference]
     path = "experiment.txt"
@@ -131,7 +130,7 @@ Nelder-Mead法による最適化
     min_list = [0.0, 0.0, 0.0]
     max_list = [10.0, 10.0, 10.0]
     initial_list = [5.25, 4.25, 3.50]
-
+        
 
 最初に ``[base]`` セクションについて説明します。
 
@@ -157,8 +156,6 @@ Nelder-Mead法による最適化
 
 - ``string_list`` は、 ``template.txt`` に記述する、動かしたい変数の名前のリストです。
 
-- ``degree_max`` は、最大角度（度単位）の指定をします。
-
 ``[solver.reference]`` セクションでは、実験データの置いてある場所と読みこむ範囲を指定します。
 
 - ``path`` は実験データが置いてあるパスを指定します。
@@ -181,7 +178,7 @@ Nelder-Mead法による最適化
 
 - ``initial_list`` は初期値を指定します。
 
-ここではデフォルト値を用いるため省略しましたが、その他のパラメータ、例えばNelder-Mead法で使用する収束判定などについては、``[algorithm]`` セクションで行うことが可能です。
+ここではデフォルト値を用いるため省略しましたが、その他のパラメータ、例えばNelder-Mead法で使用する収束判定などについては、 ``[algorithm]`` セクションで行うことが可能です。
 詳細については入出力の章をご覧ください。
 
 計算実行
@@ -216,36 +213,30 @@ Nelder-Mead法による最適化
 
 .. code-block::
 
-    Read experiment.txt
-    z1 =  5.25000
-    z2 =  4.25000
-    z3 =  3.50000
-    [' 5.25000', ' 4.25000', ' 3.50000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.015199251773721183
-    z1 =  5.50000
-    z2 =  4.25000
-    z3 =  3.50000
-    [' 5.50000', ' 4.25000', ' 3.50000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.04380131351780189
-    z1 =  5.25000
-    z2 =  4.50000
-    z3 =  3.50000
-    [' 5.25000', ' 4.50000', ' 3.50000']
+    name            : minsearch
+    label_list      : ['z1', 'z2', 'z3']
+    param.min_list  : [0.0, 0.0, 0.0]
+    param.max_list  : [10.0, 10.0, 10.0]
+    param.initial_list: [5.25, 4.25, 3.5]
+    eval: x=[5.25 4.25 3.5 ], fun=0.015199252435883206
+    eval: x=[5.22916667 4.3125     3.64583333], fun=0.013702918645281299
+    eval: x=[5.22569444 4.40625    3.54513889], fun=0.01263527811899235
+    eval: x=[5.17997685 4.34895833 3.5943287 ], fun=0.006001659635528168
+    eval: x=[5.17997685 4.34895833 3.5943287 ], fun=0.006001659635528168
+    eval: x=[5.22066294 4.33260995 3.60408629], fun=0.005145496928704404
+    eval: x=[5.22066294 4.33260995 3.60408629], fun=0.005145496928704404
+    eval: x=[5.2185245  4.32627234 3.56743818], fun=0.0032531465329236025
     ...
 
-``z1``, ``z2``, ``z3`` に各ステップでの候補パラメータと、その時の ``R-factor`` が出力されます。
+``x=`` に各ステップでの候補パラメータと、その時のR-factorの値 ``fun=`` が出力されます。
 また各ステップでの計算結果は ``output/0/LogXXXX_YYYY`` (XXXX, YYYYはステップ数)のフォルダに出力されます。
 最終的に推定されたパラメータは、 ``output/res.dat`` に出力されます。今の場合、
 
 .. code-block::
 
-    z1 = 5.230524973874179
-    z2 = 4.370622919269477
-    z3 = 3.5961444501081647
+    z1 = 5.230573154947887
+    z2 = 4.3706085364407095
+    z3 = 3.5961303342247577
 
 が得られ、正解のデータ ``ref.txt`` と同じ値が得られていることがわかります。
 なお、一括計算するスクリプトとして ``do.sh`` を用意しています。
@@ -283,10 +274,10 @@ Nelder-Mead法による最適化
 
 .. code-block::
 
-    $ cp output/0/Log00000001_00000001/RockingCurve_calculated.txt RockingCurve_ini.txt
-    $ cp output/0/Log00000061_00000001/RockingCurve_calculated.txt RockingCurve_con.txt
+    $ cp output/0/Log00000000_00000000/RockingCurve_calculated.txt RockingCurve_ini.txt
+    $ cp output/0/Log00000117_00000000/RockingCurve_calculated.txt RockingCurve_con.txt
     $ cp ../../../script/draw_RC_double.py .
-    $ python draw_RC_double.py
+    $ python3 draw_RC_double.py
 
 上記を実行すると ``RC_double.png`` が出力されます。
 

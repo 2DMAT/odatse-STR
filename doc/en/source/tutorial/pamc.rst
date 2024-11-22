@@ -49,46 +49,44 @@ For details, see the population annealing Monte Carlo method in ODAT-SE manual.
 
 .. code-block::
 
-  [base]
-  dimension = 2
-  output_dir = "output"
+    [base]
+    dimension = 2
+    output_dir = "output"
 
-  [algorithm]
-  name = "pamc"
-  label_list = ["z1", "z2"]
-  seed = 12345
+    [algorithm]
+    name = "pamc"
+    label_list = ["z1", "z2"]
+    seed = 12345
 
-  [algorithm.param]
-  min_list = [3.0, 3.0]
-  max_list = [6.0, 6.0]
-  unit_list = [0.3, 0.3]
+    [algorithm.param]
+    min_list = [3.0, 3.0]
+    max_list = [6.0, 6.0]
+    step_list = [0.3, 0.3]
 
-  [algorithm.pamc]
-  numsteps_annealing = 5
-  bmin = 0.0
-  bmax = 200.0
-  Tnum = 21
-  Tlogspace = false
-  nreplica_per_proc = 10
+    [algorithm.pamc]
+    numsteps_annealing = 5
+    bmin = 0.0
+    bmax = 200.0
+    Tnum = 21
+    Tlogspace = false
+    nreplica_per_proc = 10
 
-  [solver]
-  name = "sim-trhepd-rheed"
-  run_scheme = "subprocess"
+    [solver]
+    name = "sim-trhepd-rheed"
+    run_scheme = "subprocess"
 
-  [solver.config]
-  cal_number = [1]
+    [solver.config]
+    cal_number = [1]
 
-  [solver.param]
-  string_list = ["value_01", "value_02" ]
-  degree_max = 7.0
+    [solver.param]
+    string_list = ["value_01", "value_02" ]
 
-  [solver.reference]
-  path = "experiment.txt"
-  exp_number = [1]
+    [solver.post]
+    normalization = "TOTAL"
 
-  [solver.post]
-  normalization = "TOTAL"
-
+    [solver.reference]
+    path = "experiment.txt"
+    exp_number = [1]
 
 In the following, we will briefly describe this input file.
 For details, see the manual of the population annealing Monte Carlo method in ODAT-SE manual.
@@ -98,10 +96,6 @@ For details, see the manual of the population annealing Monte Carlo method in OD
 - ``dimension`` is the number of variables you want to optimize. In this case, specify ``2`` because it optimizes two variables.
 
 - ``output_dir`` is the name of directory for the outputs. If it is omitted, the results are written in the directory in which the program is executed.
-
-``[solver]`` section specifies the solver to use inside the main program and its settings.
-
-- See the minsearch tutorial.
 
 ``[algorithm]`` section sets the algorithm to use and its settings.
 
@@ -248,8 +242,8 @@ Visualization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By illustrating ``result_T.txt``, you can estimate regions where the parameters with small R-factor are.
-In this case, the figure ``result_fx.pdf`` and ``result_T.pdf`` of the 2D parameter space is created by using the following command.
-The color of symbols of ``result_fx.pdf`` and ``result_T.pdf`` mean ``R-factor`` and :math:`\beta`, respectively.
+In this case, the figure ``result_fx.png`` and ``result_T.png`` of the 2D parameter space is created by using the following command.
+The color of symbols of ``result_fx.png`` and ``result_T.png`` mean ``R-factor`` and :math:`\beta`, respectively.
 
 .. code-block::
 
@@ -265,6 +259,5 @@ Looking at the resulting diagram, we can see that the samples are concentrated n
 
     Sampled parameters and :math:`\beta`. The horizontal axes is x1 (``value_01``)  and the vertical axes is x2 (``value_02``).
 
-Also, ``RockingCurve.txt`` is stored in each subfolder,
-``LogXXXX_YYYY`` (``XXXX`` is an index of MC step and ``YYYY`` is an index of a replica in the MPI process) when ``generate_rocking_curve`` in ``[solver]`` section is set to true.
+When ``generate_rocking_curve`` in ``[solver]`` section is set to true, ``RockingCurve.txt`` is stored in each subfolder, ``LogXXXX_YYYY`` (``XXXX`` is an index of MC step and ``YYYY`` is an index of a replica in the MPI process). 
 By using this, it is possible to compare with the experimental value according to the procedure of the previous tutorial.

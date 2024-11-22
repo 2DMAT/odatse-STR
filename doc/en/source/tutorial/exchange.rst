@@ -61,6 +61,7 @@ For details, see the replica exchange Monte Carlo method in ODAT-SE manual.
   [algorithm.param]
   min_list = [3.0, 3.0]
   max_list = [6.0, 6.0]
+  step_list = [1.0, 1.0]
 
   [algorithm.exchange]
   numsteps = 1000
@@ -111,7 +112,7 @@ For details, see the algorithm section of ODAT-SE manual.
 
 ``[algorithm.param]`` section sets the parameter space to be explored.
 
-- ``min_list`` is a lower bound and ``max_list`` is an upper bound.
+- ``min_list`` is a lower bound and ``max_list`` is an upper bound. ``step_list`` specifies the step size of one Monte Carlo update (deviation of Gaussian).
 
 ``[algorithm.exchange]`` section sets the parameters for RXMC.
 
@@ -174,16 +175,19 @@ These files have the same format: the first two columns are time (step) and the 
 
 In the case of the sim-trhepd-rheed solver, a subfolder ``LogXXXX_YYYY`` (``XXXX`` is the number of MC steps) is created under each working directory, and the rocking curve information and other outputs are recorded.
 
+``result.txt`` in the output directory for each MPI rank records the data sampled by each replica. They are rearranged according to the temperature, and stored in the files ``output/result_T*.txt`` in which ``*`` stands for the index of the temperature.
+
 Finally, ``best_result.txt`` is filled with the information about the parameters with the value of the optimal objective function (R-factor), the rank from which it was obtained, and the Monte Carlo step.
 
 .. code-block::
 
-  nprocs = 4
-  rank = 2
-  step = 65
-  fx = 0.008233957976993406
-  x[0] = 4.221129370933539
-  x[1] = 5.139591716517661
+    nprocs = 4
+    rank = 1
+    step = 282
+    walker = 0
+    fx = 0.008414800224430936
+    z1 = 5.164773671165013
+    z2 = 4.226467514644945
 
 In addition, ``do.sh`` is prepared as a script for batch calculation.
 ``do.sh`` also checks the difference between ``best_result.txt`` and ``ref.txt``.
@@ -211,37 +215,11 @@ The content of the script is shown below, though further information will be omi
   fi
 
 
-Post process
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The ``result.txt`` in the output directory for each MPI rank records the data sampled by each replica.
-However, the same replica holds samples at different temperatures because of the temperature exchanges.
-odatse-STR provides a script, ``script/separateT.py``, that rearranges the results of all replicas into the samples classified by the temperature.
-
-.. code-block::
-
-   $ python3 script/separateT.py
-
-The data reorganized for each temperature point is written to ``result_T%.txt`` (where ``%`` is the index of the temperature point).
-The first column is the step, the second column is the rank, the third column is the value of the objective function, and the fourth and subsequent columns are the parameters.
-
-Example:
-
-.. code-block::
-
-  # T = 0.004999999999999999
-  # step rank fx x1 x2
-  0 0 0.07830821484593968 3.682008067401509 3.9502750191292586
-  1 0 0.07830821484593968 3.682008067401509 3.9502750191292586
-  2 0 0.07830821484593968 3.682008067401509 3.9502750191292586
-  ...
-
-
 Visualization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By illustrating ``result_T.txt``, you can estimate regions where the parameters with small R-factor are.
-In this case, the figure ``result.png`` of the 2D parameter space is created by using the following command.
+By illustrating ``output/result_T*.txt``, you can estimate regions where the parameters with small R-factor are.
+In this case, the figure ``result.png`` of the 2D parameter space is created for the data in ``output/result_T1.txt`` by using the following command.
 
 .. code-block::
 

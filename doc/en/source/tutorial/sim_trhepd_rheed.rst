@@ -78,17 +78,17 @@ The contents of ``surf-bulkP.s`` are shown as follow:
 
 .. code-block::
 
-   #azimuths,g-angles,beams
-   1 56 13
-   #ih,ik
-   6 0 5 0 4 0 3 0 2 0 1 0 0 0 -1 0 -2 0 -3 0 -4 0 -5 0 -6 0
-   0.5000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.1595E-01, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00,
-   0.6000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.1870E-01, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00,
-   0.7000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.2121E-01, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00,
-   0.8000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.2171E-02, 0.1927E-01, 0.2171E-02, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00,
-   0.9000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.4397E-02, 0.1700E-01, 0.4397E-02, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00,
-   0.1000E+01, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.6326E-02, 0.1495E-01, 0.6326E-02, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00, 0.0000E+00,
-   ...
+    #azimuths,g-angles,beams
+    1 56 13
+    #ih,ik
+    deg,6 0,5 0,4 0,3 0,2 0,1 0,0 0,-1 0,-2 0,-3 0,-4 0,-5 0,-6 0,
+      5.0000E-01,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  1.5946E-02,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,
+      6.0000E-01,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  1.8701E-02,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,
+      7.0000E-01,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  2.1202E-02,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,
+      8.0000E-01,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  2.1711E-03,  1.9273E-02,  2.1711E-03,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,
+      9.0000E-01,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  4.3965E-03,  1.7006E-02,  4.3965E-03,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,
+      1.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  6.3263E-03,  1.4952E-02,  6.3263E-03,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,  0.0000E+00,
+    ...
 
 From the above file, a rocking curve is created whose horizontal axis is the angle (first column of data after row 5) and the vertical axis shows the intensity of the (0,0) peak (eighth column of data after row 5).
 You can use Gnuplot or other graphing software, but here we use the program ``plot_bulkP.py`` in the ``script`` folder.
@@ -113,10 +113,6 @@ Prepare ``surf-bulkP.s`` and run ``make_convolution.py``.
 
 When executed, the following file ``convolution.txt`` will be created.
 
-.. figure:: ../../../common/img/plot_convolution.*
-
-   Rocking curve of Si(001)-2x1 surface that is made convolution of half-width 0.5 and normalized.
-
 .. code-block::
 
    0.500000 0.010818010
@@ -132,3 +128,13 @@ When executed, the following file ``convolution.txt`` will be created.
    6.000000 0.000277553
 
 The first column is the viewing angle, and the second column is the normalized 00-peak diffraction intensity data written in ``surf-bulkP.s`` with a convolution of half-width 0.5.
+
+By using ``plot_convolution.py``, a figure ``plot_convolution.png`` will be generated as follows.
+
+.. code-block::
+
+   $ python3 ../script/plot_convolution.py
+
+.. figure:: ../../../common/img/plot_convolution.*
+
+   Rocking curve of Si(001)-2x1 surface that is made convolution of half-width 0.5 and normalized.

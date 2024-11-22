@@ -46,46 +46,44 @@
 
 .. code-block::
 
-  [base]
-  dimension = 2
-  output_dir = "output"
+    [base]
+    dimension = 2
+    output_dir = "output"
 
-  [algorithm]
-  name = "pamc"
-  label_list = ["z1", "z2"]
-  seed = 12345
+    [algorithm]
+    name = "pamc"
+    label_list = ["z1", "z2"]
+    seed = 12345
 
-  [algorithm.param]
-  min_list = [3.0, 3.0]
-  max_list = [6.0, 6.0]
-  unit_list = [0.3, 0.3]
+    [algorithm.param]
+    min_list = [3.0, 3.0]
+    max_list = [6.0, 6.0]
+    step_list = [0.3, 0.3]
 
-  [algorithm.pamc]
-  numsteps_annealing = 5
-  bmin = 0.0
-  bmax = 200.0
-  Tnum = 21
-  Tlogspace = false
-  nreplica_per_proc = 10
+    [algorithm.pamc]
+    numsteps_annealing = 5
+    bmin = 0.0
+    bmax = 200.0
+    Tnum = 21
+    Tlogspace = false
+    nreplica_per_proc = 10
 
-  [solver]
-  name = "sim-trhepd-rheed"
-  run_scheme = "subprocess"
+    [solver]
+    name = "sim-trhepd-rheed"
+    run_scheme = "subprocess"
 
-  [solver.config]
-  cal_number = [1]
+    [solver.config]
+    cal_number = [1]
 
-  [solver.param]
-  string_list = ["value_01", "value_02" ]
-  degree_max = 7.0
+    [solver.param]
+    string_list = ["value_01", "value_02" ]
 
-  [solver.reference]
-  path = "experiment.txt"
-  exp_number = [1]
+    [solver.post]
+    normalization = "TOTAL"
 
-  [solver.post]
-  normalization = "TOTAL"
-
+    [solver.reference]
+    path = "experiment.txt"
+    exp_number = [1]
 
 ここではこの入力ファイルを簡単に説明します。
 詳細は入力ファイルのレファレンスを参照してください。
@@ -94,8 +92,7 @@
 ``dimension`` は最適化したい変数の個数で、今の場合は2つの変数の最適化を行うので、``2`` を指定します。
 ``output_dir`` は出力先のディレクトリ名です。省略した場合はプログラムを実行したディレクトリになります。
 
-``[algorithm]`` セクションは用いる探索アルゴリズムを設定します。
-交換モンテカルロ法を用いる場合には、 ``name`` に ``"exchange"`` を指定します。
+``[algorithm]`` セクションは用いる探索アルゴリズムを設定します。交換モンテカルロ法を用いる場合には、 ``name`` に ``"exchange"`` を指定します。
 ``label_list`` は、``value_0x`` (x=1,2) を出力する際につけるラベル名のリストです。
 ``seed`` は擬似乱数生成器に与える種です。
 
@@ -111,8 +108,7 @@
 - ``Tlogspace`` が ``true`` の場合、温度を対数空間で等分割します
 - ``nreplica_per_proc`` はMPIプロセスひとつが受け持つ計算レプリカの数です。
 
-``[solver]`` セクションではメインプログラムの内部で使用するソルバーを指定します。
-Nelder-Mead法による最適化のチュートリアルを参照してください。
+``[solver]`` セクションではメインプログラムの内部で使用するソルバーを指定します。Nelder-Mead法による最適化のチュートリアルを参照してください。
 
 
 計算実行
@@ -145,6 +141,7 @@ Nelder-Mead法による最適化のチュートリアルを参照してくださ
 
 ここではプロセス数4のMPI並列を用いた計算を行っています。
 (Open MPI を用いる場合で、使えるコア数よりも要求プロセス数の方が多い時には、 ``mpiexec`` コマンドに ``--oversubscribe`` オプションを追加してください。)
+
 実行すると、 ``output`` ディレクトリの中に各ランクのフォルダが作成され、温度ごとに各モンテカルロステップで評価したパラメータおよび目的関数の値を記した ``trial_TXXX.txt`` ファイル(``XXX`` は温度点の番号)と、実際に採択されたパラメータを記した ``result_TXXX.txt`` ファイル、さらにそれぞれを結合した ``trial.txt``, ``result.txt`` ファイルが生成されます。
 それぞれ書式は同じで、最初の2列がステップ数とプロセス内のwalker (replica) 番号、次が(逆)温度、3列目が目的関数の値、4列目以降がパラメータです。
 最後の2 列は、 walker の重み (Neal-Jarzynski weight) と祖先(計算を開始したときのレプリカ)の番号です。
@@ -218,8 +215,8 @@ Nelder-Mead法による最適化のチュートリアルを参照してくださ
 計算結果の可視化
 ~~~~~~~~~~~~~~~~~~~
 
-``result_T%.txt`` を図示することで、 ``R-factor`` の小さいパラメータがどこにあるかを推定することができます。
-今回の場合は、以下のコマンドを実行すると2次元パラメータ空間の図 ``result_fx.pdf`` と ``result_T.pdf`` が作成されます。
+``output/*/result_T%.txt`` を図示することで、 ``R-factor`` の小さいパラメータがどこにあるかを推定することができます。
+今回の場合は、以下のコマンドを実行すると2次元パラメータ空間の図 ``result_fx.png`` と ``result_T.png`` が作成されます。
 シンボルの色はそれぞれ ``R-factor`` と逆温度 :math:`\beta` に対応します。
 
 .. code-block::
