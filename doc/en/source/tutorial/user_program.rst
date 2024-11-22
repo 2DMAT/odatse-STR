@@ -181,28 +181,24 @@ The standard output will look as follows.
 
 .. code-block::
 
-    Read experiment.txt
-    z1 =  5.25000
-    z2 =  4.25000
-    z3 =  3.50000
-    [' 5.25000', ' 4.25000', ' 3.50000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.015199251773721183
-    z1 =  5.50000
-    z2 =  4.25000
-    z3 =  3.50000
-    [' 5.50000', ' 4.25000', ' 3.50000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.04380131351780189
-    z1 =  5.25000
-    z2 =  4.50000
-    z3 =  3.50000
-    [' 5.25000', ' 4.50000', ' 3.50000']
+    name            : minsearch
+    label_list      : ['z1', 'z2', 'z3']
+    param.min_list  : [0.0, 0.0, 0.0]
+    param.max_list  : [10.0, 10.0, 10.0]
+    param.initial_list: [5.25, 4.25, 3.5]
+    eval: x=[5.25 4.25 3.5 ], fun=0.015199252435883206
+    eval: x=[5.22916667 4.3125     3.64583333], fun=0.013702918645281299
+    eval: x=[5.22569444 4.40625    3.54513889], fun=0.01263527811899235
+    eval: x=[5.17997685 4.34895833 3.5943287 ], fun=0.006001659635528168
+    eval: x=[5.17997685 4.34895833 3.5943287 ], fun=0.006001659635528168
+    eval: x=[5.22066294 4.33260995 3.60408629], fun=0.005145496928704404
+    eval: x=[5.22066294 4.33260995 3.60408629], fun=0.005145496928704404
+    eval: x=[5.2185245  4.32627234 3.56743818], fun=0.0032531465329236025
+    eval: x=[5.19953437 4.34549482 3.5863457 ], fun=0.0027579225484420356
+    eval: x=[5.21549776 4.35100199 3.57476018], fun=0.002464573036316852
     ...
 
-``z1``, ``z2``, and ``z3`` are the candidate parameters at each step, and ``R-factor`` is the function value at that point.
+``x=`` are the candidate parameters at each step, and ``fun=`` is the R-factor value at that point.
 The results at each step are also written in the folder ``output/LogXXXX_YYYY`` (where XXXX and YYYY are the step counts).
 The final estimated parameters will be written to ``output/res.dat``. 
 In the current case, the following result will be obtained:

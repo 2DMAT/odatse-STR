@@ -79,13 +79,13 @@ For details, see Bayes optimization section of ODAT-SE manual.
     [solver]
     name = "sim-trhepd-rheed"
     run_scheme = "subprocess"
+    generate_rocking_curve = false
 
     [solver.config]
     cal_number = [1]
 
     [solver.param]
     string_list = ["value_01", "value_02" ]
-    degree_max = 7.0
 
     [solver.reference]
     path = "experiment.txt"
@@ -162,21 +162,36 @@ The following standard output will be shown:
 
 .. code-block::
 
-  # parameter
-  random_max_num_probes = 10
-  bayes_max_num_probes = 20
-  score = TS
-  interval = 5
-  num_rand_basis = 5000
-  value_01 =  5.10000
-  value_02 =  4.90000
-  R-factor = 0.037237314010261195
-  0001-th step: f(x) = -0.037237 (action=150)
-     current best f(x) = -0.037237 (best action=150)
+    # parameter
+    random_max_num_probes = 10
+    bayes_max_num_probes = 20
+    score = TS
+    interval = 5
+    num_rand_basis = 5000
+    name            : bayes
+    label_list      : ['z1', 'z2']
+    seed            : 1
+    param.mesh_path : ./MeshData.txt
+    bayes.random_max_num_probes: 10
+    bayes.bayes_max_num_probes: 20
+    0001-th step: f(x) = -0.037237 (action=150)
+       current best f(x) = -0.037237 (best action=150) 
 
-  value_01 =  4.30000
-  value_02 =  3.50000
-  ...
+    0002-th step: f(x) = -0.060508 (action=36)
+       current best f(x) = -0.037237 (best action=150) 
+
+    0003-th step: f(x) = -0.062158 (action=175)
+       current best f(x) = -0.037237 (best action=150) 
+
+    0004-th step: f(x) = -0.049211 (action=85)
+       current best f(x) = -0.037237 (best action=150) 
+
+    0005-th step: f(x) = -0.083945 (action=255)
+       current best f(x) = -0.037237 (best action=150) 
+
+    0006-th step: f(x) = -0.055569 (action=170)
+       current best f(x) = -0.037237 (best action=150) 
+    ...
 
 where a list of hyperparameters are shown, followed by the candidate parameters at each step and the corresponding ``R-factor`` multiplied by :math:`-1`.
 It also outputs the grid index (``action``) and ``f(x)`` with the best ``R-factor`` at that time.

@@ -1,8 +1,8 @@
 import numpy as np
 
-import py2dmat
-import py2dmat.algorithm.min_search
-from odatse.extra.sim_trhepd_rheed import Solver
+import odatse
+import odatse.algorithm.min_search
+from odatse.extra.STR import Solver
 
 params = {
     "base": {
@@ -36,12 +36,12 @@ params = {
     },
 }
 
-info = py2dmat.Info(params)
+info = odatse.Info(params)
 
 solver = Solver(info)
 
-runner = py2dmat.Runner(solver, info)
+runner = odatse.Runner(solver, info)
 
-alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
+alg = odatse.algorithm.min_search.Algorithm(info, runner)
 
 alg.main()

@@ -80,13 +80,13 @@ The following is the content of ``input.toml`` in the sample file.
     [solver]
     name = "sim-trhepd-rheed"
     run_scheme = "subprocess"
+    generate_rocking_curve = false
 
     [solver.config]
     cal_number = [1]
 
     [solver.param]
     string_list = ["value_01", "value_02" ]
-    degree_max = 7.0
 
     [solver.post]
     normalization = "TOTAL"
@@ -128,8 +128,6 @@ The solver can be configured in the subsections ``[solver.config]``, ``[solver.p
 ``[solver.param]`` section specifies options for the input file passed to ``surf.exe`` that is to be called from the main program.
 
 - ``string_list`` is a list of variable names embedded in ``template.txt``.
-
-- ``degree_max`` specifies the maximum angle in degrees.
 
 ``[solver.reference]`` section specifies the location of the experimental data and the range to read.
 
@@ -179,24 +177,32 @@ After that, run the main program. The computation time will take only a few seco
    $ mpiexec -np 2 odatse-STR input.toml | tee log.txt
 
 Here, the calculation using MPI parallel with 2 processes will be done.
+
 When executed, a folder for each rank will be created, and a subfolder ``LogXXXX_YYYY`` (where ``XXXX`` and ``YYYY`` are the grid id and the sequence number, respectively) will be created under it.
 (The grid id is associated to the index in ``MeshData.txt``.)
 The standard output will look like as follows.
 
 .. code-block::
 
-    Iteration : 1/33
-    Read experiment.txt
-    mesh before: [1.0, 6.0, 6.0]
-    z1 =  6.00000
-    z2 =  6.00000
-    [' 6.00000', ' 6.00000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.04785241875354398
+    name            : mapper
+    label_list      : ['z1', 'z2']
+    param.mesh_path : ./MeshData.txt
+    Iteration : 1/66
+    Iteration : 2/66
+    Iteration : 3/66
+    Iteration : 4/66
+    Iteration : 5/66
+    Iteration : 6/66
     ...
+    Iteration : 63/66
+    Iteration : 64/66
+    Iteration : 65/66
+    Iteration : 66/66
+    [0] minimum_value: 1.51992524e-02 at [5.25, 4.25] (mesh 34)
+    Make ColorMap
+    complete main process : rank 00000000/00000001
+    end of run
 
-``z1`` and ``z2`` are the candidate parameters for each mesh and ``R-factor`` is the function value at that point.
 Finally, the ``R-factor`` calculated at all the points on the grid will be written to ``ColorMap.txt``.
 In this case, the following results will be obtained.
 

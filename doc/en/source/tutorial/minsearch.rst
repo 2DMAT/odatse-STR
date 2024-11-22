@@ -79,10 +79,10 @@ In the sample folder, there is a reference file ``ref.txt`` to know if the atomi
 
 .. code-block::
 
-  fx = 7.382680568652868e-06
-  z1 = 5.230524973874179
-  z2 = 4.370622919269477
-  z3 = 3.5961444501081647
+    fx = 8.97501627575891e-06
+    z1 = 5.230573154947887
+    z2 = 4.3706085364407095
+    z3 = 3.5961303342247577
 
 ``value_01``, ``value_02``, and ``value_03`` correspond to ``z1``, ``z2``, and ``z3``, respectively.
 ``fx`` is the optimal value of the objective function.
@@ -115,7 +115,6 @@ The content of ``input.toml`` is shown below.
 
     [solver.param]
     string_list = ["value_01", "value_02", "value_03" ]
-    degree_max = 7.0
 
     [solver.reference]
     path = "experiment.txt"
@@ -161,8 +160,6 @@ The solver can be configured in the subsections ``[solver.config]``, ``[solver.p
 ``[solver.param]`` section specifies options for the input file passed to ``surf.exe`` that is to be called from the main program.
 
 - ``string_list`` is a list of variable names embedded in ``template.txt``.
-
-- ``degree_max`` specifies the maximum angle in degrees.
 
 ``[solver.reference]`` section specifies the location of the experimental data and the range to read.
 
@@ -222,37 +219,31 @@ Then, the standard output will look as follows.
 
 .. code-block::
 
-    Read experiment.txt
-    z1 =  5.25000
-    z2 =  4.25000
-    z3 =  3.50000
-    [' 5.25000', ' 4.25000', ' 3.50000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.015199251773721183
-    z1 =  5.50000
-    z2 =  4.25000
-    z3 =  3.50000
-    [' 5.50000', ' 4.25000', ' 3.50000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.04380131351780189
-    z1 =  5.25000
-    z2 =  4.50000
-    z3 =  3.50000
-    [' 5.25000', ' 4.50000', ' 3.50000']
+    name            : minsearch
+    label_list      : ['z1', 'z2', 'z3']
+    param.min_list  : [0.0, 0.0, 0.0]
+    param.max_list  : [10.0, 10.0, 10.0]
+    param.initial_list: [5.25, 4.25, 3.5]
+    eval: x=[5.25 4.25 3.5 ], fun=0.015199252435883206
+    eval: x=[5.22916667 4.3125     3.64583333], fun=0.013702918645281299
+    eval: x=[5.22569444 4.40625    3.54513889], fun=0.01263527811899235
+    eval: x=[5.17997685 4.34895833 3.5943287 ], fun=0.006001659635528168
+    eval: x=[5.17997685 4.34895833 3.5943287 ], fun=0.006001659635528168
+    eval: x=[5.22066294 4.33260995 3.60408629], fun=0.005145496928704404
+    eval: x=[5.22066294 4.33260995 3.60408629], fun=0.005145496928704404
+    eval: x=[5.2185245  4.32627234 3.56743818], fun=0.0032531465329236025
     ...
 
-``z1``, ``z2``, and ``z3`` are the candidate parameters at each step, and ``R-factor`` is the function value at that point.
+``x=`` are the candidate parameters at each step, and ``fun=`` is the R-factor value at that point.
 The results at each step are also written in the folder ``output/LogXXXX_YYYY`` (where XXXX and YYYY are the step counts).
 The final estimated parameters will be written to ``output/res.dat``. 
 In the current case, the following result will be obtained:
 
 .. code-block::
 
-    z1 = 5.230524973874179
-    z2 = 4.370622919269477
-    z3 = 3.5961444501081647
+    z1 = 5.230573154947887
+    z2 = 4.3706085364407095
+    z3 = 3.5961303342247577
 
 You can see that we will get the same values as the correct answer data in ``ref.txt``.
 
@@ -291,10 +282,10 @@ In this section, we will use this tool to visualize the results.
 
 .. code-block::
 
-   $ cp output/0/Log00000001_00000001/RockingCurve.txt RockingCurve_ini.txt
-   $ cp output/0/Log00000061_00000001/RockingCurve.txt RockingCurve_con.txt
+   $ cp output/0/Log00000000_00000000/RockingCurve.txt RockingCurve_ini.txt
+   $ cp output/0/Log00000117_00000000/RockingCurve.txt RockingCurve_con.txt
    $ cp ../../../script/draw_RC_double.py .
-   $ python draw_RC_double.py
+   $ python3 draw_RC_double.py
 
 By running the above, ``RC_double.png`` will be generated.
 

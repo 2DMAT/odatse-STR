@@ -77,13 +77,13 @@
     [solver]
     name = "sim-trhepd-rheed"
     run_scheme = "subprocess"
+    generate_rocking_curve = false
 
     [solver.config]
     cal_number = [1]
 
     [solver.param]
     string_list = ["value_01", "value_02" ]
-    degree_max = 7.0
 
     [solver.post]
     normalization = "TOTAL"
@@ -120,8 +120,6 @@
 ``[solver.param]`` セクションではメインプログラム内部で呼び出す ``surf.exe`` への入力パラメータについてのオプションを指定します。
 
 - ``string_list`` は、 ``template.txt`` で読み込む、動かしたい変数の名前のリストです。
-
-- ``degree_max`` は、最大角度（度単位）の指定をします。
 
 ``[solver.reference]`` セクションでは、実験データの置いてある場所と読みこむ範囲を指定します。
 
@@ -174,24 +172,32 @@
     $ mpiexec -np 2 odatse-STR input.toml | tee log.txt
 
 ここではプロセス数2のMPI並列を用いた計算を行っています。
+
 実行すると、output ディレクトリ内に各ランクのフォルダが作成され、その中にグリッドのidがついたサブフォルダ ``LogXXXX_00000000``  (``XXXX`` がグリッドのid) が作成されます
 (``MeshData.txt`` に付けられた番号がグリッドのidとして割り振られます)。
 以下の様な出力が標準出力に書き出されます。
 
 .. code-block::
 
-    Iteration : 1/33
-    Read experiment.txt
-    mesh before: [1.0, 6.0, 6.0]
-    z1 =  6.00000
-    z2 =  6.00000
-    [' 6.00000', ' 6.00000']
-    PASS : degree in lastline = 7.0
-    PASS : len(calculated_list) 70 == len(convolution_I_calculated_list)70
-    R-factor = 0.04785241875354398
+    name            : mapper
+    label_list      : ['z1', 'z2']
+    param.mesh_path : ./MeshData.txt
+    Iteration : 1/66
+    Iteration : 2/66
+    Iteration : 3/66
+    Iteration : 4/66
+    Iteration : 5/66
+    Iteration : 6/66
     ...
-
-``z1``, ``z2`` に各メッシュでの候補パラメータと、その時の ``R-factor`` が出力されます。
+    Iteration : 63/66
+    Iteration : 64/66
+    Iteration : 65/66
+    Iteration : 66/66
+    [0] minimum_value: 1.51992524e-02 at [5.25, 4.25] (mesh 34)
+    Make ColorMap
+    complete main process : rank 00000000/00000001
+    end of run
+        
 最終的にグリッド上の全ての点で計算された ``R-factor`` は ``output/ColorMap.txt`` に出力されます。
 今回の場合は
 

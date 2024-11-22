@@ -3,7 +3,7 @@ Installation of odatse-STR
 
 Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Python3 (>=3.6.8)
+- Python3 (>=3.9)
 
   - The following Python packages are required.
 
@@ -26,7 +26,7 @@ How to download and install
 
      .. code-block:: bash
 
-	$ git clone -b update https://github.com/issp-center-dev/ODAT-SE.git
+	$ git clone https://github.com/issp-center-dev/ODAT-SE.git
 
      Install ODAT-SE using ``pip`` command:
 
