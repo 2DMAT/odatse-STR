@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Analyses by user programs &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=a2628a1b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Input and output" href="../solver.html" />
+    <link rel="prev" title="Optimization by population annealing Monte Carlo method" href="pamc.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Analyses by user programs</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="pamc.html">Optimization by population annealing Monte Carlo method</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="../solver.html">Input and output</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="analyses-by-user-programs">
+<h1>Analyses by user programs<a class="headerlink" href="#analyses-by-user-programs" title="Link to this heading">¶</a></h1>
+<p>In this tutorial, we will write a user program using odatse-STR module and perform analyese. As an example, we adopt Nelder-Mead method for the inverse problem algorithm.</p>
+<section id="location-of-the-sample-files">
+<h2>Location of the sample files<a class="headerlink" href="#location-of-the-sample-files" title="Link to this heading">¶</a></h2>
+<p>The sample files are located in <code class="docutils literal notranslate"><span class="pre">sample/single_beam/user_program</span></code>.
+The following files are stored in the folder.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">simple.py</span></code></p>
+<p>Source file of the main program. This program reads <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> for the parameters.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input.toml</span></code></p>
+<p>Input file of the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">template.txt</span></code></p>
+<p>Reference file to proceed with calculations in the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ref.txt</span></code></p>
+<p>A file containing the answers you want to seek in this tutorial.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">simple2.py</span></code></p>
+<p>Another version of source file of the main program. The parameters are embedded in the program as a dict.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare.sh</span></code> , <code class="docutils literal notranslate"><span class="pre">do.sh</span></code></p>
+<p>Script prepared for doing all calculation of this tutorial</p>
+</li>
+</ul>
+<p>The following sections describe these files and then show the actual calculation results.</p>
+</section>
+<section id="description-of-main-program">
+<h2>Description of main program<a class="headerlink" href="#description-of-main-program" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">simple.py</span></code> is a simple program for the analyses using odatse-STR module.
+The entire source file is shown as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">odatse</span>
+<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
+<span class="kn">from</span> <span class="nn">odatse.extra.STR</span> <span class="kn">import</span> <span class="n">Solver</span>
+
+<span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;input.toml&quot;</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">min_search</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span>
+<span class="n">alg</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>At the beginning of the program, the required modules are imported as listed below.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse</span></code> for the main module of ODAT-SE.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.algorithm.min_search</span></code> for the module of the inverse problem algorithm used in this tutorial.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.extra.STR</span></code> for the direct problem solver module.</p></li>
+</ul>
+<p>Next, the instances of the classes are created.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.Info</span></code> class</p>
+<p>This class is for storing the parameters. It is created by calling a class method <code class="docutils literal notranslate"><span class="pre">from_file</span></code> with a path to TOML file as an argument.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.extra.STR.Solver</span></code> class</p>
+<p>This class is for the direct problem solver of the odatse-STR module. It is created by passing an instance of Info class.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.Runner</span></code> class</p>
+<p>This class is for connecting the direct problem solver and the inverse problem algorithm. It is created by passing an instance of Solver class and an instance of Info class.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.algorithm.min_search.Algorithm</span></code> class</p>
+<p>This class is for the inverse problem algorithm. In this tutorial, we use <code class="docutils literal notranslate"><span class="pre">min_search</span></code> module that implements the optimization by Nelder-Mead method. It is created by passing an instance of Runner class.</p>
+</li>
+</ul>
+<p>After creating the instances of Solver, Runner, and Algorithm in this order, we invoke <code class="docutils literal notranslate"><span class="pre">main()</span></code> method of the Algorithm class to start analyses.</p>
+<p>In the above program, the input parameters are read from a file in TOML format. It is also possible to take the parameters in the form of dictionary.
+<code class="docutils literal notranslate"><span class="pre">simple2.py</span></code> is anther version of the main program in which the parameters are embedded in the program. The entire source file is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">odatse</span>
+<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
+<span class="kn">from</span> <span class="nn">odatse.extra.STR</span> <span class="kn">import</span> <span class="n">Solver</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;output_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;run_scheme&quot;</span><span class="p">:</span> <span class="s2">&quot;subprocess&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;generate_rocking_curve&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;cal_number&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;param&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;string_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;value_01&quot;</span><span class="p">,</span> <span class="s2">&quot;value_02&quot;</span><span class="p">,</span> <span class="s2">&quot;value_03&quot;</span><span class="p">],</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;experiment.txt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;exp_number&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;post&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;normalization&quot;</span><span class="p">:</span> <span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;algorithm&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;label_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">,</span> <span class="s2">&quot;z3&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;param&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;min_list&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">],</span>
+            <span class="s2">&quot;max_list&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span> <span class="p">],</span>
+            <span class="s2">&quot;initial_list&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">3.50</span><span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">min_search</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span>
+<span class="n">alg</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>An instance of Info class is created by passing a set of parameters in a dict form.
+It is also possible to generate the parameters within the program before passing to the class.</p>
+</section>
+<section id="input-files">
+<h2>Input files<a class="headerlink" href="#input-files" title="Link to this heading">¶</a></h2>
+<p>The input file <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> for the main program is the same as that used in the previous tutorial for Nelder-Mead method.
+Except, <code class="docutils literal notranslate"><span class="pre">algorithm.name</span></code> parameter for specifying the algorithm type should be ignored.</p>
+<p><code class="docutils literal notranslate"><span class="pre">template.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code> are the same as those in the previous tutorials.</p>
+</section>
+<section id="calculation-execution">
+<h2>Calculation execution<a class="headerlink" href="#calculation-execution" title="Link to this heading">¶</a></h2>
+<p>First, move to the folder where the sample files are located. (We assume that you are directly under the directory where you downloaded this software.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd sample/single_beam/user_program
+</pre></div>
+</div>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp ../../sim-trhepd-rheed/src/bulk.exe .
+$ cp ../../sim-trhepd-rheed/src/surf.exe .
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> to produce <code class="docutils literal notranslate"><span class="pre">bulkP.b</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./bulk.exe
+</pre></div>
+</div>
+<p>Then, run the main program. The computation time will take only a few seconds on a normal PC.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 simple.py | tee log.txt
+</pre></div>
+</div>
+<p>The standard output will look as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span>            <span class="p">:</span> <span class="n">minsearch</span>
+<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="s1">&#39;z2&#39;</span><span class="p">,</span> <span class="s1">&#39;z3&#39;</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">min_list</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">max_list</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">initial_list</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">]</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.25</span> <span class="mf">4.25</span> <span class="mf">3.5</span> <span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.015199252435883206</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22916667</span> <span class="mf">4.3125</span>     <span class="mf">3.64583333</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.013702918645281299</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22569444</span> <span class="mf">4.40625</span>    <span class="mf">3.54513889</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.01263527811899235</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.17997685</span> <span class="mf">4.34895833</span> <span class="mf">3.5943287</span> <span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.006001659635528168</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.17997685</span> <span class="mf">4.34895833</span> <span class="mf">3.5943287</span> <span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.006001659635528168</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22066294</span> <span class="mf">4.33260995</span> <span class="mf">3.60408629</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.005145496928704404</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22066294</span> <span class="mf">4.33260995</span> <span class="mf">3.60408629</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.005145496928704404</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.2185245</span>  <span class="mf">4.32627234</span> <span class="mf">3.56743818</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.0032531465329236025</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.19953437</span> <span class="mf">4.34549482</span> <span class="mf">3.5863457</span> <span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.0027579225484420356</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.21549776</span> <span class="mf">4.35100199</span> <span class="mf">3.57476018</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.002464573036316852</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">x=</span></code> are the candidate parameters at each step, and <code class="docutils literal notranslate"><span class="pre">fun=</span></code> is the R-factor value at that point.
+The results at each step are also written in the folder <code class="docutils literal notranslate"><span class="pre">output/LogXXXX_YYYY</span></code> (where XXXX and YYYY are the step counts).
+The final estimated parameters will be written to <code class="docutils literal notranslate"><span class="pre">output/res.dat</span></code>.
+In the current case, the following result will be obtained:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z1</span> <span class="o">=</span> <span class="mf">5.230524973874179</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="mf">4.370622919269477</span>
+<span class="n">z3</span> <span class="o">=</span> <span class="mf">3.5961444501081647</span>
+</pre></div>
+</div>
+<p>You can see that we will get the same values as the correct answer data in <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code>.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">do.sh</span></code> is available as a script for batch calculation.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="pamc.html">Optimization by population annealing Monte Carlo method</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="../solver.html">Input and output</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TRHEPD 順問題ソルバー &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=3b7831b5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="Nelder-Mead法による最適化" href="minsearch.html" />
+    <link rel="prev" title="チュートリアル" href="index.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev ドキュメント</span></a></h1>
+        <h2 class="heading"><span>TRHEPD 順問題ソルバー</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">チュートリアル</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">コンテンツ</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="minsearch.html">Nelder-Mead法による最適化</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="trhepd">
+<h1>TRHEPD 順問題ソルバー<a class="headerlink" href="#trhepd" title="Link to this heading">¶</a></h1>
+<p>odatse-STR モジュールは、反射高速(陽)電子回折(RHEED, TRHEPD)の強度計算 (A. Ichimiya, Jpn. J. Appl. Phys. 22, 176 (1983); 24, 1365 (1985)) を行うプログラム <a class="reference external" href="https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/">sim-trhepd-rheed</a> をODAT-SEの順問題ソルバーとして利用するためのラッパーです。
+本チュートリアルでは sim-trhepd-rheed を用い、様々なアルゴリズムを利用した解析を行います。
+最初に、チュートリアルを行うために必要な sim-trhepd-rheed のインストールおよびテストを行います。</p>
+<section id="id1">
+<h2>ダウンロード・インストール<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>あらかじめ odatse-STR のソースコードをリポジトリから取得しておきます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/2DMAT/odatse-STR.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>odatse-STR
+</pre></div>
+</div>
+<p>GitHub の sim-trhepd-rheed リポジトリから、ソースコード一式を入手し、ビルドします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>http://github.com/sim-trhepd-rheed/sim-trhepd-rheed
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sim-trhepd-rheed/src
+$<span class="w"> </span>make
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> は実行環境に応じて適宜編集してください。
+makeが成功すると、 <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> が作成されます。</p>
+</section>
+<section id="id2">
+<h2>計算実行<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>sim-trhepd-rheed では、最初に <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> で表面構造のバルク部分に関する計算をします。
+その後、 <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> の計算結果 (<code class="docutils literal notranslate"><span class="pre">bulkP.b</span></code> ファイル) を用いて、 <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> 表面構造の表面部分を計算します。</p>
+<p>このチュートリアルでは実際に TRHEPD 計算をしてみます。
+サンプルとなる入力ファイルは odatse-STR の <code class="docutils literal notranslate"><span class="pre">sample/solver</span></code> 以下にあります。
+まず、このフォルダを適当な作業用フォルダ <code class="docutils literal notranslate"><span class="pre">work</span></code> にコピーします。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp -r sample/solver work
+$ cd work
+</pre></div>
+</div>
+<p>次に <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> を <code class="docutils literal notranslate"><span class="pre">work</span></code> にコピーします</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp ../sim-trhepd-rheed/src/bulk.exe .
+$ cp ../sim-trhepd-rheed/src/surf.exe .
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> を実行します。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./bulk.exe
+</pre></div>
+</div>
+<p>バルクファイル <code class="docutils literal notranslate"><span class="pre">bulkP.b</span></code> が生成されます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ls
+bulk.exe bulk.txt bulkP.b surf.exe surf.txt
+</pre></div>
+</div>
+<p>続いて、 <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> を実行します。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./surf.exe
+</pre></div>
+</div>
+<p>以下のように出力されます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">surf</span><span class="o">-</span><span class="n">bulkP</span><span class="o">.</span><span class="n">s</span>
+</pre></div>
+</div>
+<p>実行後に、ファイル <code class="docutils literal notranslate"><span class="pre">surf-bulkP.md</span></code>, <code class="docutils literal notranslate"><span class="pre">surf-bulkP.s</span></code>
+および <code class="docutils literal notranslate"><span class="pre">SURF</span></code> YYYYMMDD-HHMMSS <code class="docutils literal notranslate"><span class="pre">log.txt</span></code> が生成されます。
+(YYYYMMDD、 HHMMSS には実行日時に対応した数字が入ります)</p>
+</section>
+<section id="id3">
+<h2>計算結果の可視化<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">surf-bulkP.s</span></code> は以下の通りです。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="c1">#azimuths,g-angles,beams</span>
+ <span class="mi">1</span> <span class="mi">56</span> <span class="mi">13</span>
+ <span class="c1">#ih,ik</span>
+ <span class="n">deg</span><span class="p">,</span><span class="mi">6</span> <span class="mi">0</span><span class="p">,</span><span class="mi">5</span> <span class="mi">0</span><span class="p">,</span><span class="mi">4</span> <span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="mi">0</span><span class="p">,</span><span class="mi">2</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span> <span class="mi">0</span><span class="p">,</span>
+   <span class="mf">5.0000E-01</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">1.5946E-02</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>
+   <span class="mf">6.0000E-01</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">1.8701E-02</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>
+   <span class="mf">7.0000E-01</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">2.1202E-02</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>
+   <span class="mf">8.0000E-01</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">2.1711E-03</span><span class="p">,</span>  <span class="mf">1.9273E-02</span><span class="p">,</span>  <span class="mf">2.1711E-03</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>
+   <span class="mf">9.0000E-01</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">4.3965E-03</span><span class="p">,</span>  <span class="mf">1.7006E-02</span><span class="p">,</span>  <span class="mf">4.3965E-03</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>
+   <span class="mf">1.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">6.3263E-03</span><span class="p">,</span>  <span class="mf">1.4952E-02</span><span class="p">,</span>  <span class="mf">6.3263E-03</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>  <span class="mf">0.0000E+00</span><span class="p">,</span>
+<span class="p">(</span><span class="n">以下略</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>上記ファイルより、縦軸に角度 (5行目以降の1列目データ) と <span class="math notranslate nohighlight">\((0,0)\)</span> ピークの強度 (5行目以降の8列目データ) からロッキングカーブを作成します。
+Gnuplot等のグラフソフトを用いる事も出来ますが、ここでは <code class="docutils literal notranslate"><span class="pre">script</span></code> フォルダにあるプログラム <code class="docutils literal notranslate"><span class="pre">plot_bulkP.py</span></code> を用います。
+以下のように実行して下さい。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 ../script/plot_bulkP.py
+</pre></div>
+</div>
+<p>以下のような <code class="docutils literal notranslate"><span class="pre">plot_bulkP.png</span></code> が作成されます。</p>
+<figure class="align-default" id="id4">
+<img alt="../_images/plot_bulkP.png" src="../_images/plot_bulkP.png" />
+<figcaption>
+<p><span class="caption-text">Si(001)-2x1面のロッキングカーブ。</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>この00ピークの回折強度のデータに対し、コンボリューションを掛けたうえで規格化します。
+<code class="docutils literal notranslate"><span class="pre">surf-bulkP.s</span></code> があることを確認し、 <code class="docutils literal notranslate"><span class="pre">make_convolution.py</span></code> を実行してください。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 ../script/make_convolution.py
+</pre></div>
+</div>
+<p>実行すると、以下のようなファイル <code class="docutils literal notranslate"><span class="pre">convolution.txt</span></code> が出力されます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.500000</span> <span class="mf">0.010818010</span>
+<span class="mf">0.600000</span> <span class="mf">0.013986716</span>
+<span class="mf">0.700000</span> <span class="mf">0.016119093</span>
+<span class="mf">0.800000</span> <span class="mf">0.017039022</span>
+<span class="mf">0.900000</span> <span class="mf">0.017084666</span>
+<span class="p">(</span><span class="n">中略</span><span class="p">)</span>
+<span class="mf">5.600000</span> <span class="mf">0.000728539</span>
+<span class="mf">5.700000</span> <span class="mf">0.000530758</span>
+<span class="mf">5.800000</span> <span class="mf">0.000412908</span>
+<span class="mf">5.900000</span> <span class="mf">0.000341740</span>
+<span class="mf">6.000000</span> <span class="mf">0.000277553</span>
+</pre></div>
+</div>
+<p>1列目が視射角、2列目が <code class="docutils literal notranslate"><span class="pre">surf-bulkP.s</span></code> に書かれた00ピーク回折強度のデータに
+半値幅0.5のコンボリューションを付加して規格化したものです。</p>
+<p><code class="docutils literal notranslate"><span class="pre">plot_convolution.py</span></code> を実行すると <code class="docutils literal notranslate"><span class="pre">plot_convolution.png</span></code> が作成されます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 ../script/plot_convolution.py
+</pre></div>
+</div>
+<figure class="align-default" id="id5">
+<img alt="../_images/plot_convolution.png" src="../_images/plot_convolution.png" />
+<figcaption>
+<p><span class="caption-text">Si(001)-2x1面のロッキングカーブに半値幅0.5のコンボリューションを付加して規格化したもの。</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">チュートリアル</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">コンテンツ</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="minsearch.html">Nelder-Mead法による最適化</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

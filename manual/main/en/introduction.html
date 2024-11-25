@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=a2628a1b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation of odatse-STR" href="install.html" />
+    <link rel="prev" title="Welcome to odatse-STR documentation!" href="index.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Introduction</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to odatse-STR documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="install.html">Installation of odatse-STR</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h1>
+<section id="what-is-odat-se">
+<h2>What is ODAT-SE ?<a class="headerlink" href="#what-is-odat-se" title="Link to this heading">¶</a></h2>
+<p>ODAT-SE is a framework for applying a search algorithm to a direct problem solver to find the optimal solution.
+As the standard direct problem solver, the experimental data analysis software for two-dimensional material structure analysis is prepared.
+The direct problem solver gives the deviation between the experimental data and the calculated data obtained under the given parameters such as atomic positions as a loss function used in the inverse problem.
+The optimal parameters are estimated by minimizing the loss function using a search algorithm. For further use, the original direct problem solver or the search algorithm can be defined by users.
+In the current version, for solving a direct problem, ODAT-SE offers the wrapper of the solver for the total-reflection high-energy positron diffraction (TRHEPD), the surface X-ray diffraction (SXRD), and the low-energy electron diffraction (LEED).
+As algorithms, it offers the Nelder-Mead method, the grid search method, the Bayesian optimization method, the replica exchange Monte Carlo method, and the population annealing Monte Carlo method.</p>
+</section>
+<section id="what-is-odatse-str">
+<h2>What is odatse-STR ?<a class="headerlink" href="#what-is-odatse-str" title="Link to this heading">¶</a></h2>
+<p>sim-trhepd-rheed has been developed as a simulator software package for the total-reflection high-energy positron diffraction (TRHEPD) and the reflection high energy electron diffraction (RHEED).
+It takes atom positions as input and calculates the Rocking Curve of the diffraction intensity.
+The program is written in Fortran and runs on ordinary Linux environment.
+odatse-STR is an adaptor library to use sim-trhepd-rheed as a direct problem solver of ODAT-SE.
+It was originally developed as a component of 2DMAT v2.x, and has been restructured as a separate module to be used with ODAT-SE and sim-trhepd-rheed.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">This package is distributed under GNU General Public License version 3 (GPL v3).</div>
+</div>
+<p>Copyright (c) &lt;2020-&gt; The University of Tokyo. All rights reserved.</p>
+<p>This software was developed with the support of “Project for advancement of software usability in materials science” of The Institute for Solid State Physics, The University of Tokyo.
+We hope that you cite the following reference when you publish the results using ODAT-SE:</p>
+<p>“Data-analysis software framework 2DMAT and its application to experimental measurements for two-dimensional material structures”, Y. Motoyama, K. Yoshimi, I. Mochizuki, H. Iwamoto, H. Ichinose, and T. Hoshi, <a class="reference external" href="https://doi.org/10.1016/j.cpc.2022.108465">Computer Physics Communications 280, 108465 (2022).</a></p>
+<p>Bibtex:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">MOTOYAMA2022108465</span><span class="p">,</span>
+  <span class="n">title</span> <span class="o">=</span> <span class="p">{</span><span class="n">Data</span><span class="o">-</span><span class="n">analysis</span> <span class="n">software</span> <span class="n">framework</span> <span class="mi">2</span><span class="n">DMAT</span> <span class="ow">and</span> <span class="n">its</span> <span class="n">application</span> <span class="n">to</span> <span class="n">experimental</span> <span class="n">measurements</span> <span class="k">for</span> <span class="n">two</span><span class="o">-</span><span class="n">dimensional</span> <span class="n">material</span> <span class="n">structures</span><span class="p">},</span>
+  <span class="n">journal</span> <span class="o">=</span> <span class="p">{</span><span class="n">Computer</span> <span class="n">Physics</span> <span class="n">Communications</span><span class="p">},</span>
+  <span class="n">volume</span> <span class="o">=</span> <span class="p">{</span><span class="mi">280</span><span class="p">},</span>
+  <span class="n">pages</span> <span class="o">=</span> <span class="p">{</span><span class="mi">108465</span><span class="p">},</span>
+  <span class="n">year</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2022</span><span class="p">},</span>
+  <span class="n">issn</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0010</span><span class="o">-</span><span class="mi">4655</span><span class="p">},</span>
+  <span class="n">doi</span> <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">doi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="mf">10.1016</span><span class="o">/</span><span class="n">j</span><span class="o">.</span><span class="n">cpc</span><span class="mf">.2022.108465</span><span class="p">},</span>
+  <span class="n">url</span> <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">sciencedirect</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">science</span><span class="o">/</span><span class="n">article</span><span class="o">/</span><span class="n">pii</span><span class="o">/</span><span class="n">S0010465522001849</span><span class="p">},</span>
+  <span class="n">author</span> <span class="o">=</span> <span class="p">{</span><span class="n">Yuichi</span> <span class="n">Motoyama</span> <span class="ow">and</span> <span class="n">Kazuyoshi</span> <span class="n">Yoshimi</span> <span class="ow">and</span> <span class="n">Izumi</span> <span class="n">Mochizuki</span> <span class="ow">and</span> <span class="n">Harumichi</span> <span class="n">Iwamoto</span> <span class="ow">and</span> <span class="n">Hayato</span> <span class="n">Ichinose</span> <span class="ow">and</span> <span class="n">Takeo</span> <span class="n">Hoshi</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="version-information">
+<h2>Version Information<a class="headerlink" href="#version-information" title="Link to this heading">¶</a></h2>
+<p>odatse-STR</p>
+<ul class="simple">
+<li><p>v1.0.0: 2024-11-25</p></li>
+</ul>
+<p>ODAT-SE</p>
+<ul class="simple">
+<li><p>v3.0.0: 2024-11-25</p></li>
+</ul>
+<p>2DMAT</p>
+<ul class="simple">
+<li><p>v2.1.0: 2022-04-08</p></li>
+<li><p>v2.0.0: 2022-01-17</p></li>
+<li><p>v1.0.1: 2021-04-15</p></li>
+<li><p>v1.0.0: 2021-03-12</p></li>
+<li><p>v0.1.0: 2021-02-08</p></li>
+</ul>
+</section>
+<section id="main-developers">
+<h2>Main developers<a class="headerlink" href="#main-developers" title="Link to this heading">¶</a></h2>
+<p>ODAT-SE, odatse-STR, and 2DMAT has been developed by following members.</p>
+<ul class="simple">
+<li><p>ODAT-SE v3.0.0 -, odat-STR v1.0.0 -</p>
+<ul>
+<li><ol class="upperalpha simple" start="25">
+<li><p>Motoyama (The Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="11">
+<li><p>Yoshimi (The Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="20">
+<li><p>Aoyama (The Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="20">
+<li><p>Hoshi (National Institute for Fusion Science)</p></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>2DMAT v2.0.0 -</p>
+<ul>
+<li><ol class="upperalpha simple" start="25">
+<li><p>Motoyama (The Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="11">
+<li><p>Yoshimi (The Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="8">
+<li><p>Iwamoto (Department of Applied Mathematics and Physics, Tottori University)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="20">
+<li><p>Hoshi (Department of Applied Mathematics and Physics, Tottori University)</p></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>2DMAT v0.1.0 - v1.0.1</p>
+<ul>
+<li><ol class="upperalpha simple" start="25">
+<li><p>Motoyama (The Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="11">
+<li><p>Yoshimi (The Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="20">
+<li><p>Hoshi (Department of Applied Mathematics and Physics, Tottori University)</p></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to odatse-STR documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="install.html">Installation of odatse-STR</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

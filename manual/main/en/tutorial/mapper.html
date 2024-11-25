@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimization by Grid search &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=a2628a1b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimization by Bayesian Optimization" href="bayes.html" />
+    <link rel="prev" title="Optimization by Nelder-Mead method" href="minsearch.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Optimization by Grid search</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="minsearch.html">Optimization by Nelder-Mead method</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="bayes.html">Optimization by Bayesian Optimization</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="optimization-by-grid-search">
+<h1>Optimization by Grid search<a class="headerlink" href="#optimization-by-grid-search" title="Link to this heading">¶</a></h1>
+<p>In this section, we will explain how to perform a grid-type search to analyze atomic coordinates from diffraction data.
+The grid type search is compatible with MPI.
+The specific calculation procedure is the same as for <code class="docutils literal notranslate"><span class="pre">minsearch</span></code>.
+It is necessary to prepare the data file <code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code> that defines the search grid in advance.</p>
+<section id="location-of-the-sample-files">
+<h2>Location of the sample files<a class="headerlink" href="#location-of-the-sample-files" title="Link to this heading">¶</a></h2>
+<p>The sample files are located in <code class="docutils literal notranslate"><span class="pre">sample/single_beam/mapper</span></code>.
+The following files are stored in the folder:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk.txt</span></code></p>
+<p>Input file of <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code></p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">template.txt</span></code></p>
+<p>Reference file to proceed with calculations in the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code></p>
+<p>Data file for the search grid.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input.toml</span></code></p>
+<p>Input file of the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ref_ColorMap.txt</span></code></p>
+<p>A file to check if the calculation was performed correctly (the answer to <code class="docutils literal notranslate"><span class="pre">ColorMap.txt</span></code> obtained by doing this tutorial).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare.sh</span></code>, <code class="docutils literal notranslate"><span class="pre">do.sh</span></code></p>
+<p>Script prepared for bulk calculation of this tutorial.</p>
+</li>
+</ul>
+<p>Below, we will describe these files and then show the actual calculation results.</p>
+</section>
+<section id="reference-files">
+<h2>Reference files<a class="headerlink" href="#reference-files" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">template.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code> are the same as in the previous tutorial (Nealder-Mead optimization).
+Except, to reduce the computation time, the value of <code class="docutils literal notranslate"><span class="pre">value_03</span></code> is fixed to <code class="docutils literal notranslate"><span class="pre">3.5</span></code> instead of the variable, and thus the grid is searched in two-dimensional space.
+The actual grid to be searched is given in <code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code>.
+In the sample, the contents of <code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code> are as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="mf">6.000000</span> <span class="mf">6.000000</span>
+<span class="mi">2</span> <span class="mf">6.000000</span> <span class="mf">5.750000</span>
+<span class="mi">3</span> <span class="mf">6.000000</span> <span class="mf">5.500000</span>
+<span class="mi">4</span> <span class="mf">6.000000</span> <span class="mf">5.250000</span>
+<span class="mi">5</span> <span class="mf">6.000000</span> <span class="mf">5.000000</span>
+<span class="mi">6</span> <span class="mf">6.000000</span> <span class="mf">4.750000</span>
+<span class="mi">7</span> <span class="mf">6.000000</span> <span class="mf">4.500000</span>
+<span class="mi">8</span> <span class="mf">6.000000</span> <span class="mf">4.250000</span>
+<span class="mi">9</span> <span class="mf">6.000000</span> <span class="mf">4.000000</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>The first column is the serial number, and the second and subsequent columns are the values of <code class="docutils literal notranslate"><span class="pre">value_0</span></code>, <code class="docutils literal notranslate"><span class="pre">value_1</span></code>, and so on that are referred to by the variables in <code class="docutils literal notranslate"><span class="pre">template.txt</span></code> in that order.</p>
+</section>
+<section id="input-file">
+<h2>Input file<a class="headerlink" href="#input-file" title="Link to this heading">¶</a></h2>
+<p>This section describes the input file for the main program, <code class="docutils literal notranslate"><span class="pre">input.toml</span></code>.
+The details of <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> can be found in the input file section of the manual.
+The following is the content of <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> in the sample file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
+<span class="n">dimension</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="s2">&quot;output&quot;</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sim-trhepd-rheed&quot;</span>
+<span class="n">run_scheme</span> <span class="o">=</span> <span class="s2">&quot;subprocess&quot;</span>
+<span class="n">generate_rocking_curve</span> <span class="o">=</span> <span class="n">false</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">]</span>
+<span class="n">cal_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
+<span class="n">string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;value_01&quot;</span><span class="p">,</span> <span class="s2">&quot;value_02&quot;</span> <span class="p">]</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">post</span><span class="p">]</span>
+<span class="n">normalization</span> <span class="o">=</span> <span class="s2">&quot;TOTAL&quot;</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">reference</span><span class="p">]</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;experiment.txt&quot;</span>
+<span class="n">exp_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">algorithm</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mapper&quot;</span>
+<span class="n">label_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">algorithm</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
+<span class="n">mesh_path</span> <span class="o">=</span> <span class="s2">&quot;./MeshData.txt&quot;</span>
+</pre></div>
+</div>
+<p>First, <code class="docutils literal notranslate"><span class="pre">[base]</span></code> section is explained.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dimension</span></code> is the number of variables to be optimized. In this case, it is <code class="docutils literal notranslate"><span class="pre">2</span></code> since we are optimizing two variables as described in <code class="docutils literal notranslate"><span class="pre">template.txt</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_dir</span></code> is the name of directory for the outputs. If it is omitted, the results are written in the directory in which the program is executed.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver]</span></code> section specifies the solver to be used inside the main program and its settings.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> is the name of the solver you want to use. In this tutorial it is <code class="docutils literal notranslate"><span class="pre">sim-trhepd-rheed</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_scheme</span></code> specifies how the solver is executed within the program. In the current version, <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> can be specified.</p></li>
+</ul>
+<p>The solver can be configured in the subsections <code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code>, <code class="docutils literal notranslate"><span class="pre">[solver.param]</span></code>, and <code class="docutils literal notranslate"><span class="pre">[solver.reference]</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code> section specifies options for reading the output file produced by <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> that is called from the main program.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">calculated_first_line</span></code> specifies the first line to read from the output file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calculated_last_line</span></code> specifies the last line of the output file to be read.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cal_number</span></code> specifies the indices of columns of the output file to read.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.param]</span></code> section specifies options for the input file passed to <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> that is to be called from the main program.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">string_list</span></code> is a list of variable names embedded in <code class="docutils literal notranslate"><span class="pre">template.txt</span></code>.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.reference]</span></code> section specifies the location of the experimental data and the range to read.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> specifies the path where the experimental data is located.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">first</span></code> specifies the first line of the experimental data file to read.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">end</span></code> specifies the last line of the experimental data file to read.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exp_number</span></code> specifies the indices of columns of the experimental data file to read.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[algorithm]</span></code> section specifies the algorithm to use and its settings.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> is the name of the algorithm you want to use. In this tutorial we will use <code class="docutils literal notranslate"><span class="pre">mapper</span></code> since we will be using grid-search method.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label_list</span></code> is a list of label names to be attached to the output of <code class="docutils literal notranslate"><span class="pre">value_0x</span></code> (x=1,2).</p></li>
+</ul>
+<p>For details on other parameters that can be specified in the input file, please see the Input File section of the manual.</p>
+</section>
+<section id="calculation-execution">
+<h2>Calculation execution<a class="headerlink" href="#calculation-execution" title="Link to this heading">¶</a></h2>
+<p>First, move to the folder where the sample files are located. (We assume that you are directly under the directory where you downloaded this software.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd sample/single_beam/mapper
+</pre></div>
+</div>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp ../../sim-trhepd-rheed/src/bulk.exe .
+$ cp ../../sim-trhepd-rheed/src/surf.exe .
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> to produce <code class="docutils literal notranslate"><span class="pre">bulkP.b</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./bulk.exe
+</pre></div>
+</div>
+<p>After that, run the main program. The computation time will take only a few seconds on a normal PC.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mpiexec -np 2 odatse-STR input.toml | tee log.txt
+</pre></div>
+</div>
+<p>Here, the calculation using MPI parallel with 2 processes will be done.</p>
+<p>When executed, a folder for each rank will be created, and a subfolder <code class="docutils literal notranslate"><span class="pre">LogXXXX_YYYY</span></code> (where <code class="docutils literal notranslate"><span class="pre">XXXX</span></code> and <code class="docutils literal notranslate"><span class="pre">YYYY</span></code> are the grid id and the sequence number, respectively) will be created under it.
+(The grid id is associated to the index in <code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code>.)
+The standard output will look like as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span>            <span class="p">:</span> <span class="n">mapper</span>
+<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="s1">&#39;z2&#39;</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">mesh_path</span> <span class="p">:</span> <span class="o">./</span><span class="n">MeshData</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">2</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">3</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">4</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">5</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">6</span><span class="o">/</span><span class="mi">66</span>
+<span class="o">...</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">63</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">64</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">65</span><span class="o">/</span><span class="mi">66</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">66</span><span class="o">/</span><span class="mi">66</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="n">minimum_value</span><span class="p">:</span> <span class="mf">1.51992524e-02</span> <span class="n">at</span> <span class="p">[</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">]</span> <span class="p">(</span><span class="n">mesh</span> <span class="mi">34</span><span class="p">)</span>
+<span class="n">Make</span> <span class="n">ColorMap</span>
+<span class="n">complete</span> <span class="n">main</span> <span class="n">process</span> <span class="p">:</span> <span class="n">rank</span> <span class="mi">00000000</span><span class="o">/</span><span class="mi">00000001</span>
+<span class="n">end</span> <span class="n">of</span> <span class="n">run</span>
+</pre></div>
+</div>
+<p>Finally, the <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> calculated at all the points on the grid will be written to <code class="docutils literal notranslate"><span class="pre">ColorMap.txt</span></code>.
+In this case, the following results will be obtained.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">6.000000</span> <span class="mf">6.000000</span> <span class="mf">0.047852</span>
+<span class="mf">6.000000</span> <span class="mf">5.750000</span> <span class="mf">0.055011</span>
+<span class="mf">6.000000</span> <span class="mf">5.500000</span> <span class="mf">0.053190</span>
+<span class="mf">6.000000</span> <span class="mf">5.250000</span> <span class="mf">0.038905</span>
+<span class="mf">6.000000</span> <span class="mf">5.000000</span> <span class="mf">0.047674</span>
+<span class="mf">6.000000</span> <span class="mf">4.750000</span> <span class="mf">0.065919</span>
+<span class="mf">6.000000</span> <span class="mf">4.500000</span> <span class="mf">0.053675</span>
+<span class="mf">6.000000</span> <span class="mf">4.250000</span> <span class="mf">0.061261</span>
+<span class="mf">6.000000</span> <span class="mf">4.000000</span> <span class="mf">0.069351</span>
+<span class="mf">6.000000</span> <span class="mf">3.750000</span> <span class="mf">0.071868</span>
+<span class="mf">6.000000</span> <span class="mf">3.500000</span> <span class="mf">0.072739</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>The first and second columns contain the values of <code class="docutils literal notranslate"><span class="pre">value_01</span></code> and <code class="docutils literal notranslate"><span class="pre">value_02</span></code>, and the third column contains the <code class="docutils literal notranslate"><span class="pre">R-factor</span></code>.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">do.sh</span></code> is available as a script for batch calculation.
+In <code class="docutils literal notranslate"><span class="pre">do.sh</span></code>, <code class="docutils literal notranslate"><span class="pre">res.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code> are also compared for the check.
+Here is what it does, without further explanation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+sh<span class="w"> </span>prepare.sh
+
+./bulk.exe
+
+<span class="nb">time</span><span class="w"> </span>mpiexec<span class="w"> </span>-np<span class="w"> </span><span class="m">2</span><span class="w"> </span>odatse-STR<span class="w"> </span>input.toml
+
+<span class="nb">echo</span><span class="w"> </span>diff<span class="w"> </span>output/ColorMap.txt<span class="w"> </span>ref_ColorMap.txt
+<span class="nv">res</span><span class="o">=</span><span class="m">0</span>
+diff<span class="w"> </span>output/ColorMap.txt<span class="w"> </span>ref_ColorMap.txt<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">res</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$res</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>TEST<span class="w"> </span>PASS
+<span class="w">  </span><span class="nb">true</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>TEST<span class="w"> </span>FAILED:<span class="w"> </span>ColorMap.txt<span class="w"> </span>and<span class="w"> </span>ref_ColorMap.txt<span class="w"> </span>differ
+<span class="w">  </span><span class="nb">false</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</section>
+<section id="visualization-of-calculation-results">
+<h2>Visualization of calculation results<a class="headerlink" href="#visualization-of-calculation-results" title="Link to this heading">¶</a></h2>
+<p>By examining <code class="docutils literal notranslate"><span class="pre">ColorMap.txt</span></code>, we can estimate the region where the value of <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> becomes small.
+In this case, the following command will create a two-dimensional parameter space diagram <code class="docutils literal notranslate"><span class="pre">ColorMapFig.png</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 plot_colormap_2d.py
+</pre></div>
+</div>
+<p>Looking at the generated figure, we can see that it has the minimum value around (5.25, 4.25).</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/mapper.png" src="../_images/mapper.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">R-factor</span></code> on a two-dimensional parameter space.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>When <code class="docutils literal notranslate"><span class="pre">generate_rocking_curve</span></code> in <code class="docutils literal notranslate"><span class="pre">[solver]</span></code> section is set to true, <code class="docutils literal notranslate"><span class="pre">RockingCurve_calculated.txt</span></code> will be generated in each log directory.
+By using it, you can compare the results with the experimental values following the procedure in the previous tutorial.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="minsearch.html">Optimization by Nelder-Mead method</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="bayes.html">Optimization by Bayesian Optimization</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

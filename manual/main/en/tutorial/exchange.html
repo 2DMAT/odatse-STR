@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimization by replica exchange Monte Carlo method &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=a2628a1b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimization by population annealing Monte Carlo method" href="pamc.html" />
+    <link rel="prev" title="Optimization by Bayesian Optimization" href="bayes.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Optimization by replica exchange Monte Carlo method</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="bayes.html">Optimization by Bayesian Optimization</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="pamc.html">Optimization by population annealing Monte Carlo method</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="optimization-by-replica-exchange-monte-carlo-method">
+<h1>Optimization by replica exchange Monte Carlo method<a class="headerlink" href="#optimization-by-replica-exchange-monte-carlo-method" title="Link to this heading">¶</a></h1>
+<p>This tutorial describes how to estimate atomic positions from the experimental diffraction data by using the replica exchange Monte Carlo method (RXMC).</p>
+<section id="sample-files">
+<h2>Sample files<a class="headerlink" href="#sample-files" title="Link to this heading">¶</a></h2>
+<p>Sample files are available from <code class="docutils literal notranslate"><span class="pre">sample/single_beam/exchange</span></code> .
+This directory includes the following files:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk.txt</span></code></p>
+<p>The input file of <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">template.txt</span></code></p>
+<p>Reference files for the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ref.txt</span></code></p>
+<p>Solution file for checking whether the calucation is successful or not.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input.toml</span></code></p>
+<p>The input file of the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare.sh</span></code>, <code class="docutils literal notranslate"><span class="pre">do.sh</span></code></p>
+<p>Script files for running this tutorial.</p>
+</li>
+</ul>
+<p>In the following, we will describe these files and then show the result.</p>
+</section>
+<section id="reference-files">
+<h2>Reference files<a class="headerlink" href="#reference-files" title="Link to this heading">¶</a></h2>
+<p>This tutorial uses the reference files, <code class="docutils literal notranslate"><span class="pre">template.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code>,
+which are the same as those used in the previous tutorial (<a class="reference internal" href="minsearch.html"><span class="doc">Optimization by Nelder-Mead method</span></a>).</p>
+</section>
+<section id="input-files">
+<h2>Input files<a class="headerlink" href="#input-files" title="Link to this heading">¶</a></h2>
+<p>This subsection describes the input files.
+For details, see the replica exchange Monte Carlo method in ODAT-SE manual.
+<code class="docutils literal notranslate"><span class="pre">input.toml</span></code> in the sample directory is shown as the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
+<span class="n">dimension</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="s2">&quot;output&quot;</span>
+
+<span class="p">[</span><span class="n">algorithm</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;exchange&quot;</span>
+<span class="n">label_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">]</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">12345</span>
+
+<span class="p">[</span><span class="n">algorithm</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
+<span class="n">min_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]</span>
+<span class="n">max_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]</span>
+<span class="n">step_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">algorithm</span><span class="o">.</span><span class="n">exchange</span><span class="p">]</span>
+<span class="n">numsteps</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">numsteps_exchange</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">Tmin</span> <span class="o">=</span> <span class="mf">0.005</span>
+<span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">Tlogspace</span> <span class="o">=</span> <span class="n">true</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sim-trhepd-rheed&quot;</span>
+<span class="n">run_scheme</span> <span class="o">=</span> <span class="s2">&quot;subprocess&quot;</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">]</span>
+<span class="n">cal_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
+<span class="n">string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;value_01&quot;</span><span class="p">,</span> <span class="s2">&quot;value_02&quot;</span> <span class="p">]</span>
+<span class="n">degree_max</span> <span class="o">=</span> <span class="mf">7.0</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">reference</span><span class="p">]</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;experiment.txt&quot;</span>
+<span class="n">exp_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">post</span><span class="p">]</span>
+<span class="n">normalization</span> <span class="o">=</span> <span class="s2">&quot;TOTAL&quot;</span>
+</pre></div>
+</div>
+<p>In the following, we will briefly describe the contents of the file.
+For details, see the algorithm section of ODAT-SE manual.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[base]</span></code> section describes the settings for a whole calculation.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dimension</span></code> is the number of variables you want to optimize. In this case, specify <code class="docutils literal notranslate"><span class="pre">2</span></code> because it optimizes two variables.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_dir</span></code> is the name of directory for the outputs. If it is omitted, the results are written in the directory in which the program is executed.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver]</span></code> section specifies the solver to use inside the main program and its settings.</p>
+<ul class="simple">
+<li><p>See the minsearch tutorial.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[algorithm]</span></code> section sets the algorithm to use and its settings.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> is the name of the algorithm you want to use. In this tutorial we will use RXMC, so specify <code class="docutils literal notranslate"><span class="pre">exchange</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label_list</span></code> is a list of labels to be attached to the output of <code class="docutils literal notranslate"><span class="pre">value_0x</span></code> (x = 1,2).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code> is the seed that a pseudo-random number generator uses.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[algorithm.param]</span></code> section sets the parameter space to be explored.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">min_list</span></code> is a lower bound and <code class="docutils literal notranslate"><span class="pre">max_list</span></code> is an upper bound. <code class="docutils literal notranslate"><span class="pre">step_list</span></code> specifies the step size of one Monte Carlo update (deviation of Gaussian).</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[algorithm.exchange]</span></code> section sets the parameters for RXMC.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numstep</span></code> is the number of Monte Carlo steps.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numsteps_exchange</span></code> is the number of interval steps between temperature exchanges.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Tmin</span></code>, <code class="docutils literal notranslate"><span class="pre">Tmax</span></code> are the minimum and the maximum of temperature, respectively.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">Tlogspace</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, the temperature points are distributed uniformly in the logarithmic space.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver]</span></code> section specifies the solver to use inside the main program and its settings.</p>
+<ul class="simple">
+<li><p>See the <a class="reference internal" href="minsearch.html"><span class="doc">Optimization by Nelder-Mead method</span></a> tutorial.</p></li>
+</ul>
+</section>
+<section id="calculation">
+<h2>Calculation<a class="headerlink" href="#calculation" title="Link to this heading">¶</a></h2>
+<p>First, move to the folder where the sample file is located. (Hereinafter, it is assumed that you are the root directory of odatse-STR.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd sample/single_beam/exchange
+</pre></div>
+</div>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> as in the tutorial for the direct problem.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp ../../sim-trhepd-rheed/src/bulk.exe .
+$ cp ../../sim-trhepd-rheed/src/surf.exe .
+</pre></div>
+</div>
+<p>Execute <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> to generate <code class="docutils literal notranslate"><span class="pre">bulkP.b</span></code> .</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./bulk.exe
+</pre></div>
+</div>
+<p>Then, run the main program. It will take a few secondes on a normal PC.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mpiexec -np 4 odatse-STR input.toml | tee log.txt
+</pre></div>
+</div>
+<p>Here, the calculation is performed using MPI parallel with 4 processes.
+If you are using Open MPI and you request more processes than the number of available CPU cores, add the <code class="docutils literal notranslate"><span class="pre">--oversubscribed</span></code> option to the <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> command.</p>
+<p>When executed, a folder for each rank will be created under the directory <code class="docutils literal notranslate"><span class="pre">output</span></code>, and <code class="docutils literal notranslate"><span class="pre">trial.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">result.txt</span></code> will be created.
+<code class="docutils literal notranslate"><span class="pre">trial.txt</span></code> contains the parameters evaluated in each Monte Carlo step and the value of the objective function, and <code class="docutils literal notranslate"><span class="pre">result.txt</span></code> contains the parameters actually adopted.</p>
+<p>These files have the same format: the first two columns are time (step) and the index of walker in the process, the third is the temperature, the fourth column is the value of the objective function, and the fifth and subsequent columns are the parameters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># step walker T fx x1 x2</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mf">0.004999999999999999</span> <span class="mf">0.07830821484593968</span> <span class="mf">3.682008067401509</span> <span class="mf">3.9502750191292586</span>
+<span class="mi">1</span> <span class="mi">0</span> <span class="mf">0.004999999999999999</span> <span class="mf">0.07830821484593968</span> <span class="mf">3.682008067401509</span> <span class="mf">3.9502750191292586</span>
+<span class="mi">2</span> <span class="mi">0</span> <span class="mf">0.004999999999999999</span> <span class="mf">0.07830821484593968</span> <span class="mf">3.682008067401509</span> <span class="mf">3.9502750191292586</span>
+<span class="mi">3</span> <span class="mi">0</span> <span class="mf">0.004999999999999999</span> <span class="mf">0.06273922648753057</span> <span class="mf">4.330900869594549</span> <span class="mf">4.311333132184154</span>
+</pre></div>
+</div>
+<p>In the case of the sim-trhepd-rheed solver, a subfolder <code class="docutils literal notranslate"><span class="pre">LogXXXX_YYYY</span></code> (<code class="docutils literal notranslate"><span class="pre">XXXX</span></code> is the number of MC steps) is created under each working directory, and the rocking curve information and other outputs are recorded.</p>
+<p><code class="docutils literal notranslate"><span class="pre">result.txt</span></code> in the output directory for each MPI rank records the data sampled by each replica. They are rearranged according to the temperature, and stored in the files <code class="docutils literal notranslate"><span class="pre">output/result_T*.txt</span></code> in which <code class="docutils literal notranslate"><span class="pre">*</span></code> stands for the index of the temperature.</p>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">best_result.txt</span></code> is filled with the information about the parameters with the value of the optimal objective function (R-factor), the rank from which it was obtained, and the Monte Carlo step.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nprocs</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mi">282</span>
+<span class="n">walker</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="mf">0.008414800224430936</span>
+<span class="n">z1</span> <span class="o">=</span> <span class="mf">5.164773671165013</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="mf">4.226467514644945</span>
+</pre></div>
+</div>
+<p>In addition, <code class="docutils literal notranslate"><span class="pre">do.sh</span></code> is prepared as a script for batch calculation.
+<code class="docutils literal notranslate"><span class="pre">do.sh</span></code> also checks the difference between <code class="docutils literal notranslate"><span class="pre">best_result.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code>.
+The content of the script is shown below, though further information will be omitted.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+sh<span class="w"> </span>prepare.sh
+
+./bulk.exe
+
+<span class="nb">time</span><span class="w"> </span>mpiexec<span class="w"> </span>--oversubscribe<span class="w"> </span>-np<span class="w"> </span><span class="m">4</span><span class="w"> </span>odatse-STR<span class="w"> </span>input.toml
+
+<span class="nb">echo</span><span class="w"> </span>diff<span class="w"> </span>output/best_result.txt<span class="w"> </span>ref.txt
+<span class="nv">res</span><span class="o">=</span><span class="m">0</span>
+diff<span class="w"> </span>best_result.txt<span class="w"> </span>ref.txt<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">res</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$res</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>TEST<span class="w"> </span>PASS
+<span class="w">  </span><span class="nb">true</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>TEST<span class="w"> </span>FAILED:<span class="w"> </span>best_result.txt<span class="w"> </span>and<span class="w"> </span>ref.txt<span class="w"> </span>differ
+<span class="w">  </span><span class="nb">false</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</section>
+<section id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">¶</a></h2>
+<p>By illustrating <code class="docutils literal notranslate"><span class="pre">output/result_T*.txt</span></code>, you can estimate regions where the parameters with small R-factor are.
+In this case, the figure <code class="docutils literal notranslate"><span class="pre">result.png</span></code> of the 2D parameter space is created for the data in <code class="docutils literal notranslate"><span class="pre">output/result_T1.txt</span></code> by using the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 plot_result_2d.py
+</pre></div>
+</div>
+<p>Looking at the resulting diagram, we can see that the samples are concentrated near (5.25, 4.25) and (4.25, 5.25), and that the <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> value is small there.</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/exchange.png" src="../_images/exchange.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Sampled parameters and <code class="docutils literal notranslate"><span class="pre">R-factor</span></code>. The horizontal axes is x1 (<code class="docutils literal notranslate"><span class="pre">value_01</span></code>)  and the vertical axes is x2 (<code class="docutils literal notranslate"><span class="pre">value_02</span></code>).</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Also, <code class="docutils literal notranslate"><span class="pre">RockingCurve.txt</span></code> is stored in each subfolder
+<code class="docutils literal notranslate"><span class="pre">LogXXXX_YYYY</span></code> (<code class="docutils literal notranslate"><span class="pre">XXXX</span></code> is the index of MC step and <code class="docutils literal notranslate"><span class="pre">YYYY</span></code> is the index of replica in the MPI process) when <code class="docutils literal notranslate"><span class="pre">generate_rocking_curve</span></code> in <code class="docutils literal notranslate"><span class="pre">[solver]</span></code> section is set to true.
+By using this, it is possible to compare the result with the experimental value according to the procedure of the previous tutorial.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="bayes.html">Optimization by Bayesian Optimization</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="pamc.html">Optimization by population annealing Monte Carlo method</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

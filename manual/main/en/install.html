@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Installation of odatse-STR &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=a2628a1b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorial/index.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Installation of odatse-STR</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="introduction.html">Introduction</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="tutorial/index.html">Tutorials</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="installation-of-odatse-str">
+<h1>Installation of odatse-STR<a class="headerlink" href="#installation-of-odatse-str" title="Link to this heading">¶</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Python3 (&gt;=3.9)</p>
+<ul>
+<li><p>The following Python packages are required.</p>
+<ul>
+<li><p>tomli &gt;= 1.2</p></li>
+<li><p>numpy &gt;= 1.14</p></li>
+</ul>
+</li>
+<li><p>ODAT-SE version 3.0 and later</p></li>
+<li><p>sim-trhepd-rheed version 1.0.2 and later</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="how-to-download-and-install">
+<h2>How to download and install<a class="headerlink" href="#how-to-download-and-install" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Install ODAT-SE</p>
+<ul>
+<li><p>From source files:</p>
+<p>Download source files of ODAT-SE from the repository as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/issp-center-dev/ODAT-SE.git
+</pre></div>
+</div>
+<p>Install ODAT-SE using <code class="docutils literal notranslate"><span class="pre">pip</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>ODAT-SE
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>You may add <code class="docutils literal notranslate"><span class="pre">--user</span></code> option to install ODAT-SE locally (in <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>).</p>
+<p>If you run the following command instead, optional packages will also be installed at the same time.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="o">[</span>all<span class="o">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Install sim-trhepd-rheed</p>
+<ul>
+<li><p>Download the source package from the official site:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wget<span class="w"> </span>-O<span class="w"> </span>sim-trhepd-rheed-1.0.2.tar.gz<span class="w"> </span>https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/archive/refs/tags/v1.0.2.tar.gz
+</pre></div>
+</div>
+</li>
+<li><p>Unpack the source package, and compile the source. Edit Makefile in sim-trhepd-rheed/src as needed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>tar<span class="w"> </span>xvfz<span class="w"> </span>sim-trhepd-rheed-1.0.2.tar.gz
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sim-trhepd-rheed-1.0.2/src
+$<span class="w"> </span>make
+</pre></div>
+</div>
+<p>The executable files <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code>, <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code>, <code class="docutils literal notranslate"><span class="pre">potcalc.exe</span></code>, and <code class="docutils literal notranslate"><span class="pre">xyz.exe</span></code> will be generated.
+Put <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> in a directory listed in the PATH environment variable, or specify the paths to these commands at run time.</p>
+</li>
+</ul>
+</li>
+<li><p>Install odatse-STR</p>
+<ul>
+<li><p>From source files:</p>
+<p>The source files of odatse-STR are available from the GitHub repository. After obtaining the source files, install odatse-STR using <code class="docutils literal notranslate"><span class="pre">pip</span></code> command as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/2DMAT/odatse-STR.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>odatse-STR
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>You may add <code class="docutils literal notranslate"><span class="pre">--user</span></code> option to install the package locally (in <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>).</p>
+<p>Then, the library of odatse-STR and the command <code class="docutils literal notranslate"><span class="pre">odatse-STR</span></code> wil be installed.</p>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="how-to-run">
+<h2>How to run<a class="headerlink" href="#how-to-run" title="Link to this heading">¶</a></h2>
+<p>In ODAT-SE, the analysis is done by using a predefined optimization algorithm and a direct problem solver.
+There are two ways to do analyses of TRHEPD:</p>
+<ol class="arabic simple">
+<li><p>Use odatse-STR program included in this package to perform analyses.
+The users prepare an input parameter file in TOML format, and run command with it.
+The type of the inverse problem algorithms can be chosen by the parameter.</p></li>
+<li><p>Write a program for the analysis with odatse-STR library and ODAT-SE framework.
+The type of the inverse problem algorithms can be chosen by importing the appropriate module.
+A flexible use would be possible, for example, to include data generation within the program.</p></li>
+</ol>
+<p>The types of parameters and the instruction to use the library will be given in the subsequent sections.</p>
+</section>
+<section id="how-to-uninstall">
+<h2>How to uninstall<a class="headerlink" href="#how-to-uninstall" title="Link to this heading">¶</a></h2>
+<p>In order to uninstall odatse-STR and ODAT-SE modules, type the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>uninstall<span class="w"> </span>odatse-STR<span class="w"> </span>ODAT-SE
+</pre></div>
+</div>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="introduction.html">Introduction</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="tutorial/index.html">Tutorials</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

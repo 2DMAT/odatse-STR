@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimization by Nelder-Mead method &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=a2628a1b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimization by Grid search" href="mapper.html" />
+    <link rel="prev" title="Direct Problem Solver" href="sim_trhepd_rheed.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Optimization by Nelder-Mead method</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="sim_trhepd_rheed.html">Direct Problem Solver</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="mapper.html">Optimization by Grid search</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="optimization-by-nelder-mead-method">
+<h1>Optimization by Nelder-Mead method<a class="headerlink" href="#optimization-by-nelder-mead-method" title="Link to this heading">¶</a></h1>
+<p>In this section, we will explain how to calculate the inverse problem of analyzing atomic coordinates from diffraction data using the Nelder-Mead method.
+The specific calculation procedure is as follows.</p>
+<ol class="arabic" start="0">
+<li><p>Preparation of the reference file</p>
+<p>Prepare the reference file to be matched (in this tutorial, it corresponds to <code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code> described below).</p>
+</li>
+<li><p>Perform calculations on the bulk part of the surface structure.</p>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> to <code class="docutils literal notranslate"><span class="pre">sample/minsearch</span></code> and run the calculation.</p>
+</li>
+<li><p>Run the main program</p>
+<p>Run the calculation using <code class="docutils literal notranslate"><span class="pre">odatse-STR</span></code> to estimate the atomic coordinates.</p>
+</li>
+</ol>
+<p>In the main program, the Nelder-Mead method implemented in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html">scipy.optimize.fmin</a> is applied to find the parameter that minimizes the deviation (R-value) between the intensity obtained using the solver (in this case <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code>) and the intensity listed in the reference file (<code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code>).</p>
+<section id="location-of-the-sample-files">
+<h2>Location of the sample files<a class="headerlink" href="#location-of-the-sample-files" title="Link to this heading">¶</a></h2>
+<p>The sample files are located in <code class="docutils literal notranslate"><span class="pre">sample/single_beam/minsearch</span></code>.
+The following files are stored in the folder.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk.txt</span></code></p>
+<p>Input file of <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code> , <code class="docutils literal notranslate"><span class="pre">template.txt</span></code></p>
+<p>Reference file to proceed with calculations in the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ref.txt</span></code></p>
+<p>A file containing the answers you want to seek in this tutorial.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input.toml</span></code></p>
+<p>Input file of the main program.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare.sh</span></code> , <code class="docutils literal notranslate"><span class="pre">do.sh</span></code></p>
+<p>Script prepared for doing all calculation of this tutorial</p>
+</li>
+</ul>
+<p>The following sections describe these files and then show the actual calculation results.</p>
+</section>
+<section id="the-reference-file">
+<h2>The reference file<a class="headerlink" href="#the-reference-file" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">template.txt</span></code> file is almost the same format as the input file for <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code>.
+The parameters to vary (such as the atomic coordinates you want to find) are labeled as <code class="docutils literal notranslate"><span class="pre">value_*</span></code> or some other appropriate strings.
+The following is the content of <code class="docutils literal notranslate"><span class="pre">template.txt</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>                                    <span class="p">,</span><span class="n">NELMS</span><span class="p">,</span>  <span class="o">--------</span> <span class="n">Ge</span><span class="p">(</span><span class="mi">001</span><span class="p">)</span><span class="o">-</span><span class="n">c4x2</span>
+<span class="mi">32</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.1</span>                           <span class="p">,</span><span class="n">Ge</span> <span class="n">Z</span><span class="p">,</span><span class="n">da1</span><span class="p">,</span><span class="n">sap</span>
+<span class="mf">0.6</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.6</span>                          <span class="p">,</span><span class="n">BH</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">BK</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">BZ</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="mi">32</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.1</span>                           <span class="p">,</span><span class="n">Ge</span> <span class="n">Z</span><span class="p">,</span><span class="n">da1</span><span class="p">,</span><span class="n">sap</span>
+<span class="mf">0.4</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.4</span>                          <span class="p">,</span><span class="n">BH</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">BK</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">BZ</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span>               <span class="p">,</span><span class="n">NSGS</span><span class="p">,</span><span class="n">msa</span><span class="p">,</span><span class="n">msb</span><span class="p">,</span><span class="n">nsa</span><span class="p">,</span><span class="n">nsb</span><span class="p">,</span><span class="n">dthick</span><span class="p">,</span><span class="n">DXS</span><span class="p">,</span><span class="n">DYS</span>
+<span class="mi">8</span>                                    <span class="p">,</span><span class="n">NATM</span>
+<span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.34502591</span>  <span class="mi">1</span>       <span class="n">value_01</span>   <span class="p">,</span><span class="n">IELM</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">ocr</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">),</span><span class="n">Z</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.752457792</span> <span class="mi">1</span>       <span class="n">value_02</span>
+<span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.480003343</span> <span class="mf">1.465005851</span>     <span class="n">value_03</span>
+<span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span>   <span class="mf">1.497500418</span>     <span class="mf">2.281675</span>
+<span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span>   <span class="mf">1.5</span>     <span class="mf">1.991675</span>
+<span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span>   <span class="mi">1</span>       <span class="mf">0.847225</span>
+<span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span>   <span class="mi">1</span>       <span class="mf">0.807225</span>
+<span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.009998328</span> <span class="mi">1</span>       <span class="mf">0.597225</span>
+<span class="mi">1</span><span class="p">,</span><span class="mi">1</span>                                  <span class="p">,(</span><span class="n">WDOM</span><span class="p">,</span><span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">NDOM</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this input file, <code class="docutils literal notranslate"><span class="pre">value_01</span></code>, <code class="docutils literal notranslate"><span class="pre">value_02</span></code>, and <code class="docutils literal notranslate"><span class="pre">value_03</span></code> are used.
+In the sample folder, there is a reference file <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code> to know if the atomic positions are estimated correctly. The contents of this file are</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fx</span> <span class="o">=</span> <span class="mf">8.97501627575891e-06</span>
+<span class="n">z1</span> <span class="o">=</span> <span class="mf">5.230573154947887</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="mf">4.3706085364407095</span>
+<span class="n">z3</span> <span class="o">=</span> <span class="mf">3.5961303342247577</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">value_01</span></code>, <code class="docutils literal notranslate"><span class="pre">value_02</span></code>, and <code class="docutils literal notranslate"><span class="pre">value_03</span></code> correspond to <code class="docutils literal notranslate"><span class="pre">z1</span></code>, <code class="docutils literal notranslate"><span class="pre">z2</span></code>, and <code class="docutils literal notranslate"><span class="pre">z3</span></code>, respectively.
+<code class="docutils literal notranslate"><span class="pre">fx</span></code> is the optimal value of the objective function.</p>
+<p><code class="docutils literal notranslate"><span class="pre">experiment.txt</span></code> is a file that is used as a reference in the main program.
+In this tutorial, it is equivalent to <code class="docutils literal notranslate"><span class="pre">convolution.txt</span></code> obtained from the calculation when putting the parameters in <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code> into <code class="docutils literal notranslate"><span class="pre">template.txt</span></code> and following the same procedure as in the tutorial on direct problems.
+(Note that they are different from those in the tutorial of the direct problem because the input files for <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> are different.)</p>
+</section>
+<section id="input-files">
+<h2>Input files<a class="headerlink" href="#input-files" title="Link to this heading">¶</a></h2>
+<p>In this section, we prepare the input file <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> for the main program.
+The details can be found in the input file section in the manual.
+The content of <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> is shown below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
+<span class="n">dimension</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="s2">&quot;output&quot;</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sim-trhepd-rheed&quot;</span>
+<span class="n">run_scheme</span> <span class="o">=</span> <span class="s2">&quot;subprocess&quot;</span>
+<span class="n">generate_rocking_curve</span> <span class="o">=</span> <span class="n">true</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">]</span>
+<span class="n">cal_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
+<span class="n">string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;value_01&quot;</span><span class="p">,</span> <span class="s2">&quot;value_02&quot;</span><span class="p">,</span> <span class="s2">&quot;value_03&quot;</span> <span class="p">]</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">reference</span><span class="p">]</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;experiment.txt&quot;</span>
+<span class="n">exp_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">post</span><span class="p">]</span>
+<span class="n">normalization</span> <span class="o">=</span> <span class="s2">&quot;TOTAL&quot;</span>
+
+<span class="p">[</span><span class="n">algorithm</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;minsearch&quot;</span>
+<span class="n">label_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">,</span> <span class="s2">&quot;z3&quot;</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">algorithm</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
+<span class="n">min_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">max_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span>
+<span class="n">initial_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">3.50</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>First, <code class="docutils literal notranslate"><span class="pre">[base]</span></code> section is explained.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dimension</span></code> is the number of variables to be optimized. In this case it is <code class="docutils literal notranslate"><span class="pre">3</span></code> since we are optimizing three variables as described in <code class="docutils literal notranslate"><span class="pre">template.txt</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_dir</span></code> is the name of directory for the outputs. If it is omitted, the results are written in the directory in which the program is executed.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver]</span></code> section specifies the solver to be used inside the main program and its settings.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> is the name of the solver you want to use. In this tutorial it is <code class="docutils literal notranslate"><span class="pre">sim-trhepd-rheed</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_scheme</span></code> specifies how the solver is executed within the program. In the current version, <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> can be specified.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_rocking_curve</span></code> specifies whether or not the rocking curves are generated in every steps.</p></li>
+</ul>
+<p>The solver can be configured in the subsections <code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code>, <code class="docutils literal notranslate"><span class="pre">[solver.param]</span></code>, and <code class="docutils literal notranslate"><span class="pre">[solver.reference]</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code> section specifies options for reading the output file produced by <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> that is called from the main program.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">calculated_first_line</span></code> specifies the first line to read from the output file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calculated_last_line</span></code> specifies the last line of the output file to be read.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cal_number</span></code> specifies the indices of columns of the output file to read.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.param]</span></code> section specifies options for the input file passed to <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> that is to be called from the main program.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">string_list</span></code> is a list of variable names embedded in <code class="docutils literal notranslate"><span class="pre">template.txt</span></code>.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.reference]</span></code> section specifies the location of the experimental data and the range to read.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> specifies the path where the experimental data is located.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">first</span></code> specifies the first line of the experimental data file to read.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">end</span></code> specifies the last line of the experimental data file to read.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exp_number</span></code> specifies the indices of columns of the experimental data file to read.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[algorithm]</span></code> section specifies the algorithm to use and its settings.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> is the name of the algorithm you want to use. In this tutorial, it is set to <code class="docutils literal notranslate"><span class="pre">minsearch</span></code>, since we are using the Nelder-Mead method.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label_list</span></code> is a list of label names to be attached to the output of <code class="docutils literal notranslate"><span class="pre">value_0x</span></code> (x=1,2,3).</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[algorithm.param]</span></code> section specifies the range of parameters to search and their initial values.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">min_list</span></code> and <code class="docutils literal notranslate"><span class="pre">max_list</span></code> specify the minimum and maximum values of the search range, respectively.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initial_list</span></code> specifies the initial values.</p></li>
+</ul>
+<p>Other parameters, such as convergence criteria used in the Nelder-Mead method, can be set in the <code class="docutils literal notranslate"><span class="pre">[algorithm]</span></code> section, although they are omitted here so that the default values are used.
+See the input file section of the manual for details.</p>
+</section>
+<section id="calculation-execution">
+<h2>Calculation execution<a class="headerlink" href="#calculation-execution" title="Link to this heading">¶</a></h2>
+<p>First, move to the folder where the sample files are located. (We assume that you are directly under the directory where you downloaded this software.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd sample/single_beam/minsearch
+</pre></div>
+</div>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp ../../sim-trhepd-rheed/src/bulk.exe .
+$ cp ../../sim-trhepd-rheed/src/surf.exe .
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> to produce <code class="docutils literal notranslate"><span class="pre">bulkP.b</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./bulk.exe
+</pre></div>
+</div>
+<p>After that, run the main program. The computation time will take only a few seconds on a normal PC.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ odatse-STR input.toml | tee log.txt
+</pre></div>
+</div>
+<p>Then, the standard output will look as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span>            <span class="p">:</span> <span class="n">minsearch</span>
+<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="s1">&#39;z2&#39;</span><span class="p">,</span> <span class="s1">&#39;z3&#39;</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">min_list</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">max_list</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">initial_list</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">]</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.25</span> <span class="mf">4.25</span> <span class="mf">3.5</span> <span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.015199252435883206</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22916667</span> <span class="mf">4.3125</span>     <span class="mf">3.64583333</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.013702918645281299</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22569444</span> <span class="mf">4.40625</span>    <span class="mf">3.54513889</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.01263527811899235</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.17997685</span> <span class="mf">4.34895833</span> <span class="mf">3.5943287</span> <span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.006001659635528168</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.17997685</span> <span class="mf">4.34895833</span> <span class="mf">3.5943287</span> <span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.006001659635528168</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22066294</span> <span class="mf">4.33260995</span> <span class="mf">3.60408629</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.005145496928704404</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.22066294</span> <span class="mf">4.33260995</span> <span class="mf">3.60408629</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.005145496928704404</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">5.2185245</span>  <span class="mf">4.32627234</span> <span class="mf">3.56743818</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.0032531465329236025</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">x=</span></code> are the candidate parameters at each step, and <code class="docutils literal notranslate"><span class="pre">fun=</span></code> is the R-factor value at that point.
+The results at each step are also written in the folder <code class="docutils literal notranslate"><span class="pre">output/LogXXXX_YYYY</span></code> (where XXXX and YYYY are the step counts).
+The final estimated parameters will be written to <code class="docutils literal notranslate"><span class="pre">output/res.dat</span></code>.
+In the current case, the following result will be obtained:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z1</span> <span class="o">=</span> <span class="mf">5.230573154947887</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="mf">4.3706085364407095</span>
+<span class="n">z3</span> <span class="o">=</span> <span class="mf">3.5961303342247577</span>
+</pre></div>
+</div>
+<p>You can see that we will get the same values as the correct answer data in <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code>.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">do.sh</span></code> is available as a script for batch calculation.
+In <code class="docutils literal notranslate"><span class="pre">do.sh</span></code>, <code class="docutils literal notranslate"><span class="pre">res.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code> are also compared for the check.
+Here is what it does, without further explanation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+sh<span class="w"> </span>./prepare.sh
+
+./bulk.exe
+
+<span class="nb">time</span><span class="w"> </span>odatse-STR<span class="w"> </span>input.toml<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>log.txt
+
+<span class="nb">echo</span><span class="w"> </span>diff<span class="w"> </span>output/res.txt<span class="w"> </span>ref.txt
+<span class="nv">res</span><span class="o">=</span><span class="m">0</span>
+diff<span class="w"> </span>output/res.txt<span class="w"> </span>ref.txt<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">res</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$res</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>Test<span class="w"> </span>PASS
+<span class="w">  </span><span class="nb">true</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>Test<span class="w"> </span>FAILED:<span class="w"> </span>res.txt<span class="w"> </span>and<span class="w"> </span>ref.txt<span class="w"> </span>differ
+<span class="w">  </span><span class="nb">false</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</section>
+<section id="visualization-of-calculation-results">
+<h2>Visualization of calculation results<a class="headerlink" href="#visualization-of-calculation-results" title="Link to this heading">¶</a></h2>
+<p>If <code class="docutils literal notranslate"><span class="pre">generate_rocking_curve</span></code> is set to true, the data of the rocking curve at each step is stored in <code class="docutils literal notranslate"><span class="pre">LogXXXX_00000001</span></code> (where <code class="docutils literal notranslate"><span class="pre">XXXX</span></code> is the index of steps) as <code class="docutils literal notranslate"><span class="pre">RockingCurve.txt</span></code>.
+A tool <code class="docutils literal notranslate"><span class="pre">draw_RC_double.py</span></code> is provided to visualize this data.
+In this section, we will use this tool to visualize the results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp output/0/Log00000000_00000000/RockingCurve.txt RockingCurve_ini.txt
+$ cp output/0/Log00000117_00000000/RockingCurve.txt RockingCurve_con.txt
+$ cp ../../../script/draw_RC_double.py .
+$ python3 draw_RC_double.py
+</pre></div>
+</div>
+<p>By running the above, <code class="docutils literal notranslate"><span class="pre">RC_double.png</span></code> will be generated.</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/RC_double_minsearch.png" src="../_images/RC_double_minsearch.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Analysis using the Nelder-Mead method. The red circles represent the experimental values, the blue line represents the rocking curve at the first step, and the green line represents the rocking curve obtained at the last step.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>From the figure, we can see that at the last step the result agrees with the experimental data.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="sim_trhepd_rheed.html">Direct Problem Solver</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="mapper.html">Optimization by Grid search</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

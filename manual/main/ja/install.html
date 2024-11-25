@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>odatse-STR のインストール &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=3b7831b5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="チュートリアル" href="tutorial/index.html" />
+    <link rel="prev" title="はじめに" href="introduction.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev ドキュメント</span></a></h1>
+        <h2 class="heading"><span>odatse-STR のインストール</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="introduction.html">はじめに</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">コンテンツ</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="tutorial/index.html">チュートリアル</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="odatse-str">
+<h1>odatse-STR のインストール<a class="headerlink" href="#odatse-str" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2>実行環境・必要なパッケージ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<ul>
+<li><p>python 3.9 以上</p>
+<blockquote>
+<div><ul>
+<li><p>必要なpythonパッケージ</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>tomli (&gt;= 1.2)</p></li>
+<li><p>numpy (&gt;= 1.14)</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>ODAT-SE version 3.0 以降</p></li>
+<li><p>sim-trhepd-rheed version 1.0.2 以降</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2>ダウンロード・インストール<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>ODAT-SE をインストールする</p>
+<ul>
+<li><p>ソースコードからのインストール</p>
+<p>リポジトリから ODAT-SE のソースファイルを取得します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/issp-center-dev/ODAT-SE.git
+</pre></div>
+</div>
+<p>pip コマンドを実行してインストールします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>ODAT-SE
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--user</span></code> オプションを付けるとローカル (<code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>) にインストールできます。</p>
+<p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.[all]</span></code> を実行するとオプションのパッケージも同時にインストールします。</p>
+</li>
+</ul>
+</li>
+<li><p>sim-trhepd-rheed をインストールする</p>
+<ul>
+<li><p>公式サイトからソースパッケージをダウンロードします。</p>
+<p><a class="reference external" href="https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/releases/tag/v1.0.2">https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/releases/tag/v1.0.2</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wget<span class="w"> </span>-O<span class="w"> </span>sim-trhepd-rheed-1.0.2.tar.gz<span class="w"> </span>https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/archive/refs/tags/v1.0.2.tar.gz
+</pre></div>
+</div>
+</li>
+<li><p>ソースパッケージを展開し、コンパイルします。必要に応じて sim-trhepd-rheed/src 内の Makefile を編集してください。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>tar<span class="w"> </span>xvfz<span class="w"> </span>sim-trhepd-rheed-1.0.2.tar.gz
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sim-trhepd-rheed-1.0.2/src
+$<span class="w"> </span>make
+</pre></div>
+</div>
+<p>実行形式 <code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code>, <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code>, <code class="docutils literal notranslate"><span class="pre">potcalc.exe</span></code>, <code class="docutils literal notranslate"><span class="pre">xyz.exe</span></code> が作成されます。
+<code class="docutils literal notranslate"><span class="pre">bulk.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">surf.exe</span></code> を PATH の通ったディレクトリ (環境変数 PATH に列挙された、実行プログラムを探索するディレクトリ) に配置するか、実行時にディレクトリ名をつけて指定します。</p>
+</li>
+</ul>
+</li>
+<li><p>odatse-STR をインストールする</p>
+<ul>
+<li><p>ソースコードからのインストール</p>
+<p>odatse-STR のソースファイルは GitHub リポジトリから取得できます。以下の手順でリポジトリをクローンした後、pip コマンドを実行してインストールします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/2DMAT/odatse-STR.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>odatse-STR
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--user</span></code> オプションを付けるとローカル (<code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>) にインストールできます。</p>
+<p>odatse-STR のライブラリと、実行コマンド <code class="docutils literal notranslate"><span class="pre">odatse-STR</span></code> がインストールされます。</p>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id3">
+<h2>実行方法<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>ODAT-SE では順問題ソルバと逆問題解析アルゴリズムを組み合わせて解析を行います。
+TRHEPDの解析を行うには次の2通りの方法があります。</p>
+<ol class="arabic simple">
+<li><p>このパッケージに含まれる odatse-STR プログラムを利用して解析を行います。ユーザは、プログラムの入力となるパラメータファルを TOML 形式で作成し、プログラムの引数に指定してコマンドを実行します。逆問題解析のアルゴリズムはパラメータで選択できます。</p></li>
+<li><p>odatse-STR ライブラリと ODAT-SE フレームワークを用いてプログラムを作成し、解析を行います。逆問題解析アルゴリズムは import するモジュールで選択します。プログラム中に入力データの生成を組み込むなど、柔軟な使い方ができます。</p></li>
+</ol>
+<p>パラメータの種類やライブラリの利用方法については以降の章で説明します。</p>
+</section>
+<section id="id4">
+<h2>アンインストール<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>odatse-STR モジュールおよび ODAT-SE モジュールをアンインストールするには、以下のコマンドを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>uninstall<span class="w"> </span>odatse-STR<span class="w"> </span>ODAT-SE
+</pre></div>
+</div>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="introduction.html">はじめに</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">コンテンツ</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="tutorial/index.html">チュートリアル</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tutorials &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=a2628a1b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Direct Problem Solver" href="sim_trhepd_rheed.html" />
+    <link rel="prev" title="Installation of odatse-STR" href="../install.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Tutorials</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="../install.html">Installation of odatse-STR</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="sim_trhepd_rheed.html">Direct Problem Solver</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
+<p>The direct problem solver, <code class="docutils literal notranslate"><span class="pre">sim_trhepd_rheed</span></code>, is based on the Reflection-High-Energy Electron Diffraction (RHEED, TRHEPD) analysis software developed by Prof. Takashi Hanada at Tohoku University.</p>
+<p>In TRHEPD, when atomic coordinates are given, diffraction data is given as a simulation result.
+Therefore, we are dealing with the direct problem from atomic coordinates to diffraction data.
+On the other hand, in many cases, diffraction data is given experimentally, and the atomic coordinates are required to reproduce the experimental data. These are inverse problems to the above direct problems.</p>
+<p>In ODAT-SE, the algorithms for solving the inverse problem can be selected as following algorithms:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">minsearch</span></code></p>
+<blockquote>
+<div><p>Nelder-Mead method.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mapper_mpi</span></code></p>
+<blockquote>
+<div><p>Searching the entire search grid for a given parameter.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bayes</span></code></p>
+<blockquote>
+<div><p>Bayesian optimization.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exchange</span></code></p>
+<blockquote>
+<div><p>Sampling by the replica exchange Monte Carlo method.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pamc</span></code></p>
+<blockquote>
+<div><p>Sampling by the population annealing Monte Carlo method.</p>
+</div></blockquote>
+</li>
+</ul>
+<p>In this tutorial, we will first introduce how to run the direct problem solver <code class="docutils literal notranslate"><span class="pre">sim-trhepd-rheed</span></code>.
+Then we will instruct how to run <code class="docutils literal notranslate"><span class="pre">minsearch</span></code> , <code class="docutils literal notranslate"><span class="pre">mapper_mpi</span></code>, <code class="docutils literal notranslate"><span class="pre">bayes</span></code>, <code class="docutils literal notranslate"><span class="pre">exchange</span></code>, and <code class="docutils literal notranslate"><span class="pre">pamc</span></code>.
+Hereinafter, we use <code class="docutils literal notranslate"><span class="pre">odatse-STR</span></code> program included in odatse-STR with input files in TOML format.</p>
+<p>At the end of the tutorial, we will explain how to write your own main program for analyses.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sim_trhepd_rheed.html">Direct Problem Solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minsearch.html">Optimization by Nelder-Mead method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mapper.html">Optimization by Grid search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bayes.html">Optimization by Bayesian Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exchange.html">Optimization by replica exchange Monte Carlo method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pamc.html">Optimization by population annealing Monte Carlo method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_program.html">Analyses by user programs</a></li>
+</ul>
+</div>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="../install.html">Installation of odatse-STR</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="sim_trhepd_rheed.html">Direct Problem Solver</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
