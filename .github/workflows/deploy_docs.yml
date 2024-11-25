@@ -79,7 +79,7 @@ jobs:
           mkdir -p "gh-pages/manual/${TARGET_NAME}"
           cp -r "main/doc/${lang}/build/html" "gh-pages/manual/${TARGET_NAME}/${lang}"
           if [ $is_tag = "YES" ]; then
-            cp "main/doc/${lang}/build/latex/userguide_${GITHUB_REPOSITORY}_${lang}.pdf" "gh-pages/manual/${TARGET_NAME}/${lang}/${GITHUB_REPOSITORY}.pdf"
+            cp "main/doc/${lang}/build/latex/userguide_odatse-STR_${lang}.pdf" "gh-pages/manual/${TARGET_NAME}/${lang}/userguide_odatse-STR_${lang}.pdf"
           fi
         done
 
