@@ -1,0 +1,64 @@
+name: Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  main:
+    strategy:
+      matrix:
+        # os: ['ubuntu-22.04']
+        # python-version: ['3.9', '3.12']
+        python-version: ['3.9']
+      fail-fast: false
+
+    name: Run tests with Python ${{ matrix.python-version }}
+    runs-on: 'ubuntu-22.04'
+    # runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: apt
+        run: |
+          sudo apt update
+          sudo apt install openmpi-bin libopenmpi-dev
+          sudo apt install gfortran
+
+      - name: pip
+        run: |
+          python -m pip install -U pip
+          python -m pip install setuptools wheel
+          python -m pip install Cython
+          python -m pip install numpy scipy tomli mpi4py
+          python -m pip install pydantic
+          python -m pip install physbo
+          python -m pip install pytest
+
+      - name: install library
+        run: |
+          git clone https://github.com/issp-center-dev/ODAT-SE.git
+          cd ODAT-SE && python -m pip install .
+
+      - name: build solver
+        run: |
+          wget -O src.tar.gz https://github.com/sim-trhepd-rheed/sim-trhepd-rheed/archive/refs/tags/v1.0.2.tar.gz
+          tar xfz src.tar.gz
+          cd sim-trhepd-rheed-1.0.2/src && make
+          cp bulk.exe surf.exe ${GITHUB_WORKSPACE}/tests/bin/
+
+      - name: run
+        run: |
+          mkdir build && cd build && cmake ..
+          ctest -V
+
+      - name: run unit tests
+        run: |
+          pytest -v
+
