@@ -10,10 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-sys.path.insert(0, os.path.abspath('../../../src'))
-from STR import __version__ as module_version
+# import os
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
@@ -22,10 +21,9 @@ project = 'ODAT-SE solver module: odatse-STR for sim-trhepd-rheed'
 copyright = '2020-, Institute for Solid State Physics, University of Tokyo'
 author = 'ISSP, University of Tokyo'
 
-#version = '1.0'
+version = '1.0'
 # The full version, including alpha/beta/rc tags
-#release = '1.0.0'
-release = module_version
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 
