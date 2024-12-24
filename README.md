@@ -1,6 +1,6 @@
 # odatse-STR: solver module for analyses of TRHEPD data
 
-Open Data Analysis Tool for Science and Engineering (ODAT-SE) is a framework for applying a search algorithm to a direct problem solver to find the optimal solution. It has been developed by the name 2DMAT, and since version 3.0, it is organized as an open platform for data analysis by modularizing direct problem solvers and search algorithms.
+[Open Data Analysis Tool for Science and Engineering (ODAT-SE)](https://github.com/issp-center-dev/ODAT-SE) is a framework for applying a search algorithm to a direct problem solver to find the optimal solution. It has been developed by the name 2DMAT, and since version 3.0, it is organized as an open platform for data analysis by modularizing direct problem solvers and search algorithms.
 
 `sim-trhepd-rheed` has been developed as a simulator software package for the total-reflection high-energy positron diffraction (TRHEPD) and the reflection high energy electron diffraction (RHEED). It takes atom positions as input and calculates the Rocking Curve of the diffraction intensity. The program is written in Fortran and runs on ordinary Linux environment. `odatse-STR` is an adaptor library to use sim-trhepd-rheed as a direct problem solver of ODAT-SE.
 
