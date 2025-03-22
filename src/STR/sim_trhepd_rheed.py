@@ -19,7 +19,7 @@ import os
 import sys
 import time
 import ctypes
-import subprocess
+import shutil
 
 import numpy as np
 
@@ -27,9 +27,8 @@ import odatse
 from odatse import exception, mpi
 from .input import Input
 from .output import Output
-from .parameter import SolverInfo
-
-from pydantic import ValidationError
+from .parameter import parse_solver_info
+from .util import Workdir, set_solver_path, run_by_subprocess
 
 # for type hints
 from pathlib import Path
@@ -78,44 +77,45 @@ class Solver(odatse.solver.SolverBase):
 
         self._name = "sim_trhepd_rheed_mb_connect"
 
-        try:
-            info_solver = SolverInfo(**info.solver)
-        except ValidationError as e:
-            print("ERROR: {}".format(e))
-            sys.exit(1)
+        self.info = parse_solver_info(**info.solver)
 
-        self.run_scheme = info_solver.run_scheme
-
+        self.run_scheme = self.info.run_scheme
         if self.run_scheme == "connect_so":
+            self.path_to_solver_lib = self.root_dir / Path(self.info.config.surface_exec_file).expanduser()
             self.load_so()
-
         elif self.run_scheme == "subprocess":
             # path to surf.exe
-            p2solver = info_solver.config.surface_exec_file
-            if os.path.dirname(p2solver) != "":
-                # ignore ENV[PATH]
-                self.path_to_solver = self.root_dir / Path(p2solver).expanduser()
-            else:
-                for P in itertools.chain(
-                    [self.root_dir], os.environ["PATH"].split(":")
-                ):
-                    self.path_to_solver = Path(P) / p2solver
-                    if os.access(self.path_to_solver, mode=os.X_OK):
-                        break
-            if not os.access(self.path_to_solver, mode=os.X_OK):
-                raise exception.InputError(f"ERROR: solver ({p2solver}) is not found")
+            self.path_to_solver = set_solver_path(self.info.config.surface_exec_file, self.root_dir)
 
-        self.isLogmode = False
-        self.set_detail_timer()
+        self.set_detail_timer(self.info.enable_detailed_timer)
 
-        self.input = Input(info.base, info_solver, self.isLogmode, self.detail_timer)
-        self.output = Output(info.base, info_solver, self.isLogmode, self.detail_timer)
+        self.input = Input(self.info, self.root_dir, self.isLogmode, self.detail_timer)
+        self.output = Output(self.info, self.isLogmode, self.detail_timer)
 
-    def set_detail_timer(self) -> None:
+    # def __del__(self):
+    #     self._show_detail_timer()
+
+    def _show_detail_timer(self):
+        if not self.isLogmode:
+            return
+
+        msec = 1.0e-3
+        if self.mpisize > 1:
+            data = self.mpicomm.allgather(self.detail_timer)
+            if self.mpirank == 0:
+                for k in self.detail_timer.keys():
+                    vs = [v[k] for v in data]
+                    print("{:25s} = {:12.6f} {:12.6f} [msec]".format(k, np.mean(vs)/msec, np.var(vs)/msec))
+        else:
+            for k, v in self.detail_timer.items():
+                print("{:25s} = {:12.6f} [msec]".format(k, v/msec))
+
+    def set_detail_timer(self, is_enabled) -> None:
         """
         Set the detail timer for logging mode.
         """
-        if self.isLogmode:
+        if is_enabled:
+            self.isLogmode = True
             self.detail_timer = {}
             self.detail_timer["prepare_Log-directory"] = 0
             self.detail_timer["make_surf_input"] = 0
@@ -127,29 +127,8 @@ class Solver(odatse.solver.SolverBase):
             self.detail_timer["make_RockingCurve.txt"] = 0
             self.detail_timer["delete_Log-directory"] = 0
         else:
+            self.isLogmode = False
             self.detail_timer = {}
-
-    def default_run_scheme(self) -> str:
-        """
-        Get the default run scheme.
-
-        Returns
-        -------
-        str
-            The run scheme.
-        """
-        return self.run_scheme
-
-    def command(self) -> List[str]:
-        """
-        Get the command to invoke the solver.
-
-        Returns
-        -------
-        List[str]
-            The command to invoke the solver.
-        """
-        return [str(self.path_to_solver)]
 
     def evaluate(self, x: np.ndarray, args=(), nprocs: int = 1, nthreads: int = 1) -> float:
         """
@@ -171,46 +150,30 @@ class Solver(odatse.solver.SolverBase):
         float
             The evaluation result.
         """
-        self.prepare(x, args)
-        cwd = os.getcwd()
-        os.chdir(self.work_dir)
-        self.run(nprocs, nthreads)
-        os.chdir(cwd)
-        result = self.get_results()
+
+        if self.run_scheme == "connect_so" and self.info.generate_rocking_curve == False:
+            self.input.generate(x)
+            self.run(nprocs, nthreads)
+            result = self.output.get_results(x)
+
+        else:
+            work_dir = "Log{:08d}_{:08d}".format(*args)
+            with Workdir(work_dir, remove=self.info.remove_work_dir, use_tmpdir=self.info.use_tmpdir):
+                if self.run_scheme == "connect_so":
+                    pass
+                else:
+                    shutil.copy(os.path.join(self.root_dir, self.info.config.bulk_output_file), ".")
+                self.input.generate(x)
+                self.run(nprocs, nthreads)
+                result = self.output.get_results(x)
         return result
-
-    def prepare(self, x: np.ndarray, args) -> None:
-        """
-        Prepare the solver for evaluation.
-
-        Parameters
-        ----------
-        x : np.ndarray
-            Input array.
-        args : tuple
-            Additional arguments.
-        """
-        fitted_x_list, subdir = self.input.prepare(x, args)
-        self.work_dir = self.proc_dir / Path(subdir)
-
-        self.output.prepare(fitted_x_list)
-
-    def get_results(self) -> float:
-        """
-        Get the results from the solver.
-
-        Returns
-        -------
-        float
-            The result.
-        """
-        return self.output.get_results(self.work_dir)
 
     def load_so(self) -> None:
         """
         Load the shared object library for the solver.
         """
-        self.lib = np.ctypeslib.load_library("surf.so", os.path.dirname(__file__))
+        #self.lib = np.ctypeslib.load_library("surf.so", os.path.dirname(__file__))
+        self.lib = np.ctypeslib.load_library(self.path_to_solver_lib.name, self.path_to_solver_lib.parent)
         self.lib.surf_so.argtypes = (
             ctypes.POINTER(ctypes.c_int),
             ctypes.POINTER(ctypes.c_int),
@@ -246,23 +209,6 @@ class Solver(odatse.solver.SolverBase):
         )
         self.output.surf_output = self.output.surf_output[0].decode().splitlines()
 
-    def _run_by_subprocess(self, command: List[str]) -> None:
-        """
-        Run the solver using a subprocess.
-
-        Parameters
-        ----------
-        command : List[str]
-            Command to run the solver.
-        """
-        with open("stdout", "w") as fi:
-            subprocess.run(
-                command,
-                stdout=fi,
-                stderr=subprocess.STDOUT,
-                check=True,
-            )
-
     def run(self, nprocs: int = 1, nthreads: int = 1) -> None:
         """
         Run the solver.
@@ -280,7 +226,7 @@ class Solver(odatse.solver.SolverBase):
         if self.run_scheme == "connect_so":
             self.launch_so()
         elif self.run_scheme == "subprocess":
-            self._run_by_subprocess([str(self.path_to_solver)])
+            run_by_subprocess([str(self.path_to_solver)])
 
         if self.isLogmode:
             time_end = time.perf_counter()

@@ -67,8 +67,5 @@ def calc(data, omega):
     conv[:,0] = xs
     conv[:,1:] = ys
 
-    # if verbose_mode:
-    #     print("conv =\n", conv)
-
     return conv
 
