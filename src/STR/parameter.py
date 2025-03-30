@@ -47,6 +47,8 @@ class SolverConfig(BaseModel):
         The number of lines of info field in the cauclated data.
     cal_number: int or List[int]
         The column number(s) to be considered in the calculated data.
+    path_to_base_dir : str
+        Path to the base directory for template and input data files.
     """
     surface_exec_file: str = "surf.exe"
     surface_input_file: str = "surf.txt"
@@ -57,6 +59,7 @@ class SolverConfig(BaseModel):
     calculated_last_line: Optional[NonNegativeInt] = None
     calculated_info_line: int = Field(default=2)
     cal_number: Union[int,List[int]] # = Field(min_length=1)
+    path_to_base_dir: Optional[str] = "."
 
 class SolverPost(BaseModel):
     """
@@ -74,15 +77,12 @@ class SolverPost(BaseModel):
         Type of the R-factor.
     omega : float
         Convolution parameter.
-    remove_work_dir: bool
-        Flag to remove the working directory after execution.
     """
     normalization: Literal["TOTAL", "MANY_BEAM", "MAX"]
     weight_type: Optional[Literal["calc", "manual"]] = None
     spot_weight: Optional[List[float]] = None
     Rfactor_type: Literal["A", "A2", "B"] = "A"
     omega: PositiveFloat = 0.5
-    remove_work_dir: bool = False
 
     @field_validator("normalization")
     def check_obsolete_normalization(cls, v):
@@ -142,6 +142,12 @@ class SolverInfo(BaseModel):
         Parameters for the solver.
     reference : SolverReference
         Parameters for the reference data.
+    remove_work_dir: bool
+        Flag to remove the working directory after execution.
+    use_tmpdir: bool
+        Flag to use temporal directory.
+    enable_detailed_timer : bool
+        Enable detailed measurement of elapsed time.
     """
     dimension: Optional[int] = None
     run_scheme: Literal["subprocess", "connect_so"] = "subprocess"
@@ -150,6 +156,9 @@ class SolverInfo(BaseModel):
     post: SolverPost
     param: SolverParam
     reference: SolverReference
+    remove_work_dir: bool = False
+    use_tmpdir: bool = False
+    enable_detailed_timer: bool = False
 
     @model_validator(mode="after")
     def check_dimension(self) ->Self:
@@ -206,6 +215,16 @@ class SolverInfo(BaseModel):
             if len(self.reference.exp_number) != 1:
                 raise ValueError("length of reference.exp_number must be 1 when normalization is TOTAL")
         return self
+
+def parse_solver_info(**kwargs):
+    try:
+        info = SolverInfo(**kwargs)
+    except ValidationError as e:
+        print("----------------")
+        print(str(e))
+        print("----------------")
+        raise ValueError("failed in parsing solver parameters") from e
+    return info
 
 
 if __name__ == "__main__":

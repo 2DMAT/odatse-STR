@@ -15,6 +15,7 @@
 # along with this program. If not, see http://www.gnu.org/licenses/.
 
 import os
+import time
 import numpy as np
 
 # for type hints
@@ -39,7 +40,6 @@ class Output(object):
 
     run_scheme: str
     generate_rocking_curve: bool
-    dimension: int
     normalization: str
     weight_type: Optional[str]
     spot_weight: List
@@ -58,7 +58,7 @@ class Output(object):
     calculated_info_line: int
     cal_number: List
 
-    def __init__(self, info_base, info_solver, isLogmode, detail_timer):
+    def __init__(self, info_solver, isLogmode, detail_timer):
         """
         Initialize the Output class with the given parameters.
 
@@ -79,11 +79,6 @@ class Output(object):
 
         self.isLogmode = isLogmode
         self.detail_timer = detail_timer
-
-        if info_solver.dimension:
-            self.dimension = info_solver.dimension
-        else:
-            self.dimension = info_base["dimension"]
 
         self.run_scheme = info_solver.run_scheme
 
@@ -107,7 +102,7 @@ class Output(object):
 
         self.omega = info_solver.post.omega
 
-        self.remove_work_dir = info_solver.post.remove_work_dir
+        self.remove_work_dir = info_solver.remove_work_dir
 
         # solver.param
         self.string_list = info_solver.param.string_list
@@ -202,17 +197,7 @@ class Output(object):
         data_exp = self.mpicomm.bcast(data_e, root=0)
         return data_exp
 
-    def prepare(self, fitted_x_list):
-        """
-        Prepare the output with the given fitted x list.
-
-        Parameters
-        ----------
-        fitted_x_list : list
-            List of fitted x values.
-        """
-        self.fitted_x_list = fitted_x_list
-    def get_results(self, work_dir) -> float:
+    def get_results(self, x) -> float:
         """
         Get Rfactor obtained by the solver program.
 
@@ -220,43 +205,6 @@ class Output(object):
         ----------
         work_dir : str
             The working directory where the solver program runs.
-
-        Returns
-        -------
-        float
-            The calculated Rfactor.
-        """
-        # Calculate Rfactor and Output numerical results
-        cwd = os.getcwd()
-        os.chdir(work_dir)
-        Rfactor = self._post(self.fitted_x_list)
-        os.chdir(cwd)
-
-        # delete Log-directory
-        if self.isLogmode:
-            time_sta = time.perf_counter()
-
-        if self.run_scheme == "subprocess":
-            if self.remove_work_dir:
-
-                def rmtree_error_handler(function, path, excinfo):
-                    print(f"WARNING: Failed to remove a working directory, {path}")
-
-                shutil.rmtree(work_dir, onerror=rmtree_error_handler)
-
-        if self.isLogmode:
-            time_end = time.perf_counter()
-            self.detail_timer["delete_Log-directory"] += time_end - time_sta
-        return Rfactor
-
-    def _post(self, fitted_x_list):
-        """
-        Perform post-processing to calculate the Rfactor.
-
-        Parameters
-        ----------
-        fitted_x_list : list
-            List of fitted x values.
 
         Returns
         -------
@@ -285,17 +233,17 @@ class Output(object):
             self.detail_timer["calculate_R-factor"] += time_end - time_sta
 
         if self.generate_rocking_curve:
-            self._generate_rocking_curve(fitted_x_list, glancing_angle, conv_I_calculated_normalized_l, Rfactor)
+            self._generate_rocking_curve(x, glancing_angle, conv_I_calculated_normalized_l, Rfactor)
 
         return Rfactor
 
-    def _generate_rocking_curve(self, fitted_x_list, glancing_angle, conv_I_calculated_normalized_l, Rfactor):
+    def _generate_rocking_curve(self, xval, glancing_angle, conv_I_calculated_normalized_l, Rfactor):
         """
         Generate the RockingCurve_calculated.txt file.
 
         Parameters
         ----------
-        fitted_x_list : list
+        xval : list
             List of fitted x values.
         glancing_angle : np.ndarray
             Array of glancing angles.
@@ -304,7 +252,6 @@ class Output(object):
         Rfactor : float
             The calculated Rfactor.
         """
-        dimension = self.dimension
         string_list = self.string_list
         cal_number = self.cal_number
         spot_weight = self.spot_weight
@@ -317,12 +264,7 @@ class Output(object):
 
         with open("RockingCurve_calculated.txt", "w") as fp:
             # Write headers
-            fp.write("#")
-            for index in range(dimension):
-                fp.write(
-                    "{} = {} ".format(string_list[index], fitted_x_list[index])
-                )
-            fp.write("\n")
+            fp.write("#" + " ".join([f"{k} = {v}" for k, v in zip(string_list, xval)]) + "\n")
             fp.write("#Rfactor_type = {}\n".format(Rfactor_type))
             fp.write("#normalization = {}\n".format(normalization))
             if weight_type is not None:
