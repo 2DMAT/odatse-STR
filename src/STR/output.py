@@ -128,7 +128,7 @@ class Output(object):
 
         # Normalization of reference data
         if self.normalization == "TOTAL":
-            data = data_experiment[:, [-1]]
+            data = data_experiment[:, cal_number[0]]
             norm = np.sum(data)
             data_normalized = data / norm
             self.I_reference_normalized_l = data_normalized.transpose()
