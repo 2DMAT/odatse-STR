@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>ユーザープログラムによる解析 &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
     <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
     <script src="../_static/documentation_options.js?v=144c8c96"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -68,11 +68,11 @@
 <h2>プログラムの説明<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">simple.py</span></code> は odatse-STR モジュールを用いて解析を行うシンプルなプログラムです。
 プログラムの全体を以下に示します。</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">odatse</span>
-<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
-<span class="kn">from</span> <span class="nn">odatse.extra.STR</span> <span class="kn">import</span> <span class="n">Solver</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">odatse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">odatse.algorithm.min_search</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">odatse.extra.STR</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solver</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;input.toml&quot;</span><span class="p">)</span>
 
@@ -106,11 +106,11 @@
 <p>Solver, Runner, Algorithm の順にインスタンスを作成した後、Algorithm クラスの <code class="docutils literal notranslate"><span class="pre">main()</span></code> メソッドを呼んで解析を行います。</p>
 <p>上記のプログラムでは、入力パラメータを TOML形式のファイルから読み込む形ですが、パラメータを dict 形式で渡すこともできます。
 <code class="docutils literal notranslate"><span class="pre">simple2.py</span></code> はパラメータをプログラム中に埋め込む形式で記述したものです。以下にプログラムの全体を記載します。</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">odatse</span>
-<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
-<span class="kn">from</span> <span class="nn">odatse.extra.STR</span> <span class="kn">import</span> <span class="n">Solver</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">odatse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">odatse.algorithm.min_search</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">odatse.extra.STR</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solver</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -228,7 +228,7 @@ $ cp ../../sim-trhepd-rheed/src/surf.exe .
 
     <div class="footer" role="contentinfo">
     &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>
