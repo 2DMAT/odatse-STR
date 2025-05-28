@@ -128,10 +128,10 @@ class Output(object):
 
         # Normalization of reference data
         if self.normalization == "TOTAL":
-            data = data_experiment[:, [-1]]
+            data = data_experiment[:, self.exp_number[0]]
             norm = np.sum(data)
             data_normalized = data / norm
-            self.I_reference_normalized_l = data_normalized.transpose()
+            self.I_reference_normalized_l = data_normalized.reshape(1,-1)
 
         elif self.normalization == "MANY_BEAM":
             data = data_experiment[:,self.exp_number]
@@ -465,9 +465,9 @@ class Output(object):
         glancing_angle = data_convolution[:, 0]
 
         if self.normalization == "TOTAL":
-            data = data_convolution[:, [-1]]
+            data = data_convolution[:, cal_number[0]]
             norm = np.sum(data)
-            data_normalized = (data / norm).transpose()
+            data_normalized = (data / norm).reshape(1,-1)
 
         elif self.normalization == "MANY_BEAM":
             data = data_convolution[:, cal_number]
