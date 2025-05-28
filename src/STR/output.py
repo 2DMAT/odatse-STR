@@ -465,7 +465,7 @@ class Output(object):
         glancing_angle = data_convolution[:, 0]
 
         if self.normalization == "TOTAL":
-            data = data_convolution[:, [-1]]
+            data = data_convolution[:, cal_number[0]]
             norm = np.sum(data)
             data_normalized = (data / norm).transpose()
 
