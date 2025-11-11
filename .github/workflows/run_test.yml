@@ -12,7 +12,7 @@ jobs:
         numpy-version: ['<2', '>=2']
       fail-fast: false
 
-    name: Run tests with Python ${{ matrix.python-version }}
+    name: Run tests with Python ${{ matrix.python-version }} and NumPy ${{ matrix.numpy-version }}
     runs-on: 'ubuntu-22.04'
     # runs-on: ${{ matrix.os }}
     timeout-minutes: 10
