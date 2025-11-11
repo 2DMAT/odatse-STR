@@ -14,7 +14,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-numpy = "^1.14"
+numpy = ">=1.14"
 mpi4py = {version = "^3", optional = true}
 ODAT-SE = "^3"
 pydantic = "^2"
