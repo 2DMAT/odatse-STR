@@ -15,6 +15,8 @@
 # along with this program. If not, see http://www.gnu.org/licenses/.
 
 import os
+import shutil
+import time
 import numpy as np
 
 # for type hints
@@ -199,7 +201,10 @@ class Output(object):
         else:
             data_e = None
 
-        data_exp = self.mpicomm.bcast(data_e, root=0)
+        if self.mpisize > 1:
+            data_exp = self.mpicomm.bcast(data_e, root=0)
+        else:
+            data_exp = data_e
         return data_exp
 
     def prepare(self, fitted_x_list):
