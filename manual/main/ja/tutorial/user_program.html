@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ユーザープログラムによる解析 &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 ドキュメント</title>
+    <title>ユーザープログラムによる解析 &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
     <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?v=6599c6cf"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
@@ -18,7 +18,7 @@
     <link rel="prev" title="ポピュレーションアニーリングによる探索" href="pamc.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 ドキュメント</span></a></h1>
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 ドキュメント</span></a></h1>
         <h2 class="heading"><span>ユーザープログラムによる解析</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="Top">
@@ -74,8 +74,9 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">odatse.algorithm.min_search</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">odatse.extra.STR</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solver</span>
 
-<span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;input.toml&quot;</span><span class="p">)</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">"input.toml"</span><span class="p">)</span>
 
+<span class="n">odatse</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 <span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
 <span class="n">runner</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 <span class="n">alg</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">min_search</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span>
@@ -93,6 +94,11 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">odatse.Info</span></code> クラス</p>
 <p>パラメータを格納するクラスです。 <code class="docutils literal notranslate"><span class="pre">from_file</span></code> クラスメソッドに TOML ファイルのパスを渡して作成することができます。</p>
 </li>
+</ul>
+<p>Solver クラスのインスタンスを作成する前に <code class="docutils literal notranslate"><span class="pre">odatse.mpi.setup()</span></code> を呼び出して MPI の設定を行います。
+ODAT-SE v4 ではこの呼び出しが必須で、MPI を使わない場合にも必要です。
+(<code class="docutils literal notranslate"><span class="pre">odatse-STR</span></code> コマンドで用いられる <code class="docutils literal notranslate"><span class="pre">odatse.initialize()</span></code> はコマンドライン引数の処理と合わせてこの設定を内部で行います。)</p>
+<ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">odatse.extra.STR.Solver</span></code> クラス</p>
 <p>odatse-STR モジュールの順問題ソルバーです。Info クラスのインスタンスを渡して作成します。</p>
 </li>
@@ -113,39 +119,40 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">odatse.extra.STR</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solver</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="s2">&quot;output_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span>
+    <span class="s2">"base"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"dimension"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">"output_dir"</span><span class="p">:</span> <span class="s2">"output"</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;run_scheme&quot;</span><span class="p">:</span> <span class="s2">&quot;subprocess&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;generate_rocking_curve&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;cal_number&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s2">"solver"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"run_scheme"</span><span class="p">:</span> <span class="s2">"subprocess"</span><span class="p">,</span>
+        <span class="s2">"generate_rocking_curve"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"config"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"cal_number"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
         <span class="p">},</span>
-        <span class="s2">&quot;param&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;string_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;value_01&quot;</span><span class="p">,</span> <span class="s2">&quot;value_02&quot;</span><span class="p">,</span> <span class="s2">&quot;value_03&quot;</span><span class="p">],</span>
+        <span class="s2">"param"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"string_list"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"value_01"</span><span class="p">,</span> <span class="s2">"value_02"</span><span class="p">,</span> <span class="s2">"value_03"</span><span class="p">],</span>
         <span class="p">},</span>
-        <span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;experiment.txt&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;exp_number&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">"reference"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"path"</span><span class="p">:</span> <span class="s2">"experiment.txt"</span><span class="p">,</span>
+            <span class="s2">"exp_number"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
         <span class="p">},</span>
-        <span class="s2">&quot;post&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;normalization&quot;</span><span class="p">:</span> <span class="s2">&quot;TOTAL&quot;</span><span class="p">,</span>
+        <span class="s2">"post"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"normalization"</span><span class="p">:</span> <span class="s2">"TOTAL"</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>
-    <span class="s2">&quot;algorithm&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;label_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">,</span> <span class="s2">&quot;z3&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;param&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;min_list&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">],</span>
-            <span class="s2">&quot;max_list&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span> <span class="p">],</span>
-            <span class="s2">&quot;initial_list&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">3.50</span><span class="p">],</span>
+    <span class="s2">"algorithm"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"label_list"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"z1"</span><span class="p">,</span> <span class="s2">"z2"</span><span class="p">,</span> <span class="s2">"z3"</span><span class="p">],</span>
+        <span class="s2">"param"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"min_list"</span><span class="p">:</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">],</span>
+            <span class="s2">"max_list"</span><span class="p">:</span> <span class="p">[</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span> <span class="p">],</span>
+            <span class="s2">"initial_list"</span><span class="p">:</span> <span class="p">[</span> <span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">3.50</span><span class="p">],</span>
         <span class="p">},</span>
     <span class="p">},</span>
 <span class="p">}</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
+<span class="n">odatse</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 <span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
 <span class="n">runner</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 <span class="n">alg</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">min_search</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span>
@@ -182,7 +189,7 @@ $ cp ../../sim-trhepd-rheed/src/surf.exe .
 </div>
 <p>実行すると、以下の様な出力がされます。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span>            <span class="p">:</span> <span class="n">minsearch</span>
-<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="s1">&#39;z2&#39;</span><span class="p">,</span> <span class="s1">&#39;z3&#39;</span><span class="p">]</span>
+<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">'z1'</span><span class="p">,</span> <span class="s1">'z2'</span><span class="p">,</span> <span class="s1">'z3'</span><span class="p">]</span>
 <span class="n">param</span><span class="o">.</span><span class="n">min_list</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
 <span class="n">param</span><span class="o">.</span><span class="n">max_list</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span>
 <span class="n">param</span><span class="o">.</span><span class="n">initial_list</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">]</span>
@@ -228,7 +235,7 @@ $ cp ../../sim-trhepd-rheed/src/surf.exe .
 
     <div class="footer" role="contentinfo">
     &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>

@@ -10,7 +10,7 @@ Prerequisites
     - tomli >= 1.2
     - numpy >= 1.14
 
-  - ODAT-SE version 3.0 and later
+  - ODAT-SE version 4.0 and later
 
   - sim-trhepd-rheed version 1.0.2 and later
 

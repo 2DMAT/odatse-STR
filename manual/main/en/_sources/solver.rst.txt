@@ -3,7 +3,11 @@ Input and output
 
 .. _sim-trhepd-rheed: https://github.com/sim-trhepd-rheed/sim-trhepd-rheed
 
-odatse-STR module is a ``Solver`` package that uses sim-trhepd-rheed_ to calculate the diffraction rocking curve from the atomic position :math:`x` and returns the deviation from the experimental rocking curve as :math:`f(x)`. 
+odatse-STR module is a ``Solver`` package that uses sim-trhepd-rheed_ to calculate the diffraction rocking curve from the atomic position :math:`x` and returns the deviation from the experimental rocking curve as :math:`f(x)`.
+
+.. note::
+
+   sim-trhepd-rheed is a serial program. The solver-level parallelization of ODAT-SE v4 (``--nsolve`` greater than 1) is not supported, and specifying it results in an error. Use the algorithm-level parallelization (``--nalg``, which takes all processes by default) for MPI runs.
 
 In this section, the input parameters, the input data, and the output data are explained.
 The input parameters are taken from the ``solver`` entry of the ``Info`` class.

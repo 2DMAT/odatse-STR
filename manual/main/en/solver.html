@@ -5,20 +5,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Input and output &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 documentation</title>
+    <title>Input and output &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
-    <script src="_static/documentation_options.js?v=8d563738"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/documentation_options.js?v=fc837d61"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Acknowledgements" href="acknowledgement.html" />
     <link rel="prev" title="Analyses by user programs" href="tutorial/user_program.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 documentation</span></a></h1>
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 documentation</span></a></h1>
         <h2 class="heading"><span>Input and output</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="Top">
@@ -38,6 +38,10 @@
   <section id="input-and-output">
 <h1>Input and output<a class="headerlink" href="#input-and-output" title="Link to this heading">¶</a></h1>
 <p>odatse-STR module is a <code class="docutils literal notranslate"><span class="pre">Solver</span></code> package that uses <a class="reference external" href="https://github.com/sim-trhepd-rheed/sim-trhepd-rheed">sim-trhepd-rheed</a> to calculate the diffraction rocking curve from the atomic position <span class="math notranslate nohighlight">\(x\)</span> and returns the deviation from the experimental rocking curve as <span class="math notranslate nohighlight">\(f(x)\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>sim-trhepd-rheed is a serial program. The solver-level parallelization of ODAT-SE v4 (<code class="docutils literal notranslate"><span class="pre">--nsolve</span></code> greater than 1) is not supported, and specifying it results in an error. Use the algorithm-level parallelization (<code class="docutils literal notranslate"><span class="pre">--nalg</span></code>, which takes all processes by default) for MPI runs.</p>
+</div>
 <p>In this section, the input parameters, the input data, and the output data are explained.
 The input parameters are taken from the <code class="docutils literal notranslate"><span class="pre">solver</span></code> entry of the <code class="docutils literal notranslate"><span class="pre">Info</span></code> class.
 The parameters are specified in <code class="docutils literal notranslate"><span class="pre">[solver]</span></code> section when they are given from a TOML file.
@@ -320,7 +324,7 @@ To calculate the objective function value (R-factor and R-factor squared), the d
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>

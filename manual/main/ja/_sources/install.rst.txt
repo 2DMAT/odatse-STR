@@ -10,7 +10,7 @@ odatse-STR のインストール
         - tomli (>= 1.2)
         - numpy (>= 1.14)
 
-- ODAT-SE version 3.0 以降
+- ODAT-SE version 4.0 以降
 
 - sim-trhepd-rheed version 1.0.2 以降
 

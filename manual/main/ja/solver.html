@@ -5,21 +5,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>入出力 &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 ドキュメント</title>
+    <title>入出力 &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
-    <script src="_static/documentation_options.js?v=144c8c96"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/documentation_options.js?v=6599c6cf"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=4755f45a"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
     <link rel="next" title="謝辞" href="acknowledgement.html" />
     <link rel="prev" title="ユーザープログラムによる解析" href="tutorial/user_program.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 ドキュメント</span></a></h1>
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 ドキュメント</span></a></h1>
         <h2 class="heading"><span>入出力</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="Top">
@@ -39,6 +39,10 @@
   <section id="id1">
 <h1>入出力<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">odatse-STR</span></code> モジュールは <a class="reference external" href="https://github.com/sim-trhepd-rheed/sim-trhepd-rheed">sim-trhepd-rheed</a> を用いて原子位置 <span class="math notranslate nohighlight">\(x\)</span> から回折 rocking curve を計算し、実験で得られた rocking curve からの誤差を <span class="math notranslate nohighlight">\(f(x)\)</span> として返す <code class="docutils literal notranslate"><span class="pre">Solver</span></code> です。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>sim-trhepd-rheed は逐次実行のプログラムです。ODAT-SE v4 のソルバー並列化 (<code class="docutils literal notranslate"><span class="pre">--nsolve</span></code> オプションに 2 以上を指定) には対応しておらず、指定した場合はエラーで終了します。MPI 並列はアルゴリズム側の並列化 (<code class="docutils literal notranslate"><span class="pre">--nalg</span></code>、既定では全プロセス) を利用してください。</p>
+</div>
 <p>この章では、入力パラメータおよび入力データと出力データについて説明します。
 入力パラメータは Info クラスの <code class="docutils literal notranslate"><span class="pre">solver</span></code> の項目が該当します。TOMLファイルを入力として与える場合は、 <code class="docutils literal notranslate"><span class="pre">[solver]</span></code> セクションに記述します。dict 形式でパラメータを作成する場合は <code class="docutils literal notranslate"><span class="pre">solver</span></code> キー以下に入れ子の dict 形式でデータを用意します。以下では、TOML形式でパラメータ項目を説明します。</p>
 <p>入力データは、ターゲットとする参照データと、sim-trhepd-rheed の入力ファイルのテンプレートです。
@@ -319,7 +323,7 @@ surf-bulkP.s
 
     <div class="footer" role="contentinfo">
     &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>

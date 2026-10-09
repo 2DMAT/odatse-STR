@@ -52,6 +52,7 @@
 
     info = odatse.Info.from_file("input.toml")
 
+    odatse.mpi.setup()
     solver = Solver(info)
     runner = odatse.Runner(solver, info)
     alg = odatse.algorithm.min_search.Algorithm(info, runner)
@@ -70,6 +71,10 @@
 - ``odatse.Info`` クラス
 
   パラメータを格納するクラスです。 ``from_file`` クラスメソッドに TOML ファイルのパスを渡して作成することができます。
+
+Solver クラスのインスタンスを作成する前に ``odatse.mpi.setup()`` を呼び出して MPI の設定を行います。
+ODAT-SE v4 ではこの呼び出しが必須で、MPI を使わない場合にも必要です。
+(``odatse-STR`` コマンドで用いられる ``odatse.initialize()`` はコマンドライン引数の処理と合わせてこの設定を内部で行います。)
 
 - ``odatse.extra.STR.Solver`` クラス
 
@@ -130,6 +135,7 @@ Solver, Runner, Algorithm の順にインスタンスを作成した後、Algori
 
     info = odatse.Info(params)
 
+    odatse.mpi.setup()
     solver = Solver(info)
     runner = odatse.Runner(solver, info)
     alg = odatse.algorithm.min_search.Algorithm(info, runner)

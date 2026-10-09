@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>グリッド型探索 &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 ドキュメント</title>
+    <title>グリッド型探索 &#8212; ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
     <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?v=6599c6cf"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
@@ -18,7 +18,7 @@
     <link rel="prev" title="Nelder-Mead法による最適化" href="minsearch.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.0.0 ドキュメント</span></a></h1>
+          <span>ODAT-SE solver module: odatse-STR for sim-trhepd-rheed 1.1.0 ドキュメント</span></a></h1>
         <h2 class="heading"><span>グリッド型探索</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="Top">
@@ -94,32 +94,32 @@
 以下は、サンプルファイルにある <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> の内容です。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
 <span class="n">dimension</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">output_dir</span> <span class="o">=</span> <span class="s2">&quot;output&quot;</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="s2">"output"</span>
 
 <span class="p">[</span><span class="n">solver</span><span class="p">]</span>
-<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sim-trhepd-rheed&quot;</span>
-<span class="n">run_scheme</span> <span class="o">=</span> <span class="s2">&quot;subprocess&quot;</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"sim-trhepd-rheed"</span>
+<span class="n">run_scheme</span> <span class="o">=</span> <span class="s2">"subprocess"</span>
 <span class="n">generate_rocking_curve</span> <span class="o">=</span> <span class="n">false</span>
 
 <span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">]</span>
 <span class="n">cal_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
-<span class="n">string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;value_01&quot;</span><span class="p">,</span> <span class="s2">&quot;value_02&quot;</span> <span class="p">]</span>
+<span class="n">string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"value_01"</span><span class="p">,</span> <span class="s2">"value_02"</span> <span class="p">]</span>
 
 <span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">post</span><span class="p">]</span>
-<span class="n">normalization</span> <span class="o">=</span> <span class="s2">&quot;TOTAL&quot;</span>
+<span class="n">normalization</span> <span class="o">=</span> <span class="s2">"TOTAL"</span>
 
 <span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">reference</span><span class="p">]</span>
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;experiment.txt&quot;</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">"experiment.txt"</span>
 <span class="n">exp_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="p">[</span><span class="n">algorithm</span><span class="p">]</span>
-<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mapper&quot;</span>
-<span class="n">label_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"mapper"</span>
+<span class="n">label_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"z1"</span><span class="p">,</span> <span class="s2">"z2"</span><span class="p">]</span>
 
 <span class="p">[</span><span class="n">algorithm</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
-<span class="n">mesh_path</span> <span class="o">=</span> <span class="s2">&quot;./MeshData.txt&quot;</span>
+<span class="n">mesh_path</span> <span class="o">=</span> <span class="s2">"./MeshData.txt"</span>
 </pre></div>
 </div>
 <p>最初に <code class="docutils literal notranslate"><span class="pre">[base]</span></code> セクションについて説明します。</p>
@@ -185,7 +185,7 @@ $ cp ../../sim-trhepd-rheed/src/surf.exe .
 (<code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code> に付けられた番号がグリッドのidとして割り振られます)。
 以下の様な出力が標準出力に書き出されます。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span>            <span class="p">:</span> <span class="n">mapper</span>
-<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="s1">&#39;z2&#39;</span><span class="p">]</span>
+<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">'z1'</span><span class="p">,</span> <span class="s1">'z2'</span><span class="p">]</span>
 <span class="n">param</span><span class="o">.</span><span class="n">mesh_path</span> <span class="p">:</span> <span class="o">./</span><span class="n">MeshData</span><span class="o">.</span><span class="n">txt</span>
 <span class="n">Iteration</span> <span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">66</span>
 <span class="n">Iteration</span> <span class="p">:</span> <span class="mi">2</span><span class="o">/</span><span class="mi">66</span>
@@ -280,7 +280,7 @@ diff<span class="w"> </span>output/ColorMap.txt<span class="w"> </span>ref_Color
 
     <div class="footer" role="contentinfo">
     &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>
