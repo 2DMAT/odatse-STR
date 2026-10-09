@@ -43,9 +43,9 @@ jobs:
 
       - name: install library
         run: |
-          # odatse-STR 1.0.x targets ODAT-SE 3.x; physbo is installed afterwards
+          # odatse-STR 1.1.x targets ODAT-SE 4.x; physbo is installed afterwards
           # so that its dependency on ODAT-SE does not pull in a newer major version.
-          python -m pip install 'ODAT-SE>=3,<4'
+          python -m pip install 'ODAT-SE>=4,<5'
           python -m pip install physbo
           python -c 'import odatse; print("ODAT-SE", odatse.__version__)'
 

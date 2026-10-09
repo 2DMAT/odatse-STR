@@ -11,7 +11,7 @@
   - python >= 3.9
   - numpy >= 1.14
   - pydantic >= 2.0
-  - ODAT-SE >= 3.0
+  - ODAT-SE >= 4.0
   - sim-trhepd-rheed >= 1.0.2
 
 ## Install

@@ -21,9 +21,9 @@ project = 'ODAT-SE solver module: odatse-STR for sim-trhepd-rheed'
 copyright = '2020-, Institute for Solid State Physics, University of Tokyo'
 author = 'ISSP, University of Tokyo'
 
-version = '1.0'
+version = '1.1'
 # The full version, including alpha/beta/rc tags
-release = '1.0.1'
+release = '1.1.0'
 
 # -- General configuration ---------------------------------------------------
 

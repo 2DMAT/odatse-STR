@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "odatse-STR"
-version = "1.0.1"
+version = "1.1.0"
 description = "SIM-TRHEPD-RHEED solver module for ODAT-SE: data-analysis software of quantum beam diffraction experiments for 2D material structure"
 authors = ["2DMAT developers <2dmat-dev@issp.u-tokyo.ac.jp>"]
 license = "GPL-3.0-or-later"
@@ -16,7 +16,7 @@ packages = [
 python = ">=3.9"
 numpy = ">=1.14"
 mpi4py = {version = ">=3", optional = true}
-ODAT-SE = "^3"
+ODAT-SE = "^4"
 pydantic = "^2"
 
 [tool.poetry.scripts]
