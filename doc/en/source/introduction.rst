@@ -53,6 +53,7 @@ Version Information
 
 odatse-STR
 
+- v1.0.1: 2026-10-09
 - v1.0.0: 2024-11-25
 
 ODAT-SE
