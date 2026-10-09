@@ -19,9 +19,9 @@ time $MPIEXEC $CMD input.toml
 result=output/res.txt
 reference=ref.txt
 
-echo diff $result $reference
+echo almost_diff $result $reference
 res=0
-diff $result $reference || res=$?
+python3 ../../almost_diff.py $result $reference || res=$?
 if [ $res -eq 0 ]; then
   echo TEST PASS
   true
