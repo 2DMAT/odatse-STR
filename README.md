@@ -14,15 +14,26 @@
   - ODAT-SE >= 4.0
   - sim-trhepd-rheed >= 1.0.2
 
+## Supported versions of ODAT-SE
+
+odatse-STR is maintained in two release lines, one for each major version of ODAT-SE. Choose the odatse-STR version that matches your ODAT-SE installation.
+
+| odatse-STR | ODAT-SE | branch |
+|---|---|---|
+| 1.1.x | 4.x | `main` |
+| 1.0.x | 3.x | `release-1.0` |
+
+- odatse-STR 1.1.x requires ODAT-SE 4.0 or later and does not work with ODAT-SE 3.x. It follows the solver API of ODAT-SE 4: user programs that create the `Solver` object themselves must call `odatse.mpi.setup()` first (programs using `odatse.initialize()` or the `odatse-STR` command are not affected), and the solver-level MPI parallelization of ODAT-SE 4 (`--nsolve` greater than 1) is not supported because sim-trhepd-rheed runs serially.
+- odatse-STR 1.0.x works with ODAT-SE 3.x (3.1 or later is recommended). Bug fixes are backported to this line, but new features are not.
+- The `main` branch holds the latest line. To obtain the 1.0.x line for ODAT-SE 3, check out the `release-1.0` branch or a `v1.0.*` tag, for example `git clone -b release-1.0 https://github.com/2DMAT/odatse-STR.git`, or download the corresponding archive from the [Releases](https://github.com/2DMAT/odatse-STR/releases) page.
+
 ## Install
 
-- From PyPI (Recommended)
-  - `python3 -m pip install -U odatse-STR`
-    - If you install them locally, use `--user` option like `python3 -m pip install -U --user`
-- From Source (For developers)
+- From Source
   1. update `pip >= 19` by `python3 -m pip install -U pip`
   2. `python3 -m pip install ODATSE_STR_ROOT_DIRECTORY` to install `odatse-STR` package and `odatse-STR` command
     - `ODATSE_STR_ROOT_DIRECTORY` points to the directory including this `README.md` file.
+    - If you install them locally, use `--user` option like `python3 -m pip install -U --user`
 
 ## Simple Usage
 
