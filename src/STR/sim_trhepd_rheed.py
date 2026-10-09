@@ -76,6 +76,16 @@ class Solver(odatse.solver.SolverBase):
         self.mpisize = mpi.size()
         self.mpirank = mpi.rank()
 
+        # sim-trhepd-rheed runs serially. ODAT-SE 4 calls evaluate() on every
+        # process of a solver group (--nsolve), which would make them run the
+        # same calculation in the same directory, so reject that configuration.
+        if mpi.solsize() > 1:
+            raise exception.InputError(
+                "ERROR: sim-trhepd-rheed solver does not support solver-level "
+                "MPI parallelization (--nsolve > 1); use --nsolve 1 "
+                "(default) and assign all processes to the algorithm (--nalg)."
+            )
+
         self._name = "sim_trhepd_rheed_mb_connect"
 
         try:
