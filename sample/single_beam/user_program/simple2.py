@@ -38,6 +38,7 @@ params = {
 
 info = odatse.Info(params)
 
+odatse.mpi.setup()
 solver = Solver(info)
 
 runner = odatse.Runner(solver, info)

@@ -6,6 +6,7 @@ from odatse.extra.STR import Solver
 
 info = odatse.Info.from_file("input.toml")
 
+odatse.mpi.setup()
 solver = Solver(info)
 
 runner = odatse.Runner(solver, info)

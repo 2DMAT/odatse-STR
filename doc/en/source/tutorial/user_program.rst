@@ -53,6 +53,7 @@ The entire source file is shown as follows:
 
     info = odatse.Info.from_file("input.toml")
 
+    odatse.mpi.setup()
     solver = Solver(info)
     runner = odatse.Runner(solver, info)
     alg = odatse.algorithm.min_search.Algorithm(info, runner)
@@ -71,6 +72,10 @@ Next, the instances of the classes are created.
 - ``odatse.Info`` class
 
   This class is for storing the parameters. It is created by calling a class method ``from_file`` with a path to TOML file as an argument.
+
+Before creating an instance of the Solver class, ``odatse.mpi.setup()`` is called to set up MPI.
+This call is mandatory in ODAT-SE v4, even when MPI is not used.
+(``odatse.initialize()``, which is used by the ``odatse-STR`` command, performs this setup internally together with the command-line argument processing.)
 
 - ``odatse.extra.STR.Solver`` class
 
@@ -131,6 +136,7 @@ In the above program, the input parameters are read from a file in TOML format. 
 
     info = odatse.Info(params)
 
+    odatse.mpi.setup()
     solver = Solver(info)
     runner = odatse.Runner(solver, info)
     alg = odatse.algorithm.min_search.Algorithm(info, runner)
